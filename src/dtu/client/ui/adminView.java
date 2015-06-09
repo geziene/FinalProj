@@ -1,35 +1,37 @@
 package dtu.client.ui;
-
-import java.util.List;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import dtu.client.service.KartotekServiceClientImpl;
-import dtu.shared.FieldVerifier;
-import dtu.client.ui.WelcomeView;
+import dtu.shared.UserDTO;
 
 
 public class adminView extends Composite {
-	KartotekServiceClientImpl clientImpl;
-	VerticalPanel adminPanel;
+	
 
-	Button admin = new Button("Administrator");
-	Button pharm = new Button("Pharmacist");
-	Button vaer = new Button("Vaerkforer");
-	Button opr = new Button("Operatoer");
+	KartotekServiceClientImpl clientImpl;
+	VerticalPanel phPanel;
+	
+	/*private static final String URL = "jdbc:mysql://localhost:3306/Raavaredb";
+	private static final String USERNAME = "root";
+	private static final String PASSWORD = "root";
+	
+	private Connection connection = null; // manages connection
+
+	private PreparedStatement saveRaavareStmt = null;*/
+
+	Button addUser = new Button("Create User");
+	Button showUser = new Button("Show User");
+	Button updateUser = new Button("Update User");
+	
 	//BrowseView bv = new BrowseView(clientImpl);
 	
 	
@@ -37,20 +39,150 @@ public class adminView extends Composite {
 	{
 		this.clientImpl = clientImpl;
 
-		adminPanel = new VerticalPanel();
-		initWidget(this.adminPanel);
+		phPanel = new VerticalPanel();
+		initWidget(this.phPanel);
 		
-		HorizontalPanel userPanel = new HorizontalPanel();
-		HorizontalPanel pwdPanel = new HorizontalPanel();
+		addUser.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				RaavareFields();
+			}
+		});
+		
+		phPanel.add(addUser);
+		
+		phPanel.add(showUser);
+		phPanel.add(updateUser);
 		
 		
-		adminPanel.add(userPanel);
-		adminPanel.add(pwdPanel);
-		adminPanel.add(admin);
-		adminPanel.add(pharm);
-		adminPanel.add(vaer);
-		adminPanel.add(opr);
 
 	}
+
+	public void RaavareFields() 
+	{
+		phPanel.clear();
+		
+		Label idLbl;
+		Label nameLbl;
+		Label iniLbl;
+		Label cprLbl;
+		Label passwordLbl;
+		Label groupLbl;
+		final TextBox idTxt;
+		final TextBox nameTxt;
+		final TextBox iniTxt;
+		final TextBox cprTxt;
+		final TextBox passwordTxt;
+		final TextBox groupTxt;
+		
+		Button save = new Button("Create");
+		
+		
+		
+	
+
+		// total height of widget. Components are distributed evenly
+		phPanel.setHeight("120px");	
+
+		HorizontalPanel idPanel = new HorizontalPanel();
+		HorizontalPanel namePanel = new HorizontalPanel();
+		HorizontalPanel iniPanel = new HorizontalPanel();
+		HorizontalPanel cprPanel = new HorizontalPanel();
+		HorizontalPanel passwordPanel = new HorizontalPanel();
+		HorizontalPanel groupPanel = new HorizontalPanel();
+
+		idLbl = new Label("User ID:");
+		idLbl.setWidth("100px");
+		idTxt = new TextBox();
+		idTxt.setHeight("1em");
+		idPanel.add(idLbl);
+		idPanel.add(idTxt);
+		
+		nameLbl = new Label("User Name:");
+		nameLbl.setWidth("100px");
+		nameTxt = new TextBox();
+		nameTxt.setHeight("1em");
+		namePanel.add(nameLbl);
+		namePanel.add(nameTxt);
+
+
+		iniLbl = new Label("Initials:");
+		iniLbl.setWidth("100px");
+		iniTxt = new TextBox();
+		//levTxt.setWidth("5em");
+		iniTxt.setHeight("1em");
+		iniPanel.add(iniLbl);
+		iniPanel.add(iniTxt);
+		
+		
+		cprLbl = new Label("CPR:");
+		cprLbl.setWidth("100px");
+		cprTxt = new TextBox();
+		//levTxt.setWidth("5em");
+		cprTxt.setHeight("1em");
+		cprPanel.add(cprLbl);
+		cprPanel.add(cprTxt);
+
+		passwordLbl = new Label("Password:");
+		passwordLbl.setWidth("100px");
+		passwordTxt = new TextBox();
+		//levTxt.setWidth("5em");
+		passwordTxt.setHeight("1em");
+		passwordPanel.add(passwordLbl);
+		passwordPanel.add(passwordTxt);
+		
+			
+		groupLbl = new Label("Group:");
+		groupLbl.setWidth("100px");
+		groupTxt = new TextBox();
+		//levTxt.setWidth("5em");
+		groupTxt.setHeight("1em");
+		groupPanel.add(groupLbl);
+		groupPanel.add(groupTxt);
+//		save.addClickHandler(new ClickHandler()  {
+//			@Override
+//			public void onClick(ClickEvent event)   {
+//			   idTxt.getText();
+//			   nameTxt.getText();
+//			   iniTxt.getText();
+//			   cprTxt.getText();
+//			   passwordTxt.getText();
+//			   groupTxt.getText();
+//			   
+//				 
+//			 UserDTO newUser = new UserDTO( Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), cprTxt.getText(),passwordTxt.getText(),groupTxt.getText());	 
+//			 clientImpl.service.saveUser(newUser, new AsyncCallback<Void>() {
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				Window.alert("Server fejl!" + caught.getMessage());
+//						
+//						
+//					}
+//
+//			@Override
+//			public void onSuccess(Void result) {
+//				Window.alert("User saved in database");
+//						
+//						
+//					}
+//				});
+//	
+//			        }		
+//		} );
+//		
+		phPanel.add(idPanel);
+		phPanel.add(namePanel);
+		phPanel.add(iniPanel);
+		phPanel.add(cprPanel);
+		phPanel.add(passwordPanel);
+		phPanel.add(groupPanel);
+		phPanel.add(save);
+
+	}
+	
+	
+	
 
 }

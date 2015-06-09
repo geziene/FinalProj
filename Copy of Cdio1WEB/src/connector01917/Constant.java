@@ -7,7 +7,7 @@ public abstract class Constant
 {
 	public static final String
 		server					= "localhost",  // database-serveren
-		database				=  "Raavaredb",  //"jdbcdatabase", // navnet paa din database = dit studienummer
+		database				=  "Raavaredatabase",  //"jdbcdatabase", // navnet paa din database = dit studienummer
 		username				= "root", // dit brugernavn = dit studienummer 
 		password				= "root"; // dit password som du har valgt til din database
 	
