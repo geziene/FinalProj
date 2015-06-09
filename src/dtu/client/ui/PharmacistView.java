@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -126,26 +127,28 @@ public class PharmacistView extends Composite {
 
 			@Override
 			public void onClick(ClickEvent event)   {
-				 try
-			        {
-					 /*RaavareDTO r = new RaavareDTO( Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());
-					 connection = 
-								DriverManager.getConnection( URL, USERNAME, PASSWORD );
+			   idTxt.getText();
+			   nameTxt.getText();
+			   levTxt.getText();
+				 
+			 RaavareDTO newRaavare = new RaavareDTO( Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());	 
+			 clientImpl.service.saveRaavare(newRaavare, new AsyncCallback<Void>() {
 
-						// create query that add/create a raavare to kartotek
-						saveRaavareStmt = 
-								connection.prepareStatement( "INSERT INTO raavare " + 
-										"( raavare_id, raavare_navn, leverandoer ) " + 
-										"VALUES (?, ?, ? )" );
-						saveRaavareStmt.setInt(1, r.getRaavareId());
-						saveRaavareStmt.setString(2, r.getRaavareNavn());
-						saveRaavareStmt.setString(3, r.getLeverandoer());
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Server fejl!" + caught.getMessage());
+						
+						
+					}
 
-						saveRaavareStmt.executeUpdate();*/
-			        }
-			        catch (Exception e) {
-			            e.printStackTrace();
-			        }
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert("Raavare gemt i kartotek");
+						
+						
+					}
+				});
+	
 			        }		
 		} );
 		

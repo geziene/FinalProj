@@ -9,7 +9,7 @@
 
   <servlet>
     <servlet-name>kartotekServlet</servlet-name>
-    <servlet-class>dtu.server.dal.RaavareDAO</servlet-class>
+    <servlet-class>dtu.server.dal.RaavareDAO_db</servlet-class>
   </servlet> 
   <servlet-mapping>
     <servlet-name>kartotekServlet</servlet-name>

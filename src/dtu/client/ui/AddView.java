@@ -83,15 +83,15 @@ public class AddView extends Composite {
 			public void onClick(ClickEvent event) {
 
 				/*// v.1 
-				// iPersonDAO.savePerson(new PersonDTO(nameTxt.getText(), Integer.parseInt(ageTxt.getText())));
-				// Window.alert("Person gemt i kartotek");
+				// iPersonDAO.saveRaavare(new RaavareDTO(nameTxt.getText(), Integer.parseInt(ageTxt.getText())));
+				// Window.alert("Raavare gemt i kartotek");
 				
 				// V.2
-				// create new PersonDTO
+				// create new RaavareDTO
 				RaavareDTO newRaavare = new RaavareDTO( parseInt(idTxt.getText()), nameTxt.getText(), ageTxt.getText());
 
 				// save on server
-				clientImpl.service.RaavarePerson(newRaavare, new AsyncCallback<Void>() {
+				clientImpl.service.RaavareRaavare(newRaavare, new AsyncCallback<Void>() {
 
 					@Override
 					public void onSuccess(Void result) {
