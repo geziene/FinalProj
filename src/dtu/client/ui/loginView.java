@@ -68,11 +68,12 @@ public void check()
 {
 	Widget w = null;
 	String usr = usrTxt.getText();
-	if("10".equals(usr)){
+	if ("9".equals(usr)){
+		w = new adminView(clientImpl);
+	} else if("10".equals(usr)){
 		w = new PharmacistView(clientImpl);
 	} else if("11".equals(usr)){
 		w = new VaerkfView(clientImpl);
-		
 	} else if("12".equals(usr)){
 		w = new OperatorView(clientImpl);
 	

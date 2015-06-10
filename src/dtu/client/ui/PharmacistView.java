@@ -127,10 +127,10 @@ public class PharmacistView extends Composite {
 
 			@Override
 			public void onClick(ClickEvent event)   {
-			   idTxt.getText();
-			   nameTxt.getText();
-			   levTxt.getText();
-				 
+//			   idTxt.getText();
+//			   nameTxt.getText();
+//			   levTxt.getText();
+				
 			 RaavareDTO newRaavare = new RaavareDTO( Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());	 
 			 clientImpl.service.saveRaavare(newRaavare, new AsyncCallback<Void>() {
 

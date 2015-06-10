@@ -17,9 +17,9 @@ import dtu.shared.RaavareDTO;
 public class RaavareDAO_db extends RemoteServiceServlet implements KartotekService  {
 	
 
-	private static final String URL = "jdbc:mysql://localhost:3306/Raavaredb";
+	private static final String URL = "jdbc:mysql://localhost:3306/Raavaredatabase";
 	private static final String USERNAME = "root";
-	private static final String PASSWORD = "root";
+	private static final String PASSWORD = "";
 
 	private Connection connection = null; // manages connection
 

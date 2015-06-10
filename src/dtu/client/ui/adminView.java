@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import dtu.client.service.KartotekServiceClientImpl;
-import dtu.shared.UserDTO;
 
 
 public class adminView extends Composite {
@@ -19,14 +18,6 @@ public class adminView extends Composite {
 
 	KartotekServiceClientImpl clientImpl;
 	VerticalPanel phPanel;
-	
-	/*private static final String URL = "jdbc:mysql://localhost:3306/Raavaredb";
-	private static final String USERNAME = "root";
-	private static final String PASSWORD = "root";
-	
-	private Connection connection = null; // manages connection
-
-	private PreparedStatement saveRaavareStmt = null;*/
 
 	Button addUser = new Button("Create User");
 	Button showUser = new Button("Show User");
@@ -35,7 +26,7 @@ public class adminView extends Composite {
 	//BrowseView bv = new BrowseView(clientImpl);
 	
 	
-	public adminView(KartotekServiceClientImpl clientImpl) // pramtriz cnsrctr
+	public adminView(KartotekServiceClientImpl clientImpl)
 	{
 		this.clientImpl = clientImpl;
 
@@ -51,7 +42,6 @@ public class adminView extends Composite {
 		});
 		
 		phPanel.add(addUser);
-		
 		phPanel.add(showUser);
 		phPanel.add(updateUser);
 		
@@ -79,9 +69,6 @@ public class adminView extends Composite {
 		Button save = new Button("Create");
 		
 		
-		
-	
-
 		// total height of widget. Components are distributed evenly
 		phPanel.setHeight("120px");	
 
