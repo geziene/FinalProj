@@ -1,52 +1,23 @@
 package dtu.client.ui;
 
-	import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.List;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-	import dtu.client.service.KartotekServiceClientImpl;
-import dtu.shared.DALException;
-import dtu.shared.FieldVerifier;
+import dtu.client.service.KartotekServiceClientImpl;
 import dtu.shared.ProduktbatchDTO;
-import dtu.client.ui.WelcomeView;
-import dtu.shared.RaavareDTO;
-import dtu.shared.DALException;
+import dtu.shared.RaavarebatchDTO;
 	
 	public class VaerkfView extends Composite{
 		KartotekServiceClientImpl clientImpl;
 		VerticalPanel phPanel;
-		
-		/*private static final String URL = "jdbc:mysql://localhost:3306/Raavaredb";
-		private static final String USERNAME = "root";
-		private static final String PASSWORD = "root";
-		
-		private Connection connection = null; // manages connection
-
-		private PreparedStatement saveRaavareStmt = null;*/
-		
-		
-		
 		
 		Button addRaavarebatches = new Button("Create Raavarebatches");
         Button showRaavarebatches = new Button("Show Raavarebatches");
@@ -56,7 +27,6 @@ import dtu.shared.DALException;
 		Button updateProduktbatches = new Button("Update Produktbatches");
 		
 		//BrowseView bv = new BrowseView(clientImpl);
-		
 		
 		public VaerkfView(KartotekServiceClientImpl clientImpl) // pramtriz cnsrctr
 		{
@@ -90,8 +60,6 @@ import dtu.shared.DALException;
 			phPanel.add(showProduktbatches);
 			phPanel.add(updateProduktbatches);
 			
-			
-
 		}
 		
 		 public void RaavarebatchesFields() 
@@ -106,11 +74,7 @@ import dtu.shared.DALException;
 	            final TextBox maengdeTxt;
 	             
 	            Button save = new Button("Create");
-	             
-	             
-	             
-	         
-	 
+
 	            // total height of widget. Components are distributed evenly
 	            phPanel.setHeight("120px"); 
 	 
@@ -138,28 +102,25 @@ import dtu.shared.DALException;
 	            maengdeTxt.setHeight("1em");
 	            maengdePanel.add(maengdeLbl);
 	            maengdePanel.add(maengdeTxt);
-	             
-	 
+	            
 	            save.addClickHandler(new ClickHandler()  {
 	 
 	                @Override
 	                public void onClick(ClickEvent event)   {
 	                     try
 	                        {
-	                         /*RaavareDTO r = new RaavareDTO( Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());
-	                         connection = 
-	                                    DriverManager.getConnection( URL, USERNAME, PASSWORD );
-	 
-	                            // create query that add/create a raavare to kartotek
-	                            saveRaavareStmt = 
-	                                    connection.prepareStatement( "INSERT INTO raavare " + 
-	                                            "( raavare_id, raavare_navn, leverandoer ) " + 
-	                                            "VALUES (?, ?, ? )" );
-	                            saveRaavareStmt.setInt(1, r.getRaavareId());
-	                            saveRaavareStmt.setString(2, r.getRaavareNavn());
-	                            saveRaavareStmt.setString(3, r.getLeverandoer());
-	 
-	                            saveRaavareStmt.executeUpdate();*/
+	                    	 RaavarebatchDTO rb = new RaavarebatchDTO(Integer.parseInt(raavarebatch_idTxt.getText()), Integer.parseInt(raavare_idTxt.getText()), Double.parseDouble(maengdeTxt.getText()));
+	                    	 clientImpl.service.saveRaavarebatch(rb, new AsyncCallback<Void>() {
+	                    		 @Override
+	             				public void onFailure(Throwable caught) {
+	             					Window.alert("Server fejl!" + caught.getMessage());
+	             						}
+
+	             				@Override
+	             				public void onSuccess(Void result) {
+	             					Window.alert("Raavarebatch gemt i kartotek");
+	             						}
+	                    	 });
 	                        }
 	                        catch (Exception e) {
 	                            e.printStackTrace();
@@ -174,9 +135,6 @@ import dtu.shared.DALException;
 	            phPanel.add(save);
 	 
 	        }
-
-			
-		
 
 		public void ProduktbatchesFields()
 		{
@@ -195,7 +153,6 @@ import dtu.shared.DALException;
 
 			// total height of widget. Components are distributed evenly
 			phPanel.setHeight("120px");	
-
 			
 			HorizontalPanel pb_idPanel = new HorizontalPanel();
 			HorizontalPanel statusPanel = new HorizontalPanel();
@@ -235,29 +192,23 @@ import dtu.shared.DALException;
 				//@Override
 				public void onClick(ClickEvent event)   {
 				   
-					 
-				   ProduktbatchDTO produktbatch = new ProduktbatchDTO(Integer.parseInt(pb_idTxt.getText()), Integer.parseInt(statusTxt.getText()),Integer.parseInt( recept_idTxt.getText()),Integer.parseInt(made_byTxt.getText()));	 
-				 clientImpl.service.saveProduktbatch( produktbatch, new AsyncCallback<Void>() {
+				ProduktbatchDTO produktbatch = new ProduktbatchDTO(Integer.parseInt(pb_idTxt.getText()), Integer.parseInt(statusTxt.getText()),Integer.parseInt( recept_idTxt.getText()),Integer.parseInt(made_byTxt.getText()));	 
+				clientImpl.service.saveProduktbatch( produktbatch, new AsyncCallback<Void>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
 					Window.alert("Server fejl!" + caught.getMessage());
-							
-							
 						}
 
 				@Override
 				public void onSuccess(Void result) {
 					Window.alert("Produktbatch gemt i kartotek");
-							
-							
 						}
 					});
 		
 				        }		
-			
-			
-			} 
+
+				} 
 			
 			);
 			
@@ -266,11 +217,7 @@ import dtu.shared.DALException;
 			phPanel.add(recept_idPanel);
 			phPanel.add(made_byPanel);
 			phPanel.add(save);
-			
 
 		}
-		
-		
-		
 		
 	}

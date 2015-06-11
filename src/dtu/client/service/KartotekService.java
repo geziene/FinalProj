@@ -7,6 +7,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import dtu.shared.ProduktbatchDTO;
 import dtu.shared.RaavareDTO;
+import dtu.shared.RaavarebatchDTO;
 import dtu.shared.ReceptDTO;
 import dtu.shared.ReceptkomponentDTO;
 import dtu.shared.UserDTO;
@@ -34,5 +35,6 @@ public interface KartotekService extends RemoteService {
 	
 	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception;
 	
+	public void saveRaavarebatch(RaavarebatchDTO rb) throws Exception;
 
 }

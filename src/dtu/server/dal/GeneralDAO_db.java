@@ -14,6 +14,7 @@ import dtu.client.service.KartotekService;
 import dtu.shared.DALException;
 import dtu.shared.ProduktbatchDTO;
 import dtu.shared.RaavareDTO;
+import dtu.shared.RaavarebatchDTO;
 import dtu.shared.ReceptDTO;
 import dtu.shared.ReceptkomponentDTO;
 import dtu.shared.UserDTO;
@@ -34,8 +35,12 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	private PreparedStatement saveReceptStmt = null;
 	
 	private PreparedStatement saveUserStmt = null;
+	
 	private PreparedStatement saveReceptkomponent = null;
+	
 	private PreparedStatement saveProduktbatchStmt= null;
+	
+	private PreparedStatement saveRaavarebatchStmt = null;
 
 	public GeneralDAO_db() throws Exception {
 		try 
@@ -77,9 +82,13 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 					"VALUES(?, ?, ?, ?, ?)");
 			
 			saveProduktbatchStmt = 
-					connection.prepareStatement( "INSERT INTO produktbatch " + 
+					connection.prepareStatement("INSERT INTO produktbatch " + 
 							"( pb_id, status, recept_id, made_by ) " + 
-							"VALUES (?, ?, ?,? )" );
+							"VALUES (?, ?, ?, ?)" );
+			
+			saveRaavarebatchStmt = connection.prepareStatement("INSERT INTO raavarebatch " +
+					"(rb_id, raavare_id, maengde) " +
+					"VALUES(?, ?, ?)");
 		} 
 		catch ( SQLException sqlException )
 		{
@@ -89,9 +98,6 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 
 	@Override
 	public void saveRaavare(RaavareDTO r) throws Exception {
-		// simulate server error
-		// throw new RuntimeException(" \"saveRaavare\" fejlede");
-
 		try {
 			saveRaavareStmt.setInt(1, r.getRaavareId());
 			saveRaavareStmt.setString(2, r.getRaavareNavn());
@@ -153,8 +159,6 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		return results;
 	} 
 
-
-
 	@Override
 	public int getSize() throws Exception {
 		//return size of raavare table
@@ -195,16 +199,6 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		}
 		
 	} 
-	
-	// close the database connection
-	public void close() {
-		try {
-			connection.close();
-		} // end try
-		catch (SQLException sqlException) {
-			sqlException.printStackTrace();
-		} 
-	}
 
 	@Override
 	public void saveRecept(ReceptDTO newRecept) throws Exception {
@@ -212,10 +206,9 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			saveReceptStmt.setInt(1, newRecept.getreceptId());
 			saveReceptStmt.setString(2, newRecept.getreceptNavn());
 			
-
 			saveReceptStmt.executeUpdate();
 		} catch (SQLException e) {
-		throw new DALException("\"saveRecept\" fejlede");
+		throw new DALException("\"save Recept\" fejlede");
 		
 	}
 }
@@ -230,18 +223,10 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			
 			saveReceptkomponent.executeUpdate();
 		} catch (SQLException e) {
-		throw new DALException("\"saveReceptkomponent\" fejlede");
+		throw new DALException("\"save Receptkomponent\" fejlede");
 		
 	}
 }
-
-	public PreparedStatement getSaveReceptkomponent() {
-		return saveReceptkomponent;
-	}
-
-	public void setSaveReceptkomponent(PreparedStatement saveReceptkomponent) {
-		this.saveReceptkomponent = saveReceptkomponent;
-	}
 
 	@Override
 	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception {
@@ -254,6 +239,28 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		} catch (SQLException e) {
 			throw new DALException(" \"save Produktbatch\" fejlede");
 		}
+	}
+	
+	@Override
+	public void saveRaavarebatch(RaavarebatchDTO rb) throws Exception {
+		try {
+			saveRaavarebatchStmt.setInt(1, rb.getRaavarebatchId());
+			saveRaavarebatchStmt.setInt(2, rb.getRaavareId());
+			saveRaavarebatchStmt.setDouble(3, rb.getMaengde());
+			saveRaavarebatchStmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DALException("\" save Raavarebatch\" fejlede");
+		}
 		
+	}
+	
+	// close the database connection
+	public void close() {
+		try {
+			connection.close();
+		} // end try
+		catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		} 
 	}
 }

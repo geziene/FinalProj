@@ -3,7 +3,6 @@ package dtu.shared;
 import java.io.Serializable;
 
 public class ProduktbatchDTO implements Serializable {
-	private static final long serialVersionUID = 1L;
     // i omraadet 1-99999999 vaelges af brugerne */
     int produktbatchId;                     
     // min. 2 max. 20 karakterer */

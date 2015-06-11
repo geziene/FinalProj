@@ -8,11 +8,12 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import dtu.client.service.KartotekService;
 import dtu.shared.ProduktbatchDTO;
 import dtu.shared.RaavareDTO;
+import dtu.shared.RaavarebatchDTO;
 import dtu.shared.ReceptDTO;
 import dtu.shared.ReceptkomponentDTO;
 import dtu.shared.UserDTO;
 
-public class GeneralDAO extends RemoteServiceServlet implements KartotekService  {
+public class GeneralDAO extends RemoteServiceServlet implements KartotekService {
 	// primary key, autoincrement - not safe!
 	private static int id = 0;
 
@@ -20,26 +21,20 @@ public class GeneralDAO extends RemoteServiceServlet implements KartotekService 
 	private List<UserDTO> uList;
 	private List<ReceptDTO> rList;
 	private List<ReceptkomponentDTO> kList;
-	private List<ProduktbatchDTO> pblist;
+	private List<ProduktbatchDTO> pbList;
+	private List<RaavarebatchDTO> rbList;
 
 	public GeneralDAO() throws Exception {
 		pList = new ArrayList<RaavareDTO>();
 		uList = new ArrayList<UserDTO>();
 		rList = new ArrayList<ReceptDTO>();
 		kList = new ArrayList<ReceptkomponentDTO>();
-		pblist = new ArrayList<ProduktbatchDTO>();
-		
-		// Indset start data
-		saveRaavare(new RaavareDTO(1,"Hans Jensen","aaa"));
-		saveRaavare(new RaavareDTO(2,"Ulla Jacobsen","eee"));
-		saveRaavare(new RaavareDTO(3,"Peter Hansen","qqq"));
+		pbList = new ArrayList<ProduktbatchDTO>();
+		rbList = new ArrayList<RaavarebatchDTO>();
 	}
 
 	@Override
 	public void saveRaavare(RaavareDTO r) throws Exception {
-		// simulate server error
-		// throw new RuntimeException(" \"savePerson\" fejlede");
-
 		// add primary key
 		r.setRaavareId(id++);
 		pList.add(r);
@@ -51,7 +46,6 @@ public class GeneralDAO extends RemoteServiceServlet implements KartotekService 
 		for (int i=0; i<pList.size();i++)
 			if (pList.get(i).getRaavareId() == r.getRaavareId())	
 				pList.set(i, r);
-
 	}
 	
 	@Override
@@ -94,7 +88,12 @@ public class GeneralDAO extends RemoteServiceServlet implements KartotekService 
 	@Override
 	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception {
 		pb.setproduktbatchId(id++);
-		pblist.add(pb);
-		
+		pbList.add(pb);
+	}
+
+	@Override
+	public void saveRaavarebatch(RaavarebatchDTO rb) throws Exception {
+		rb.setRaavarebatchId(id++);
+		rbList.add(rb);
 	}
 }

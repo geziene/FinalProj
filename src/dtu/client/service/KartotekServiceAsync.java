@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import dtu.shared.ProduktbatchDTO;
 import dtu.shared.RaavareDTO;
+import dtu.shared.RaavarebatchDTO;
 import dtu.shared.ReceptDTO;
 import dtu.shared.ReceptkomponentDTO;
 import dtu.shared.UserDTO;
@@ -31,6 +32,7 @@ public interface KartotekServiceAsync {
 
 	void saveProduktbatch(ProduktbatchDTO pb, AsyncCallback<Void> asyncCallback);
 
+	void saveRaavarebatch(RaavarebatchDTO rb, AsyncCallback<Void> asyncCallback);
 	
 	
 }

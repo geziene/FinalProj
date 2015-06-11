@@ -2,9 +2,6 @@ package dtu.shared;
 import java.io.Serializable;
 
 public class ReceptkomponentDTO extends RaavareDTO implements Serializable  {
-	
-
-		private static final long serialVersionUID = 1L;
 		
 		int receptkomponentId;
 		int raavarekomponentId;
@@ -16,9 +13,7 @@ public class ReceptkomponentDTO extends RaavareDTO implements Serializable  {
 		{
 			
 		}
-		
-		
-		
+
 		public ReceptkomponentDTO(int receptkomponentId, int raavarekomponentId,double nettokomponent,double tolerancekomponent,int madebykomponent){
 			
 			this.receptkomponentId = receptkomponentId;

@@ -24,13 +24,11 @@ public class PharmacistView extends Composite {
 	Button showRaavare = new Button("Show Raavare");
 	Button updateRaavare = new Button("Update Raavare");
 	
-	
 	Button addRecept = new Button("Create Recept");
 	Button showRecept = new Button("Show Recept");
 	Button addReceptkomponent = new Button("Create receptkomponet");
 	Button updateReceptkomponent = new Button("Update receptkomponet");
 	//BrowseView bv = new BrowseView(clientImpl);
-	
 	
 	public PharmacistView(final KartotekServiceClientImpl clientImpl) // pramtriz cnsrctr
 	{
@@ -44,14 +42,9 @@ public class PharmacistView extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				RaavareFields();
-					}
-			
-
-			
+					}	
 		});
-		
-	
-		
+
 		addRecept.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -65,8 +58,6 @@ public class PharmacistView extends Composite {
 				final TextBox receptidTxt;
 				Label receptnameLbl;
 				final TextBox receptnameTxt;
-			
-			
 				
 				Button save = new Button("Create");
 
@@ -75,7 +66,6 @@ public class PharmacistView extends Composite {
 
 				HorizontalPanel receptnamePanel = new HorizontalPanel();
 				HorizontalPanel receptidPanel = new HorizontalPanel();
-			
 				
 				receptidLbl = new Label("Recept ID:");
 				receptidLbl.setWidth("100px");
@@ -90,32 +80,22 @@ public class PharmacistView extends Composite {
 				receptnameTxt.setHeight("1em");
 				receptnamePanel.add(receptnameLbl);
 				receptnamePanel.add(receptnameTxt);
-				
-					
 
 				save.addClickHandler(new ClickHandler()  {
 
 					@Override
 					public void onClick(ClickEvent event)   {
-//					   receptidTxt.getText();
-//					   receptnameTxt.getText();
-
-						
 					 ReceptDTO newRecept = new ReceptDTO( Integer.parseInt(receptidTxt.getText()), receptnameTxt.getText());	 
 					 clientImpl.service.saveRecept(newRecept, new AsyncCallback<Void>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						Window.alert("Server error!" + caught.getMessage());
-								
-								
 							}
 
 					@Override
 					public void onSuccess(Void result) {
 						Window.alert("Recept saved in system");
-								
-								
 							}
 						});
 			
@@ -126,10 +106,8 @@ public class PharmacistView extends Composite {
 				phPanel.add(receptnamePanel);
 				phPanel.add(save);
 
-				
 			}
 
-			
 		});
 		
 			addReceptkomponent.addClickHandler(new ClickHandler() {
@@ -143,8 +121,6 @@ public class PharmacistView extends Composite {
 				phPanel.clear();
 				Label receptidLbl;
 				final TextBox receptidTxt;
-				Label receptnameLbl;
-				final TextBox receptnameTxt;
 				Label nettoLbl;
 				final TextBox nettoTxt;
 				Label toleranceLbl;
@@ -156,7 +132,6 @@ public class PharmacistView extends Composite {
 		
 				Button savereceptkomponent = new Button("Create");
 				
-
 				// total height of widget. Components are distributed evenly
 				phPanel.setHeight("120px");	
 
@@ -166,7 +141,6 @@ public class PharmacistView extends Composite {
 				HorizontalPanel nettoPanel = new HorizontalPanel();
 				HorizontalPanel tolerancePanel = new HorizontalPanel();
 				HorizontalPanel madebyPanel = new HorizontalPanel();
-				
 				
 				receptidLbl = new Label("Reccept ID:");
 				receptidLbl.setWidth("100px");
@@ -203,28 +177,24 @@ public class PharmacistView extends Composite {
 				madebyPanel.add(madebyLbl);
 				madebyPanel.add(madebyTxt);
 				
-				
-
 				savereceptkomponent.addClickHandler(new ClickHandler()  {
 
 					@Override
-					public void onClick(ClickEvent event)   {
-//					  
-					 ReceptkomponentDTO newReceptkomponent = new ReceptkomponentDTO( Integer.parseInt(receptidTxt.getText()), Integer.parseInt(raavareidTxt.getText()), Double.parseDouble(nettoTxt.getText()), Double.parseDouble(toleranceTxt.getText()),Integer.parseInt(madebyTxt.getText()));                                                                             	 
-					 clientImpl.service.saveReceptkomponent(newReceptkomponent, new AsyncCallback<Void>() {
+					public void onClick(ClickEvent event) {
+					
+					ReceptkomponentDTO newReceptkomponent = new ReceptkomponentDTO(Integer.parseInt(receptidTxt.getText()),
+							 Integer.parseInt(raavareidTxt.getText()), Double.parseDouble(nettoTxt.getText()), 
+							 Double.parseDouble(toleranceTxt.getText()),Integer.parseInt(madebyTxt.getText()));
+					clientImpl.service.saveReceptkomponent(newReceptkomponent, new AsyncCallback<Void>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 						Window.alert("Server error!" + caught.getMessage());
-								
-								
 							}
 
 					@Override
 					public void onSuccess(Void result) {
-						Window.alert("Recept saved in system");
-								
-								
+						Window.alert("Receptkomponet saved in system");
 							}
 						});
 			
@@ -234,20 +204,14 @@ public class PharmacistView extends Composite {
 				phPanel.add(receptidPanel);
 				phPanel.add(receptnamePanel);
 				phPanel.add(raavareidPanel);
+				phPanel.add(nettoPanel);
 				phPanel.add(tolerancePanel);
 				phPanel.add(madebyPanel);
-				phPanel.add(nettoPanel);
 				phPanel.add(savereceptkomponent);
 
-				
 			}
-			
 
-			
 		});
-		
-		
-		
 		phPanel.add(addRaavare);
 		phPanel.add(showRaavare);
 		phPanel.add(updateRaavare);
@@ -256,9 +220,6 @@ public class PharmacistView extends Composite {
 		phPanel.add(showRecept);
 		phPanel.add(addReceptkomponent);
 		phPanel.add(updateReceptkomponent);
-	
-		
-		
 
 	}
 
@@ -267,12 +228,11 @@ public class PharmacistView extends Composite {
 		phPanel.clear();
 		
 		Label idLbl;
-		final TextBox idTxt;
 		Label nameLbl;
 		Label levLbl;
+		final TextBox idTxt;
 		final TextBox nameTxt;
 		final TextBox levTxt ;
-	
 		
 		Button save = new Button("Create");
 
@@ -303,32 +263,22 @@ public class PharmacistView extends Composite {
 		levTxt.setHeight("1em");
 		levPanel.add(levLbl);
 		levPanel.add(levTxt);
-		
-		
 
 		save.addClickHandler(new ClickHandler()  {
 
 			@Override
 			public void onClick(ClickEvent event)   {
-//			   receptidTxt.getText();
-//			   receptnameTxt.getText();
-
-				
-			 RaavareDTO newRaavare = new RaavareDTO( Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());	 
+			 RaavareDTO newRaavare = new RaavareDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());	 
 			 clientImpl.service.saveRaavare(newRaavare, new AsyncCallback<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("Server error!" + caught.getMessage());
-						
-						
 					}
 
 			@Override
 			public void onSuccess(Void result) {
 				Window.alert("Raavare saved in system");
-						
-						
 					}
 				});
 	
@@ -342,6 +292,5 @@ public class PharmacistView extends Composite {
 		phPanel.add(save);
 
 	}
-	
 	
 }

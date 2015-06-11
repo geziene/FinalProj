@@ -2,12 +2,7 @@ package dtu.shared;
 
 import java.io.Serializable;
 
-public class ReceptDTO extends RaavareDTO implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ReceptDTO implements Serializable {
 	
 	int receptId;
 	String receptNavn;
@@ -16,16 +11,11 @@ public class ReceptDTO extends RaavareDTO implements Serializable {
 	{
 		
 	}
-	
-	
-	
+
 	public ReceptDTO(int receptId, String receptNavn)
 	{
 		this.receptId = receptId;
 		this.receptNavn = receptNavn;
-		
-		
-		
 	}
 	
 	  public int getreceptId() {
@@ -39,7 +29,6 @@ public class ReceptDTO extends RaavareDTO implements Serializable {
 	    	}
 	  public void setreceptNavn(String receptNavn) {
 	    	this.receptNavn = receptNavn;
-	
 	  }	
 	  
 	  
