@@ -5,7 +5,10 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import dtu.shared.ProduktbatchDTO;
 import dtu.shared.RaavareDTO;
+import dtu.shared.ReceptDTO;
+import dtu.shared.ReceptkomponentDTO;
 import dtu.shared.UserDTO;
 
 
@@ -24,4 +27,12 @@ public interface KartotekService extends RemoteService {
 	public int getSize() throws Exception;
 	
 	public void saveUser(UserDTO u) throws Exception;
+	
+	public void saveRecept(ReceptDTO newRecept) throws Exception;
+	
+	public void saveReceptkomponent(ReceptkomponentDTO newReceptkomponent) throws Exception;
+	
+	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception;
+	
+
 }

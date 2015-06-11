@@ -12,7 +12,10 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import dtu.client.service.KartotekService;
 import dtu.shared.DALException;
+import dtu.shared.ProduktbatchDTO;
 import dtu.shared.RaavareDTO;
+import dtu.shared.ReceptDTO;
+import dtu.shared.ReceptkomponentDTO;
 import dtu.shared.UserDTO;
 
 public class GeneralDAO_db extends RemoteServiceServlet implements KartotekService  {
@@ -28,8 +31,11 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	private PreparedStatement getRaavareStmt = null;
 	private PreparedStatement getSizeStmt = null;
 	private PreparedStatement deleteRaavareStmt = null;
+	private PreparedStatement saveReceptStmt = null;
 	
 	private PreparedStatement saveUserStmt = null;
+	private PreparedStatement saveReceptkomponent = null;
+	private PreparedStatement saveProduktbatchStmt= null;
 
 	public GeneralDAO_db() throws Exception {
 		try 
@@ -62,6 +68,18 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 					"INSERT INTO users(opr_id, opr_navn, ini, cpr, password, gruppe) " +
 					"VALUES(?, ?, ?, ?, ?, ?)");
 
+			saveReceptStmt = connection.prepareStatement(
+					"INSERT INTO recept(recept_id, recept_navn) " +
+					"VALUES(?, ?)");
+			
+			saveReceptkomponent = connection.prepareStatement(
+					"INSERT INTO receptkomponent(recept_id, raavare_id, nom_netto, tolerance, made_by) " +
+					"VALUES(?, ?, ?, ?, ?)");
+			
+			saveProduktbatchStmt = 
+					connection.prepareStatement( "INSERT INTO produktbatch " + 
+							"( pb_id, status, recept_id, made_by ) " + 
+							"VALUES (?, ?, ?,? )" );
 		} 
 		catch ( SQLException sqlException )
 		{
@@ -186,5 +204,56 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		} 
+	}
+
+	@Override
+	public void saveRecept(ReceptDTO newRecept) throws Exception {
+		try {
+			saveReceptStmt.setInt(1, newRecept.getreceptId());
+			saveReceptStmt.setString(2, newRecept.getreceptNavn());
+			
+
+			saveReceptStmt.executeUpdate();
+		} catch (SQLException e) {
+		throw new DALException("\"saveRecept\" fejlede");
+		
+	}
+}
+	@Override
+	public void saveReceptkomponent(ReceptkomponentDTO newReceptkomponent) throws Exception {
+		try {
+			saveReceptkomponent.setInt(1, newReceptkomponent.getreceptkomponentId());
+			saveReceptkomponent.setInt(2, newReceptkomponent.getraavarekomponentId());
+			saveReceptkomponent.setDouble(3, newReceptkomponent.getnettokomponent());
+			saveReceptkomponent.setDouble(4, newReceptkomponent.gettolerancekomponent());
+			saveReceptkomponent.setInt(5, newReceptkomponent.getmadebykomponent());
+			
+			saveReceptkomponent.executeUpdate();
+		} catch (SQLException e) {
+		throw new DALException("\"saveReceptkomponent\" fejlede");
+		
+	}
+}
+
+	public PreparedStatement getSaveReceptkomponent() {
+		return saveReceptkomponent;
+	}
+
+	public void setSaveReceptkomponent(PreparedStatement saveReceptkomponent) {
+		this.saveReceptkomponent = saveReceptkomponent;
+	}
+
+	@Override
+	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception {
+		try {
+			saveProduktbatchStmt.setInt(1, pb.getproduktbatchId());
+			saveProduktbatchStmt.setInt(2, pb.getstatus());
+			saveProduktbatchStmt.setInt(3, pb.getreceptId());
+			saveProduktbatchStmt.setInt(4, pb.getmade_by());
+			saveProduktbatchStmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DALException(" \"save Produktbatch\" fejlede");
+		}
+		
 	}
 }

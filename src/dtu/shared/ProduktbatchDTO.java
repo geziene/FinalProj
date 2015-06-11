@@ -26,10 +26,10 @@ public class ProduktbatchDTO implements Serializable {
 		this.made_by= made_by;
 	}
 	
-    public int getRaavareId() {
+    public int getproduktbatchId() {
     	return produktbatchId;
     	}
-    public void setRaavareId(int produktbatchId) {
+    public void setproduktbatchId(int produktbatchId) {
     	this.produktbatchId = produktbatchId;
     	}
     public int getstatus() {
@@ -55,5 +55,3 @@ public class ProduktbatchDTO implements Serializable {
 		return produktbatchId + "\t" + status +"\t" + receptId +"\t" + made_by; 
 	}
 }
-
-

@@ -6,7 +6,10 @@ import java.util.List;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import dtu.client.service.KartotekService;
+import dtu.shared.ProduktbatchDTO;
 import dtu.shared.RaavareDTO;
+import dtu.shared.ReceptDTO;
+import dtu.shared.ReceptkomponentDTO;
 import dtu.shared.UserDTO;
 
 public class GeneralDAO extends RemoteServiceServlet implements KartotekService  {
@@ -15,10 +18,16 @@ public class GeneralDAO extends RemoteServiceServlet implements KartotekService 
 
 	private List<RaavareDTO> pList;
 	private List<UserDTO> uList;
+	private List<ReceptDTO> rList;
+	private List<ReceptkomponentDTO> kList;
+	private List<ProduktbatchDTO> pblist;
 
 	public GeneralDAO() throws Exception {
 		pList = new ArrayList<RaavareDTO>();
 		uList = new ArrayList<UserDTO>();
+		rList = new ArrayList<ReceptDTO>();
+		kList = new ArrayList<ReceptkomponentDTO>();
+		pblist = new ArrayList<ProduktbatchDTO>();
 		
 		// Indset start data
 		saveRaavare(new RaavareDTO(1,"Hans Jensen","aaa"));
@@ -67,5 +76,25 @@ public class GeneralDAO extends RemoteServiceServlet implements KartotekService 
 	public void saveUser(UserDTO u) throws Exception {
 		u.setuserId(id++);
 		uList.add(u);	
+	}
+
+	@Override
+	public void saveRecept(ReceptDTO newRecept) throws Exception {
+		newRecept.setreceptId(id++);
+		rList.add(newRecept);
+		
+	}
+
+	@Override
+	public void saveReceptkomponent(ReceptkomponentDTO newReceptkomponent) throws Exception {
+		newReceptkomponent.setreceptkomponentId(id++);
+		kList.add(newReceptkomponent);
+	}
+	
+	@Override
+	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception {
+		pb.setproduktbatchId(id++);
+		pblist.add(pb);
+		
 	}
 }

@@ -50,6 +50,7 @@ import dtu.shared.DALException;
 		
 		Button addRaavarebatches = new Button("Create Raavarebatches");
         Button showRaavarebatches = new Button("Show Raavarebatches");
+        
 		Button addProduktbatches = new Button("Create Produktbatches");
 		Button showProduktbatches = new Button("Show Produktbatches");
 		Button updateProduktbatches = new Button("Update Produktbatches");
@@ -183,8 +184,6 @@ import dtu.shared.DALException;
 			
 			Label pb_idLbl;
 			final TextBox pb_idTxt;
-			Label maengdeLbl;
-			final TextBox maengdeTxt;
 			Label statusLbl;
 			final TextBox statusTxt;
 			Label recept_idLbl;
@@ -193,10 +192,6 @@ import dtu.shared.DALException;
 			final TextBox made_byTxt;
 			
 			Button save = new Button("Create");
-			
-			
-			
-		
 
 			// total height of widget. Components are distributed evenly
 			phPanel.setHeight("120px");	
@@ -235,17 +230,14 @@ import dtu.shared.DALException;
 			made_byPanel.add(made_byLbl);
 			made_byPanel.add(made_byTxt);
 
-		/*	save.addClickHandler(new ClickHandler()  {
+			save.addClickHandler(new ClickHandler()  {
 
 				//@Override
 				public void onClick(ClickEvent event)   {
-				   pb_idTxt.getText();
-				   statusTxt.getText();
-				   recept_idTxt.getText();
-				   made_byTxt.getText();
+				   
 					 
-				   ProduktbatchDTO newproduktbatch = new ProduktbatchDTO( Integer.parseInt(pb_idTxt.getText()), statusTxt.getText(), recept_idTxt.getText(),made_byTxt.getText());	 
-				 clientImpl.service.saveRaavare(newProduktbatchDTO, new AsyncCallback<Void>() {
+				   ProduktbatchDTO produktbatch = new ProduktbatchDTO(Integer.parseInt(pb_idTxt.getText()), Integer.parseInt(statusTxt.getText()),Integer.parseInt( recept_idTxt.getText()),Integer.parseInt(made_byTxt.getText()));	 
+				 clientImpl.service.saveProduktbatch( produktbatch, new AsyncCallback<Void>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -256,7 +248,7 @@ import dtu.shared.DALException;
 
 				@Override
 				public void onSuccess(Void result) {
-					Window.alert("Raavare gemt i kartotek");
+					Window.alert("Produktbatch gemt i kartotek");
 							
 							
 						}
@@ -267,12 +259,13 @@ import dtu.shared.DALException;
 			
 			} 
 			
-			); */
+			);
 			
 			phPanel.add(pb_idPanel);
 			phPanel.add(statusPanel);
 			phPanel.add(recept_idPanel);
 			phPanel.add(made_byPanel);
+			phPanel.add(save);
 			
 
 		}
