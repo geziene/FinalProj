@@ -13,9 +13,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import dtu.client.service.KartotekService;
 import dtu.shared.DALException;
 import dtu.shared.RaavareDTO;
+import dtu.shared.UserDTO;
 
-public class RaavareDAO_db extends RemoteServiceServlet implements KartotekService  {
-	
+public class GeneralDAO_db extends RemoteServiceServlet implements KartotekService  {
 
 	private static final String URL = "jdbc:mysql://localhost:3306/Raavaredatabase";
 	private static final String USERNAME = "root";
@@ -28,8 +28,10 @@ public class RaavareDAO_db extends RemoteServiceServlet implements KartotekServi
 	private PreparedStatement getRaavareStmt = null;
 	private PreparedStatement getSizeStmt = null;
 	private PreparedStatement deleteRaavareStmt = null;
+	
+	private PreparedStatement saveUserStmt = null;
 
-	public RaavareDAO_db() throws Exception {
+	public GeneralDAO_db() throws Exception {
 		try 
 		{
 			connection = DriverManager.getConnection( URL, USERNAME, PASSWORD );
@@ -56,6 +58,9 @@ public class RaavareDAO_db extends RemoteServiceServlet implements KartotekServi
 			deleteRaavareStmt = connection.prepareStatement( 
 					"DELETE FROM person WHERE raavare_id =  ? ");
 
+			saveUserStmt = connection.prepareStatement(
+					"INSERT INTO users(opr_id, opr_navn, ini, cpr, password, gruppe) " +
+					"VALUES(?, ?, ?, ?, ?, ?)");
 
 		} 
 		catch ( SQLException sqlException )
@@ -156,6 +161,23 @@ public class RaavareDAO_db extends RemoteServiceServlet implements KartotekServi
 		} 
 	}
 
+	@Override
+	public void saveUser(UserDTO u) throws Exception {
+		try {
+			saveUserStmt.setInt(1, u.getuserId());
+			saveUserStmt.setString(2, u.getuserNavn());
+			saveUserStmt.setString(3, u.getuserIni());
+			saveUserStmt.setString(4, u.getuserCpr());
+			saveUserStmt.setString(5, u.getuserPassword());
+			saveUserStmt.setInt(6, u.getuserGroup());
+
+			saveUserStmt.executeUpdate();
+		} catch (SQLException e) {
+		throw new DALException("\"saveUser\" fejlede");
+		}
+		
+	} 
+	
 	// close the database connection
 	public void close() {
 		try {
@@ -164,5 +186,5 @@ public class RaavareDAO_db extends RemoteServiceServlet implements KartotekServi
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		} 
-	} 
+	}
 }

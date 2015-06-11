@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import dtu.shared.RaavareDTO;
+import dtu.shared.UserDTO;
 
 
 @RemoteServiceRelativePath("kartotekservice")
@@ -21,4 +22,6 @@ public interface KartotekService extends RemoteService {
 	public List<RaavareDTO> getRaavare() throws Exception;
 	public void deleteRaavare(int id) throws Exception; 
 	public int getSize() throws Exception;
+	
+	public void saveUser(UserDTO u) throws Exception;
 }

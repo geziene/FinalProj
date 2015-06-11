@@ -76,8 +76,6 @@ public void check()
 		w = new VaerkfView(clientImpl);
 	} else if("12".equals(usr)){
 		w = new OperatorView(clientImpl);
-	
-		//TODO
 	}
 	loginPanel.clear();
 	loginPanel.add(w);

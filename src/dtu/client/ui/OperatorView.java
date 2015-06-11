@@ -1,93 +1,75 @@
 package dtu.client.ui;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.List;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import dtu.client.service.KartotekServiceClientImpl;
-import dtu.shared.DALException;
-import dtu.shared.FieldVerifier;
-import dtu.client.ui.WelcomeView;
-import dtu.shared.RaavareDTO;
-import dtu.shared.DALException;
 
-public class OperatorView extends Composite{
+// \u00E6 = æ \u00C6 = Æ
+// \u00F8 = ø \u00D8 = Ø
+// \u00E5 = å \u00C5 = Å
+
+public class OperatorView extends Composite {
 		KartotekServiceClientImpl clientImpl;
 		VerticalPanel phPanel;
 		
-		/*private static final String URL = "jdbc:mysql://localhost:3306/Raavaredb";
-		private static final String USERNAME = "root";
-		private static final String PASSWORD = "root";
+		Label oprId = new Label("Operat\u00F8r ID");
+		TextBox oprTxt = new TextBox();
 		
-		private Connection connection = null; // manages connection
-
-		private PreparedStatement saveRaavareStmt = null;*/
-
-		Button addAfvejning = new Button("Create Afvejning");
+		Button oprLogin = new Button("OK");
+		Button annuller = new Button("Annuller");
 		
-		
-		//BrowseView bv = new BrowseView(clientImpl);
-		
-		
-		public OperatorView(KartotekServiceClientImpl clientImpl) // pramtriz cnsrctr
-		{
+		public OperatorView(KartotekServiceClientImpl clientImpl) {
 			this.clientImpl = clientImpl;
 
 			phPanel = new VerticalPanel();
 			initWidget(this.phPanel);
 			
-			addAfvejning.addClickHandler(new ClickHandler() {
+			oprLogin.addClickHandler(new ClickHandler() {
 
 				@Override
 				public void onClick(ClickEvent event) {
-					AfvejningFields();
+					if (oprTxt.getText().equals("12")){
+						AfvejningFields();	
+					}
+					else{
+						Window.alert("Forkert ID!");
+					}
 				}
 			});
-			
-			phPanel.add(addAfvejning);
-			
-			
-			
-			
-
+			phPanel.add(oprId);
+			phPanel.add(oprTxt);
+			phPanel.add(oprLogin);
+			phPanel.add(annuller);
 		}
 
-		public void AfvejningFields() 
-		{
+		public void AfvejningFields() {
+			
 			phPanel.clear();
+
+			HorizontalPanel xPanel = new HorizontalPanel();
+			VerticalPanel yPanel = new VerticalPanel();
+			HorizontalPanel zPanel = new HorizontalPanel();
 			
-			/*Label idLbl;
-			final TextBox idTxt;
-			Label nameLbl;
-			Label levLbl;
-			final TextBox nameTxt;
-			final TextBox levTxt;*/
-			Button save = new Button("Create");
+			Label besked = new Label("Velkommen \"username\"");
+			besked.setHeight("3em");
+			xPanel.add(besked);
 			
+			Label batchLabel = new Label("Indtast ID p\u00E5 den \u00F8nskede produktbatch");
+			final TextBox batchTxt = new TextBox();
+			batchTxt.setWidth("35px");
+			yPanel.add(batchLabel);
+			yPanel.add(batchTxt);
 			
-			
-		
+			Button batchOK = new Button("OK");
+			zPanel.add(batchOK);
 
 			// total height of widget. Components are distributed evenly
 			/*phPanel.setHeight("120px");	
@@ -121,12 +103,25 @@ public class OperatorView extends Composite{
 			
 			*/
 
-			save.addClickHandler(new ClickHandler()  {
+			batchOK.addClickHandler(new ClickHandler() {
 
 				@Override
-				public void onClick(ClickEvent event)   {
-					 try
-				        {
+				public void onClick(ClickEvent event) {
+					phPanel.clear();
+					try {
+						 String batchNr = batchTxt.getText();
+						 if(batchNr.equals("1")) {
+//							 connection = DriverManager.getConnection( URL, USERNAME, PASSWORD );
+//							 
+//							 getProduktbatchReceptStmt = connection.prepareStatement
+//									 ("SELECT recept_id FROM produktbatch WHERE pb_id = 1 ");
+//							 getProduktbatchReceptStmt.executeQuery();
+//							 
+//							 String result = getProduktbatchReceptStmt.toString(); 
+//							 Label b = new Label(result);
+//							 HorizontalPanel hPanel = new HorizontalPanel();
+//							 hPanel.add(b);
+						 }
 						 /*RaavareDTO r = new RaavareDTO( Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());
 						 connection = 
 									DriverManager.getConnection( URL, USERNAME, PASSWORD );
@@ -148,10 +143,9 @@ public class OperatorView extends Composite{
 				        }		
 			} );
 			
-			/*phPanel.add(idPanel);
-			phPanel.add(namePanel);
-			phPanel.add(levPanel);
-			phPanel.add(save);*/
+			phPanel.add(xPanel);
+			phPanel.add(yPanel);
+			phPanel.add(zPanel);
 
 		}
 		

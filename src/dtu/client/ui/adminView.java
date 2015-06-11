@@ -1,4 +1,5 @@
 package dtu.client.ui;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -11,11 +12,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import dtu.client.service.KartotekServiceClientImpl;
-
+import dtu.shared.UserDTO;
 
 public class adminView extends Composite {
-	
-
 	KartotekServiceClientImpl clientImpl;
 	VerticalPanel phPanel;
 
@@ -37,7 +36,7 @@ public class adminView extends Composite {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				RaavareFields();
+				UserFields();
 			}
 		});
 		
@@ -49,7 +48,7 @@ public class adminView extends Composite {
 
 	}
 
-	public void RaavareFields() 
+	public void UserFields() 
 	{
 		phPanel.clear();
 		
@@ -127,38 +126,28 @@ public class adminView extends Composite {
 		groupTxt.setHeight("1em");
 		groupPanel.add(groupLbl);
 		groupPanel.add(groupTxt);
-//		save.addClickHandler(new ClickHandler()  {
-//			@Override
-//			public void onClick(ClickEvent event)   {
-//			   idTxt.getText();
-//			   nameTxt.getText();
-//			   iniTxt.getText();
-//			   cprTxt.getText();
-//			   passwordTxt.getText();
-//			   groupTxt.getText();
-//			   
-//				 
-//			 UserDTO newUser = new UserDTO( Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), cprTxt.getText(),passwordTxt.getText(),groupTxt.getText());	 
-//			 clientImpl.service.saveUser(newUser, new AsyncCallback<Void>() {
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				Window.alert("Server fejl!" + caught.getMessage());
-//						
-//						
-//					}
-//
-//			@Override
-//			public void onSuccess(Void result) {
-//				Window.alert("User saved in database");
-//						
-//						
-//					}
-//				});
-//	
-//			        }		
-//		} );
-//		
+		
+		save.addClickHandler(new ClickHandler()  {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+			 UserDTO newUser = new UserDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), cprTxt.getText(), passwordTxt.getText(), Integer.parseInt(groupTxt.getText()));	 
+			 clientImpl.service.saveUser(newUser, new AsyncCallback<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Server fejl!" + caught.getMessage());
+					}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert("User saved in database");
+					}
+				});
+	
+			        }		
+		} );
+		
 		phPanel.add(idPanel);
 		phPanel.add(namePanel);
 		phPanel.add(iniPanel);
@@ -168,8 +157,4 @@ public class adminView extends Composite {
 		phPanel.add(save);
 
 	}
-	
-	
-	
-
 }

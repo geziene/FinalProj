@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import dtu.shared.RaavareDTO;
+import dtu.shared.UserDTO;
 
 public interface KartotekServiceAsync {
 
@@ -18,4 +19,6 @@ public interface KartotekServiceAsync {
 
 	void getSize(AsyncCallback<Integer> callback);
 
+	
+	void saveUser(UserDTO u, AsyncCallback<Void> callback);
 }
