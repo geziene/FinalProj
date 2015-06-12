@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS raavare;
 DROP TABLE IF EXISTS users;
 
 
+
 CREATE TABLE users(opr_id INT PRIMARY KEY, opr_navn TEXT, ini TEXT, cpr TEXT, password TEXT, gruppe INT) ENGINE=innoDB;
  
 CREATE TABLE raavare(raavare_id INT PRIMARY KEY, raavare_navn TEXT, leverandoer TEXT) ENGINE=innoDB;

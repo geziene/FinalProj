@@ -1,11 +1,14 @@
 package dtu.client.ui;
 
+import java.util.ArrayList;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -42,6 +45,15 @@ import dtu.shared.RaavarebatchDTO;
 					ProduktbatchesFields();
 				}
 			});
+			
+			showProduktbatches.addClickHandler(new ClickHandler(){
+				
+				@Override
+				public void onClick(ClickEvent event){
+				showProduktbatchesFields();
+				}
+			});
+			
 			addRaavarebatches.addClickHandler(new ClickHandler() {
 				 
                 @Override
@@ -133,8 +145,41 @@ import dtu.shared.RaavarebatchDTO;
 	            phPanel.add(maengdePanel);
 	             
 	            phPanel.add(save);
+	            
+	     
 	 
 	        }
+		 
+		 
+		 public void showProduktbatchesFields(){
+			 phPanel.clear();
+			 final FlexTable pbTable = new FlexTable();
+			 clientImpl.service.showProduktbatch(new AsyncCallback<ArrayList<String>>() {
+				 
+				@Override
+				public void onSuccess(ArrayList<String> result) {
+					int j = 0;
+					pbTable.setText(0, 0, "Produktbatch id");
+					pbTable.setText(0, 1, "Status");
+					pbTable.setText(0, 2, "Recept id");
+					pbTable.setText(0, 3, "Made by");
+					for(int i = 0; i < result.size()/4; i++) {
+						pbTable.setText(i + 1, 0, result.get(j));
+						pbTable.setText(i + 1, 1, result.get(j + 1));
+						pbTable.setText(i + 1, 2, result.get(j + 2));
+						pbTable.setText(i + 1, 3, result.get(j + 3));
+						j++;
+					}
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			 phPanel.add(pbTable);
+		 }
 
 		public void ProduktbatchesFields()
 		{

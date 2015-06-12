@@ -1,5 +1,6 @@
 package dtu.client.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -34,7 +35,9 @@ public interface KartotekService extends RemoteService {
 	public void saveReceptkomponent(ReceptkomponentDTO newReceptkomponent) throws Exception;
 	
 	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception;
+	public ArrayList<String> showProduktbatch() throws Exception;
 	
 	public void saveRaavarebatch(RaavarebatchDTO rb) throws Exception;
+	
 
 }

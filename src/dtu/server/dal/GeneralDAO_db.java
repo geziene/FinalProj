@@ -21,7 +21,7 @@ import dtu.shared.UserDTO;
 
 public class GeneralDAO_db extends RemoteServiceServlet implements KartotekService  {
 
-	private static final String URL = "jdbc:mysql://localhost:3306/Raavaredatabase";
+	private static final String URL = "jdbc:mysql://localhost:3306/RAAVAREDB";
 	private static final String USERNAME = "root";
 	private static final String PASSWORD = "";
 
@@ -33,6 +33,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	private PreparedStatement getSizeStmt = null;
 	private PreparedStatement deleteRaavareStmt = null;
 	private PreparedStatement saveReceptStmt = null;
+	private PreparedStatement showProduktbatchesStmt = null;
 	
 	private PreparedStatement saveUserStmt = null;
 	
@@ -41,7 +42,9 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	private PreparedStatement saveProduktbatchStmt= null;
 	
 	private PreparedStatement saveRaavarebatchStmt = null;
-
+	
+	
+	
 	public GeneralDAO_db() throws Exception {
 		try 
 		{
@@ -80,6 +83,9 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			saveReceptkomponent = connection.prepareStatement(
 					"INSERT INTO receptkomponent(recept_id, raavare_id, nom_netto, tolerance, made_by) " +
 					"VALUES(?, ?, ?, ?, ?)");
+			
+			showProduktbatchesStmt=
+					connection.prepareStatement("SELECT * FROM produktbatch");
 			
 			saveProduktbatchStmt = 
 					connection.prepareStatement("INSERT INTO produktbatch " + 
@@ -227,7 +233,30 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		
 	}
 }
-
+	@Override
+	public ArrayList<String> showProduktbatch() throws Exception{
+		
+		try {
+			ResultSet rs = showProduktbatchesStmt.executeQuery();
+			ArrayList<String> pbList = new ArrayList<String>();
+			while(rs.next()){
+				int produktbatchId = rs.getInt("pb_id");
+				int status = rs.getInt("status");
+				int receptId = rs.getInt("recept_id");
+				int made_by = rs.getInt("made_by");
+				//ProduktbatchDTO batch = new ProduktbatchDTO(produktbatchId, status, receptId, made_by);
+				pbList.add(String.valueOf(produktbatchId));
+				pbList.add(String.valueOf(status));
+				pbList.add(String.valueOf(receptId));
+				pbList.add(String.valueOf(made_by));
+			}
+			return pbList;
+			
+		} catch (SQLException e) {
+		
+			throw new DALException("Kunne ikke hente Produktbatch");
+		}
+	}
 	@Override
 	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception {
 		try {

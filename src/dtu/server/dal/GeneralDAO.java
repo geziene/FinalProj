@@ -96,4 +96,11 @@ public class GeneralDAO extends RemoteServiceServlet implements KartotekService 
 		rb.setRaavarebatchId(id++);
 		rbList.add(rb);
 	}
+
+	@Override
+	public ArrayList<String> showProduktbatch() throws Exception {
+		ArrayList list = new ArrayList();
+		return list;
+		
+	}
 }

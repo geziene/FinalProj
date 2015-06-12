@@ -1,5 +1,6 @@
 package dtu.client.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -31,8 +32,12 @@ public interface KartotekServiceAsync {
 	void saveReceptkomponent(ReceptkomponentDTO newReceptkomponent, AsyncCallback<Void> asyncCallback);
 
 	void saveProduktbatch(ProduktbatchDTO pb, AsyncCallback<Void> asyncCallback);
+	
+	void showProduktbatch(AsyncCallback<ArrayList<String>> callback);
 
 	void saveRaavarebatch(RaavarebatchDTO rb, AsyncCallback<Void> asyncCallback);
+
+	
 	
 	
 }
