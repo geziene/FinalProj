@@ -168,7 +168,7 @@ import dtu.shared.RaavarebatchDTO;
 						pbTable.setText(i + 1, 1, result.get(j + 1));
 						pbTable.setText(i + 1, 2, result.get(j + 2));
 						pbTable.setText(i + 1, 3, result.get(j + 3));
-						j++;
+						j = j + 4;
 					}
 				}
 				
@@ -178,6 +178,7 @@ import dtu.shared.RaavarebatchDTO;
 					
 				}
 			});
+			 pbTable.setBorderWidth(1);
 			 phPanel.add(pbTable);
 		 }
 

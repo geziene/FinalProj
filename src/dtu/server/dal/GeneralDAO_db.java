@@ -21,7 +21,7 @@ import dtu.shared.UserDTO;
 
 public class GeneralDAO_db extends RemoteServiceServlet implements KartotekService  {
 
-	private static final String URL = "jdbc:mysql://localhost:3306/RAAVAREDB";
+	private static final String URL = "jdbc:mysql://localhost:3306/Raavaredatabase";
 	private static final String USERNAME = "root";
 	private static final String PASSWORD = "";
 
@@ -84,8 +84,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 					"INSERT INTO receptkomponent(recept_id, raavare_id, nom_netto, tolerance, made_by) " +
 					"VALUES(?, ?, ?, ?, ?)");
 			
-			showProduktbatchesStmt=
-					connection.prepareStatement("SELECT * FROM produktbatch");
+			showProduktbatchesStmt = connection.prepareStatement("SELECT * FROM produktbatch");
 			
 			saveProduktbatchStmt = 
 					connection.prepareStatement("INSERT INTO produktbatch " + 
@@ -240,15 +239,15 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			ResultSet rs = showProduktbatchesStmt.executeQuery();
 			ArrayList<String> pbList = new ArrayList<String>();
 			while(rs.next()){
-				int produktbatchId = rs.getInt("pb_id");
-				int status = rs.getInt("status");
-				int receptId = rs.getInt("recept_id");
-				int made_by = rs.getInt("made_by");
+				pbList.add(String.valueOf(rs.getInt("pb_id")));
+				pbList.add(String.valueOf(rs.getInt("status")));
+				pbList.add(String.valueOf(rs.getInt("recept_id")));
+				pbList.add(String.valueOf(rs.getInt("made_by")));
 				//ProduktbatchDTO batch = new ProduktbatchDTO(produktbatchId, status, receptId, made_by);
-				pbList.add(String.valueOf(produktbatchId));
-				pbList.add(String.valueOf(status));
-				pbList.add(String.valueOf(receptId));
-				pbList.add(String.valueOf(made_by));
+//				pbList.add(String.valueOf(produktbatchId));
+//				pbList.add(String.valueOf(status));
+//				pbList.add(String.valueOf(receptId));
+//				pbList.add(String.valueOf(made_by));
 			}
 			return pbList;
 			
