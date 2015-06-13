@@ -44,7 +44,7 @@ public class adminView extends Composite {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				findUser();
+				FindUser();
 			}
 		});
 		
@@ -165,7 +165,7 @@ public class adminView extends Composite {
 		phPanel.add(save);
 	}
 	
-	public UserDTO findUser()
+	public void FindUser()
 	{
 phPanel.clear();
 		
@@ -188,8 +188,7 @@ phPanel.clear();
 			
 			@Override
 			public void onClick(ClickEvent event) {
-
-			UserDTO result = clientImpl.service.findUser(Integer.parseInt(idTxt.getText()), new AsyncCallback<UserDTO>(){
+				 UserDTO result = clientImpl.service.findUser(Integer.parseInt(idTxt.getText()), new AsyncCallback<UserDTO>(){
 					 
 
 			@Override
@@ -204,11 +203,120 @@ phPanel.clear();
 			});
 			
 		}
+			
 		});
+		phPanel.add(idPanel);
+		phPanel.add(Find);
+
 	}
 		public void UserUpdate(UserDTO result)
 		{
+			UserDTO dto = result;
+			phPanel.clear();
 			
+			Label idLbl;
+			Label nameLbl;
+			Label iniLbl;
+			Label cprLbl;
+			Label passwordLbl;
+			Label groupLbl;
+			final TextBox idTxt;
+			final TextBox nameTxt;
+			final TextBox iniTxt;
+			final TextBox cprTxt;
+			final TextBox passwordTxt;
+			final TextBox groupTxt;
+			
+			Button save = new Button("Update");
+			
+			
+			// total height of widget. Components are distributed evenly
+			phPanel.setHeight("120px");	
+
+			HorizontalPanel idPanel = new HorizontalPanel();
+			HorizontalPanel namePanel = new HorizontalPanel();
+			HorizontalPanel iniPanel = new HorizontalPanel();
+			HorizontalPanel cprPanel = new HorizontalPanel();
+			HorizontalPanel passwordPanel = new HorizontalPanel();
+			HorizontalPanel groupPanel = new HorizontalPanel();
+
+			idLbl = new Label("User ID:");
+			idLbl.setWidth("100px");
+			idTxt = new TextBox();
+			idTxt.setHeight("1em");
+			idPanel.add(idLbl);
+			idPanel.add(idTxt);
+			
+			nameLbl = new Label("User Name:");
+			nameLbl.setWidth("100px");
+			nameTxt = new TextBox();
+			nameTxt.setHeight("1em");
+			namePanel.add(nameLbl);
+			namePanel.add(nameTxt);
+
+
+			iniLbl = new Label("Initials:");
+			iniLbl.setWidth("100px");
+			iniTxt = new TextBox();
+			//levTxt.setWidth("5em");
+			iniTxt.setHeight("1em");
+			iniPanel.add(iniLbl);
+			iniPanel.add(iniTxt);
+			
+			
+			cprLbl = new Label("CPR:");
+			cprLbl.setWidth("100px");
+			cprTxt = new TextBox();
+			//levTxt.setWidth("5em");
+			cprTxt.setHeight("1em");
+			cprPanel.add(cprLbl);
+			cprPanel.add(cprTxt);
+
+			passwordLbl = new Label("Password:");
+			passwordLbl.setWidth("100px");
+			passwordTxt = new TextBox();
+			//levTxt.setWidth("5em");
+			passwordTxt.setHeight("1em");
+			passwordPanel.add(passwordLbl);
+			passwordPanel.add(passwordTxt);
+			
+				
+			groupLbl = new Label("Group:");
+			groupLbl.setWidth("100px");
+			groupTxt = new TextBox();
+			//levTxt.setWidth("5em");
+			groupTxt.setHeight("1em");
+			groupPanel.add(groupLbl);
+			groupPanel.add(groupTxt);
+			
+			save.addClickHandler(new ClickHandler()  {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+				 UserDTO newUser = new UserDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), cprTxt.getText(), passwordTxt.getText(), Integer.parseInt(groupTxt.getText()));	 
+				 clientImpl.service.saveUser(newUser, new AsyncCallback<Void>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Server fejl!" + caught.getMessage());
+						}
+
+				@Override
+				public void onSuccess(Void result) {
+					Window.alert("User Updated in database");
+						}
+					});
+		
+				        }		
+			} );
+			
+			phPanel.add(idPanel);
+			phPanel.add(namePanel);
+			phPanel.add(iniPanel);
+			phPanel.add(cprPanel);
+			phPanel.add(passwordPanel);
+			phPanel.add(groupPanel);
+			phPanel.add(save);
 			
 		}	
 

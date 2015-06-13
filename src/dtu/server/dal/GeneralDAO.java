@@ -73,7 +73,6 @@ public class GeneralDAO extends RemoteServiceServlet implements KartotekService 
 	}
 	
 	public UserDTO findUser(int u) throws Exception{
-	
 		UserDTO dto = null;
 		return dto;
 	}
