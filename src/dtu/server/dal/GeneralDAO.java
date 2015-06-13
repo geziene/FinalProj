@@ -71,6 +71,10 @@ public class GeneralDAO extends RemoteServiceServlet implements KartotekService 
 		u.setuserId(id++);
 		uList.add(u);	
 	}
+	
+	public int findUser(int u) throws Exception{
+		getuserId();		
+	}
 
 	@Override
 	public void saveRecept(ReceptDTO newRecept) throws Exception {

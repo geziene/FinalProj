@@ -42,7 +42,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	private PreparedStatement saveProduktbatchStmt= null;
 	
 	private PreparedStatement saveRaavarebatchStmt = null;
-	
+	private PreparedStatement findUser = null;
 	
 	
 	public GeneralDAO_db() throws Exception {
@@ -94,6 +94,9 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			saveRaavarebatchStmt = connection.prepareStatement("INSERT INTO raavarebatch " +
 					"(rb_id, raavare_id, maengde) " +
 					"VALUES(?, ?, ?)");
+			
+			findUser = connection.prepareStatement( "SELECT FROM person WHERE opr_id =  ? ");
+			
 		} 
 		catch ( SQLException sqlException )
 		{
@@ -202,8 +205,23 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		} catch (SQLException e) {
 		throw new DALException("\"saveUser\" fejlede");
 		}
+	}
 		
-	} 
+	@Override
+	public userDTO findUser(int i) throws Exception{
+			
+			try {
+				ResultSet rs = findUser.executeQuery();
+				}
+				return rs;
+				
+	} catch (SQLException e) {
+			
+				throw new DALException("Kunne ikke finde ID");
+			}
+		
+		
+	
 
 	@Override
 	public void saveRecept(ReceptDTO newRecept) throws Exception {

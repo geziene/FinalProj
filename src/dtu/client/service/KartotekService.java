@@ -30,6 +30,8 @@ public interface KartotekService extends RemoteService {
 	
 	public void saveUser(UserDTO u) throws Exception;
 	
+	public int findUser(int u) throws Exception;
+	
 	public void saveRecept(ReceptDTO newRecept) throws Exception;
 	
 	public void saveReceptkomponent(ReceptkomponentDTO newReceptkomponent) throws Exception;

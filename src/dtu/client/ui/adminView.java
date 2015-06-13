@@ -22,7 +22,7 @@ public class adminView extends Composite {
 	Button showUser = new Button("Show User");
 	Button updateUser = new Button("Update User");
 	
-	//BrowseView bv = new BrowseView(clientImpl);
+//	EditView bv = new EditView(clientImpl);
 	
 	
 	public adminView(KartotekServiceClientImpl clientImpl)
@@ -37,6 +37,14 @@ public class adminView extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				UserFields();
+			}
+		});
+		
+		updateUser.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				FindUser();
 			}
 		});
 		
@@ -155,6 +163,51 @@ public class adminView extends Composite {
 		phPanel.add(passwordPanel);
 		phPanel.add(groupPanel);
 		phPanel.add(save);
-
 	}
+	
+	public void FindUser()
+	{
+phPanel.clear();
+		
+		Label idLbl;
+		
+		final TextBox idTxt;
+		
+		Button Find = new Button("Find ID");
+		
+		HorizontalPanel idPanel = new HorizontalPanel();
+		
+		idLbl = new Label("User ID:");
+		idLbl.setWidth("100px");
+		idTxt = new TextBox();
+		idTxt.setHeight("1em");
+		idPanel.add(idLbl);
+		idPanel.add(idTxt);
+		
+		Find.addClickHandler(new ClickHandler()  {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+		//	 UserDTO newUser = new UserDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), cprTxt.getText(), passwordTxt.getText(), Integer.parseInt(groupTxt.getText()));	 
+	//		 clientImpl.service.saveUser(newUser, new AsyncCallback<Void>()
+					 
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Server fejl!" + caught.getMessage());
+					}
+
+			@Override
+			public void onSuccess(void result) {
+				UserUpdate();
+					}}
+			});
+		}
+		public void UserUpdate()
+		{
+			
+			
+		}	
+
 }
+	

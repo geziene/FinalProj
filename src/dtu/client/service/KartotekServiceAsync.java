@@ -23,9 +23,10 @@ public interface KartotekServiceAsync {
 	void deleteRaavare(int index, AsyncCallback<Void> callback);
 
 	void getSize(AsyncCallback<Integer> callback);
-
 	
 	void saveUser(UserDTO u, AsyncCallback<Void> callback);
+	
+	int findUser(UserDTO u, AsyncCallback<Void> callback);
 
 	void saveRecept(ReceptDTO newRecept, AsyncCallback<Void> asyncCallback);
 
