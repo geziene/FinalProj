@@ -44,7 +44,7 @@ public class adminView extends Composite {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				FindUser();
+				findUser();
 			}
 		});
 		
@@ -165,7 +165,7 @@ public class adminView extends Composite {
 		phPanel.add(save);
 	}
 	
-	public void FindUser()
+	public UserDTO findUser()
 	{
 phPanel.clear();
 		

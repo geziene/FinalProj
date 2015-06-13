@@ -208,19 +208,31 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	}
 		
 	@Override
-	public userDTO findUser(int i) throws Exception{
+	public UserDTO findUser(int i) throws Exception{
+	
+		findUser.setInt(1, i);
 			
 			try {
 				ResultSet rs = findUser.executeQuery();
-				}
-				return rs;
+
+					ResultSet.add( new UserDTO(
+							rs.getInt( "opr_id" ),
+							rs.getString( "opr_navn" ),
+							rs.getString( "ini" ),
+							rs.getString( "cpr" ),
+							rs.getString( "password" ),
+							rs.getInt( "gruppe" )));
+					return rs;
+				
+
 				
 	} catch (SQLException e) {
 			
 				throw new DALException("Kunne ikke finde ID");
 			}
+	}
 		
-		
+
 	
 
 	@Override

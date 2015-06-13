@@ -26,7 +26,7 @@ public interface KartotekServiceAsync {
 	
 	void saveUser(UserDTO u, AsyncCallback<Void> callback);
 	
-	int findUser(UserDTO u, AsyncCallback<Void> callback);
+	void findUser(int u, AsyncCallback<UserDTO> callback);
 
 	void saveRecept(ReceptDTO newRecept, AsyncCallback<Void> asyncCallback);
 
