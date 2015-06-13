@@ -188,8 +188,8 @@ phPanel.clear();
 			
 			@Override
 			public void onClick(ClickEvent event) {
-		//	 UserDTO newUser = new UserDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), cprTxt.getText(), passwordTxt.getText(), Integer.parseInt(groupTxt.getText()));	 
-	//		 clientImpl.service.saveUser(newUser, new AsyncCallback<Void>()
+
+			UserDTO result = clientImpl.service.findUser(Integer.parseInt(idTxt.getText()), new AsyncCallback<UserDTO>(){
 					 
 
 			@Override
@@ -198,12 +198,15 @@ phPanel.clear();
 					}
 
 			@Override
-			public void onSuccess(void result) {
-				UserUpdate();
-					}}
+			public void onSuccess(UserDTO result) {
+				UserUpdate(result);
+					}
 			});
+			
 		}
-		public void UserUpdate()
+		});
+	}
+		public void UserUpdate(UserDTO result)
 		{
 			
 			

@@ -215,14 +215,14 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			try {
 				ResultSet rs = findUser.executeQuery();
 
-					ResultSet.add( new UserDTO(
+					UserDTO dto = ( new UserDTO(
 							rs.getInt( "opr_id" ),
 							rs.getString( "opr_navn" ),
 							rs.getString( "ini" ),
 							rs.getString( "cpr" ),
 							rs.getString( "password" ),
 							rs.getInt( "gruppe" )));
-					return rs;
+					return dto;
 				
 
 				
