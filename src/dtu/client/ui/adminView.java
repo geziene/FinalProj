@@ -6,6 +6,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -175,7 +176,7 @@ phPanel.clear();
 		
 		Button Find = new Button("Find ID");
 		
-		HorizontalPanel idPanel = new HorizontalPanel();
+		final HorizontalPanel idPanel = new HorizontalPanel();
 		
 		idLbl = new Label("User ID:");
 		idLbl.setWidth("100px");
@@ -188,16 +189,30 @@ phPanel.clear();
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				 UserDTO result = clientImpl.service.findUser(Integer.parseInt(idTxt.getText()), new AsyncCallback<UserDTO>(){
-					 
-
+				clientImpl.service.findUser(Integer.parseInt(idTxt.getText()), new AsyncCallback<UserDTO>() {
+					
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Server fejl!" + caught.getMessage());
+				Window.alert("Server fejl! " + caught.getMessage());
 					}
 
 			@Override
 			public void onSuccess(UserDTO result) {
+				FlexTable foundUser = null;
+				foundUser.setText(0, 0, "User ID");
+				foundUser.setText(0, 1, "Username");
+				foundUser.setText(0, 2, "Initials");
+				foundUser.setText(0, 3, "CPR");
+				foundUser.setText(0, 4, "Password");
+				foundUser.setText(0, 5, "Group");
+				foundUser.setText(1, 0, String.valueOf(result.getuserId()));
+				foundUser.setText(1, 1, result.getuserNavn());
+				foundUser.setText(1, 2, result.getuserIni());
+				foundUser.setText(1, 3, result.getuserCpr());
+				foundUser.setText(1, 4, result.getuserPassword());
+				foundUser.setText(1, 5, String.valueOf(result.getuserGroup()));
+				foundUser.setBorderWidth(1);
+				phPanel.add(foundUser);
 				UserUpdate(result);
 					}
 			});
@@ -211,8 +226,7 @@ phPanel.clear();
 	}
 		public void UserUpdate(UserDTO result)
 		{
-			UserDTO dto = result;
-			phPanel.clear();
+			//phPanel.clear();
 			
 			Label idLbl;
 			Label nameLbl;

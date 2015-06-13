@@ -8,7 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 import dtu.client.service.KartotekService;
 import dtu.shared.DALException;
@@ -42,7 +46,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	private PreparedStatement saveProduktbatchStmt= null;
 	
 	private PreparedStatement saveRaavarebatchStmt = null;
-	private PreparedStatement findUser = null;
+	private PreparedStatement findUserStmt = null;
 	
 	
 	public GeneralDAO_db() throws Exception {
@@ -95,7 +99,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 					"(rb_id, raavare_id, maengde) " +
 					"VALUES(?, ?, ?)");
 			
-			findUser = connection.prepareStatement( "SELECT FROM person WHERE opr_id =  ? ");
+			findUserStmt = connection.prepareStatement("SELECT * FROM users WHERE opr_id = ? ");
 			
 		} 
 		catch ( SQLException sqlException )
@@ -208,14 +212,12 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	}
 		
 	@Override
-	public UserDTO findUser(int i) throws Exception{
-	
-		findUser.setInt(1, i);
+	public UserDTO findUser(int id) throws Exception{
+		try {			
+			findUserStmt.setInt(1, id);
+			ResultSet rs = findUserStmt.executeQuery();
 			
-			try {
-				ResultSet rs = findUser.executeQuery();
-
-					UserDTO dto = ( new UserDTO(
+			UserDTO dto = ( new UserDTO(
 							rs.getInt( "opr_id" ),
 							rs.getString( "opr_navn" ),
 							rs.getString( "ini" ),
@@ -223,17 +225,12 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 							rs.getString( "password" ),
 							rs.getInt( "gruppe" )));
 					return dto;
-				
 
-				
 	} catch (SQLException e) {
 			
 				throw new DALException("Kunne ikke finde ID");
 			}
 	}
-		
-
-	
 
 	@Override
 	public void saveRecept(ReceptDTO newRecept) throws Exception {
@@ -273,11 +270,6 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 				pbList.add(String.valueOf(rs.getInt("status")));
 				pbList.add(String.valueOf(rs.getInt("recept_id")));
 				pbList.add(String.valueOf(rs.getInt("made_by")));
-				//ProduktbatchDTO batch = new ProduktbatchDTO(produktbatchId, status, receptId, made_by);
-//				pbList.add(String.valueOf(produktbatchId));
-//				pbList.add(String.valueOf(status));
-//				pbList.add(String.valueOf(receptId));
-//				pbList.add(String.valueOf(made_by));
 			}
 			return pbList;
 			
