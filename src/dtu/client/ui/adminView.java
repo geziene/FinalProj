@@ -189,7 +189,8 @@ phPanel.clear();
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				clientImpl.service.findUser(Integer.parseInt(idTxt.getText()), new AsyncCallback<UserDTO>() {
+				int user = Integer.parseInt(idTxt.getText());
+				clientImpl.service.findUser(user, new AsyncCallback<UserDTO>() {
 					
 			@Override
 			public void onFailure(Throwable caught) {

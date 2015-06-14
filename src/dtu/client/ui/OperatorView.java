@@ -3,6 +3,7 @@ package dtu.client.ui;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -26,22 +27,32 @@ public class OperatorView extends Composite {
 		Button oprLogin = new Button("OK");
 		Button annuller = new Button("Annuller");
 		
-		public OperatorView(KartotekServiceClientImpl clientImpl) {
+		public OperatorView(final KartotekServiceClientImpl clientImpl) {
 			this.clientImpl = clientImpl;
 
 			phPanel = new VerticalPanel();
 			initWidget(this.phPanel);
 			
 			oprLogin.addClickHandler(new ClickHandler() {
-
+				
 				@Override
 				public void onClick(ClickEvent event) {
-					if (oprTxt.getText().equals("12")){
-						AfvejningFields();	
-					}
-					else{
-						Window.alert("Forkert ID!");
-					}
+					int id = Integer.parseInt(oprTxt.getText());
+					clientImpl.service.userName(id, new AsyncCallback<String>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							Window.alert("Server fejl!" + caught.getMessage());
+						}
+
+						@Override
+						public void onSuccess(String result) {
+							String name = result;
+							AfvejningFields(name);
+						}
+						
+					});
+					
 				}
 			});
 			phPanel.add(oprId);
@@ -50,7 +61,7 @@ public class OperatorView extends Composite {
 			phPanel.add(annuller);
 		}
 
-		public void AfvejningFields() {
+		public void AfvejningFields(String name) {
 			
 			phPanel.clear();
 
@@ -58,7 +69,7 @@ public class OperatorView extends Composite {
 			VerticalPanel yPanel = new VerticalPanel();
 			HorizontalPanel zPanel = new HorizontalPanel();
 			
-			Label besked = new Label("Velkommen \"username\"");
+			Label besked = new Label("Velkommen " + name);
 			besked.setHeight("3em");
 			xPanel.add(besked);
 			

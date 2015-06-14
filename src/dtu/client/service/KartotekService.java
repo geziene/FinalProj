@@ -41,5 +41,7 @@ public interface KartotekService extends RemoteService {
 	
 	public void saveRaavarebatch(RaavarebatchDTO rb) throws Exception;
 	
+	public String userName(int id) throws Exception;
+	
 
 }

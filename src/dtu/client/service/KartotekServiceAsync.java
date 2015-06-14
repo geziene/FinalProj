@@ -37,6 +37,8 @@ public interface KartotekServiceAsync {
 	void showProduktbatch(AsyncCallback<ArrayList<String>> callback);
 
 	void saveRaavarebatch(RaavarebatchDTO rb, AsyncCallback<Void> asyncCallback);
+	
+	void userName(int id, AsyncCallback<String> asyncCallback);
 
 	
 	

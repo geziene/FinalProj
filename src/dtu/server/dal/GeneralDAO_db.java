@@ -8,11 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.sun.java.swing.plaf.windows.resources.windows;
 
 import dtu.client.service.KartotekService;
 import dtu.shared.DALException;
@@ -100,6 +96,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 					"VALUES(?, ?, ?)");
 			
 			findUserStmt = connection.prepareStatement("SELECT * FROM users WHERE opr_id = ? ");
+			
 			
 		} 
 		catch ( SQLException sqlException )
@@ -213,17 +210,17 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		
 	@Override
 	public UserDTO findUser(int id) throws Exception{
-		try {			
+		try {
 			findUserStmt.setInt(1, id);
 			ResultSet rs = findUserStmt.executeQuery();
 			
-			UserDTO dto = ( new UserDTO(
+			UserDTO dto = new UserDTO(
 							rs.getInt( "opr_id" ),
 							rs.getString( "opr_navn" ),
 							rs.getString( "ini" ),
 							rs.getString( "cpr" ),
 							rs.getString( "password" ),
-							rs.getInt( "gruppe" )));
+							rs.getInt( "gruppe" ));
 					return dto;
 
 	} catch (SQLException e) {
@@ -278,6 +275,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			throw new DALException("Kunne ikke hente Produktbatch");
 		}
 	}
+	
 	@Override
 	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception {
 		try {
@@ -302,6 +300,24 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			throw new DALException("\" save Raavarebatch\" fejlede");
 		}
 		
+	}
+	
+	@Override
+	public String userName(int id) throws Exception {
+		String name = "hej";
+		try {
+		findUserStmt.setInt(1, id);
+		ResultSet rs = findUserStmt.executeQuery();
+		int gruppe = rs.getInt("gruppe");
+		
+//		if(gruppe == 4){
+//			name = rs.getString("opr_id");
+//		}
+		return name;
+		
+		} catch(SQLException e) {
+			throw new DALException("Kunne ikke hente User");
+		}
 	}
 	
 	// close the database connection
