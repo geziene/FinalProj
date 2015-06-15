@@ -24,17 +24,17 @@ public interface KartotekService extends RemoteService {
 	
 	public void saveRaavare(RaavareDTO r) throws Exception;
 	public void updateRaavare(RaavareDTO r) throws Exception;
-	public List<RaavareDTO> getRaavare() throws Exception;
+	public ArrayList<RaavareDTO> getRaavare() throws Exception;
 	public void deleteRaavare(int id) throws Exception; 
 	public int getSize() throws Exception;
 	
 	public void saveUser(UserDTO u) throws Exception;
-	
 	public UserDTO findUser(int u) throws Exception;
 	
 	public void saveRecept(ReceptDTO newRecept) throws Exception;
 	
 	public void saveReceptkomponent(ReceptkomponentDTO newReceptkomponent) throws Exception;
+	public ArrayList<String> findReceptkomponet(int id) throws Exception;
 	
 	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception;
 	public ArrayList<String> showProduktbatch() throws Exception;
@@ -42,6 +42,8 @@ public interface KartotekService extends RemoteService {
 	public void saveRaavarebatch(RaavarebatchDTO rb) throws Exception;
 	
 	public String userName(int id) throws Exception;
+	
+	public int logUser(int id, String psw) throws Exception;
 	
 
 }

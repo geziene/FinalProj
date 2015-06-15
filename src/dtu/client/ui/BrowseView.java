@@ -1,6 +1,6 @@
 package dtu.client.ui;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -40,7 +40,7 @@ public class BrowseView extends Composite {
 		//List<PersonDTO> personer = iPersonDAO.getPersons();
 
 		// V.2
-		clientImpl.service.getRaavare(new AsyncCallback<List<RaavareDTO>>() {
+		clientImpl.service.getRaavare(new AsyncCallback<ArrayList<RaavareDTO>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -48,7 +48,7 @@ public class BrowseView extends Composite {
 			}
 
 			@Override
-			public void onSuccess(List<RaavareDTO> result) {
+			public void onSuccess(ArrayList<RaavareDTO> result) {
 				for (int i=0; i < result.size(); i++) {
 					t.setText(i+1, 0, "" + result.get(i).getRaavareId());
 					t.setText(i+1, 1, result.get(i).getRaavareNavn());

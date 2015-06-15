@@ -1,5 +1,6 @@
 package dtu.client.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -86,7 +87,7 @@ public class EditView extends Composite {
 
 
 		// V.2
-		clientImpl.service.getRaavare(new AsyncCallback<List<RaavareDTO>>() {
+		clientImpl.service.getRaavare(new AsyncCallback<ArrayList<RaavareDTO>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -94,7 +95,7 @@ public class EditView extends Composite {
 			}
 
 			@Override
-			public void onSuccess(List<RaavareDTO> result) {
+			public void onSuccess(ArrayList<RaavareDTO> result) {
 				// populate table and add delete anchor to each row
 				for (int rowIndex=0; rowIndex < result.size(); rowIndex++) {
 					t.setText(rowIndex+1, 0, "" + result.get(rowIndex).getRaavareId());

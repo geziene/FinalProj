@@ -1,21 +1,21 @@
 package dtu.client.ui;
 
+import java.util.ArrayList;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import dtu.client.service.KartotekServiceClientImpl;
-
-// \u00E6 = æ \u00C6 = Æ
-// \u00F8 = ø \u00D8 = Ø
-// \u00E5 = å \u00C5 = Å
+import dtu.shared.DALException;
 
 public class OperatorView extends Composite {
 		KartotekServiceClientImpl clientImpl;
@@ -42,13 +42,19 @@ public class OperatorView extends Composite {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							Window.alert("Server fejl!" + caught.getMessage());
+							Window.alert("Server error! " + caught.getMessage());
 						}
 
 						@Override
 						public void onSuccess(String result) {
+							if(result.equals("null")) {
+								Throwable caught = new DALException("This user does not exsit anymore.");
+								onFailure(caught);
+							}
+							else {
 							String name = result;
 							AfvejningFields(name);
+							}
 						}
 						
 					});
@@ -69,11 +75,11 @@ public class OperatorView extends Composite {
 			VerticalPanel yPanel = new VerticalPanel();
 			HorizontalPanel zPanel = new HorizontalPanel();
 			
-			Label besked = new Label("Velkommen " + name);
+			Label besked = new Label("Welcome " + name);
 			besked.setHeight("3em");
 			xPanel.add(besked);
 			
-			Label batchLabel = new Label("Indtast ID p\u00E5 den \u00F8nskede produktbatch");
+			Label batchLabel = new Label("Write the ID of the wanted produktbatch");
 			final TextBox batchTxt = new TextBox();
 			batchTxt.setWidth("35px");
 			yPanel.add(batchLabel);
@@ -82,75 +88,37 @@ public class OperatorView extends Composite {
 			Button batchOK = new Button("OK");
 			zPanel.add(batchOK);
 
-			// total height of widget. Components are distributed evenly
-			/*phPanel.setHeight("120px");	
-
-			HorizontalPanel namePanel = new HorizontalPanel();
-			HorizontalPanel idPanel = new HorizontalPanel();
-			HorizontalPanel levPanel = new HorizontalPanel();
-
-			idLbl = new Label("ID:");
-			idLbl.setWidth("100px");
-			idTxt = new TextBox();
-			idTxt.setHeight("1em");
-			idPanel.add(idLbl);
-			idPanel.add(idTxt);
-			
-			nameLbl = new Label("Navn:");
-			nameLbl.setWidth("100px");
-			nameTxt = new TextBox();
-			nameTxt.setHeight("1em");
-			namePanel.add(nameLbl);
-			namePanel.add(nameTxt);
-
-
-			levLbl = new Label("Leverandoer:");
-			levLbl.setWidth("100px");
-			levTxt = new TextBox();
-			//levTxt.setWidth("5em");
-			levTxt.setHeight("1em");
-			levPanel.add(levLbl);
-			levPanel.add(levTxt);
-			
-			*/
-
 			batchOK.addClickHandler(new ClickHandler() {
 
 				@Override
 				public void onClick(ClickEvent event) {
 					phPanel.clear();
-					try {
-						 String batchNr = batchTxt.getText();
-						 if(batchNr.equals("1")) {
-//							 connection = DriverManager.getConnection( URL, USERNAME, PASSWORD );
-//							 
-//							 getProduktbatchReceptStmt = connection.prepareStatement
-//									 ("SELECT recept_id FROM produktbatch WHERE pb_id = 1 ");
-//							 getProduktbatchReceptStmt.executeQuery();
-//							 
-//							 String result = getProduktbatchReceptStmt.toString(); 
-//							 Label b = new Label(result);
-//							 HorizontalPanel hPanel = new HorizontalPanel();
-//							 hPanel.add(b);
-						 }
-						 /*RaavareDTO r = new RaavareDTO( Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());
-						 connection = 
-									DriverManager.getConnection( URL, USERNAME, PASSWORD );
+					int batchNr = Integer.parseInt(batchTxt.getText());
+					clientImpl.service.findReceptkomponet(batchNr, new AsyncCallback<ArrayList<String>>() {
 
-							// create query that add/create a raavare to kartotek
-							saveRaavareStmt = 
-									connection.prepareStatement( "INSERT INTO raavare " + 
-											"( raavare_id, raavare_navn, leverandoer ) " + 
-											"VALUES (?, ?, ? )" );
-							saveRaavareStmt.setInt(1, r.getRaavareId());
-							saveRaavareStmt.setString(2, r.getRaavareNavn());
-							saveRaavareStmt.setString(3, r.getLeverandoer());
+						@Override
+						public void onFailure(Throwable caught) {
+							Window.alert("Server error " + caught);							
+						}
 
-							saveRaavareStmt.executeUpdate();*/
-				        }
-				        catch (Exception e) {
-				            e.printStackTrace();
-				        }
+						@Override
+						public void onSuccess(ArrayList<String> result) {
+							FlexTable rkTable = null;
+							int j = 0;
+							rkTable.setText(0, 0, "Recept ID");
+							rkTable.setText(0, 1, "Netto weight");
+							rkTable.setText(0, 2, "Tolerance");
+							for(int i = 0; i < result.size()/3; i++){
+							rkTable.setText(i + 1, 0, String.valueOf((result.get(j))));
+							rkTable.setText(i + 1, 1, String.valueOf((result.get(j + 1))));
+							rkTable.setText(i + 1, 2, String.valueOf((result.get(j + 2))));
+							j = j + 3;
+							}
+							phPanel.add(rkTable);
+						}
+						
+					});
+					
 				        }		
 			} );
 			

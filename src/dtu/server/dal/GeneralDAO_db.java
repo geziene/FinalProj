@@ -32,18 +32,20 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	private PreparedStatement getRaavareStmt = null;
 	private PreparedStatement getSizeStmt = null;
 	private PreparedStatement deleteRaavareStmt = null;
+	
 	private PreparedStatement saveReceptStmt = null;
-	private PreparedStatement showProduktbatchesStmt = null;
 	
 	private PreparedStatement saveUserStmt = null;
-	
-	private PreparedStatement saveReceptkomponent = null;
-	
-	private PreparedStatement saveProduktbatchStmt= null;
-	
-	private PreparedStatement saveRaavarebatchStmt = null;
 	private PreparedStatement findUserStmt = null;
 	
+	private PreparedStatement saveReceptkomponent = null;
+	private PreparedStatement findReceptkomponent = null;
+	
+	private PreparedStatement saveProduktbatchStmt = null;
+	private PreparedStatement findProduktbatchStmt = null;
+	private PreparedStatement showProduktbatcheStmt = null;
+	
+	private PreparedStatement saveRaavarebatchStmt = null;
 	
 	public GeneralDAO_db() throws Exception {
 		try 
@@ -58,7 +60,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 
 			// create query that updates a raavare
 			updateRaavareStmt = connection.prepareStatement( 
-					"UPDATE person SET raavare_navn = ?, leverandoer = ?  WHERE raavare_id = ?" );
+					"UPDATE users SET raavare_navn = ?, leverandoer = ?  WHERE raavare_id = ?" );
 
 			// create query that get all raavare in kartotek
 			getRaavareStmt = connection.prepareStatement( 
@@ -70,7 +72,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 
 			// create query that deletes a person in kartotek
 			deleteRaavareStmt = connection.prepareStatement( 
-					"DELETE FROM person WHERE raavare_id =  ? ");
+					"DELETE FROM users WHERE raavare_id =  ? ");
 
 			saveUserStmt = connection.prepareStatement(
 					"INSERT INTO users(opr_id, opr_navn, ini, cpr, password, gruppe) " +
@@ -84,7 +86,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 					"INSERT INTO receptkomponent(recept_id, raavare_id, nom_netto, tolerance, made_by) " +
 					"VALUES(?, ?, ?, ?, ?)");
 			
-			showProduktbatchesStmt = connection.prepareStatement("SELECT * FROM produktbatch");
+			showProduktbatcheStmt = connection.prepareStatement("SELECT * FROM produktbatch");
 			
 			saveProduktbatchStmt = 
 					connection.prepareStatement("INSERT INTO produktbatch " + 
@@ -97,7 +99,10 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			
 			findUserStmt = connection.prepareStatement("SELECT * FROM users WHERE opr_id = ? ");
 			
+			findProduktbatchStmt = connection.prepareStatement("SELECT recept_id FROM produktbatch WHERE pb_id = ?");
 			
+			findReceptkomponent = connection.prepareStatement("SELECT raavare_id, nom_netto, tolerance "
+					+ "FROM receptkomponent WHERE recept_id = ?");
 		} 
 		catch ( SQLException sqlException )
 		{
@@ -132,8 +137,8 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	}
 
 	@Override
-	public List<RaavareDTO> getRaavare() throws Exception {
-		List< RaavareDTO > results = null;
+	public ArrayList<RaavareDTO> getRaavare() throws Exception {
+		ArrayList< RaavareDTO > results = null;
 		ResultSet resultSet = null;
 
 		try 
@@ -267,7 +272,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	public ArrayList<String> showProduktbatch() throws Exception{
 		
 		try {
-			ResultSet rs = showProduktbatchesStmt.executeQuery();
+			ResultSet rs = showProduktbatcheStmt.executeQuery();
 			ArrayList<String> pbList = new ArrayList<String>();
 			while(rs.next()){
 				pbList.add(String.valueOf(rs.getInt("pb_id")));
@@ -311,20 +316,68 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	
 	@Override
 	public String userName(int id) throws Exception {
-		String name = "hej";
+		String name;
 		try {
 		findUserStmt.setInt(1, id);
 		ResultSet rs = findUserStmt.executeQuery();
+		while(rs.next()){
 		int gruppe = rs.getInt("gruppe");
 		
-//		if(gruppe == 4){
-//			name = rs.getString("opr_id");
-//		}
-		return name;
+		if(gruppe != 5){
+			name = rs.getString("opr_navn");
+			return name;
+			}
+		}
+		return null;
 		
 		} catch(SQLException e) {
 			throw new DALException("Kunne ikke hente User");
 		}
+	}
+	
+	public int logUser(int id, String psw) throws Exception{
+		try {
+			findUserStmt.setInt(1, id);
+
+			ResultSet rs1 = findUserStmt.executeQuery();
+
+			while(rs1.next())
+			{
+				if(rs1.getInt("opr_id") == id)
+				{
+					if(rs1.getString("password").equals(psw))
+					{
+						return rs1.getInt("gruppe");
+					} 
+				}
+			}
+			return 0;	
+	} catch (SQLException e) {
+			
+				throw new DALException("Bruger findes ikke");
+			}
+	}
+	
+	@Override
+	public ArrayList<String> findReceptkomponet(int id) throws Exception {
+		ArrayList<String> rkList = new ArrayList<String>();
+		int receptId = 0;
+		
+		findProduktbatchStmt.setInt(1, id);
+		ResultSet rs = findProduktbatchStmt.executeQuery();
+		while(rs.next()){
+			receptId = rs.getInt("recept_id");
+		}
+		
+		findReceptkomponent.setInt(1, receptId);
+		rs = findReceptkomponent.executeQuery();
+		while(rs.next()){
+			rkList.add(String.valueOf(rs.getInt("raavare_id")));
+			rkList.add(String.valueOf(rs.getDouble("nom_netto")));
+			rkList.add(String.valueOf(rs.getDouble("tolerance")));
+		}
+		
+		return rkList;
 	}
 	
 	// close the database connection

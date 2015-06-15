@@ -2,6 +2,8 @@ package dtu.client.ui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -12,6 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import dtu.client.service.KartotekServiceClientImpl;
+import dtu.shared.UserDTO;
 
 
 public class loginView extends Composite {
@@ -19,15 +22,15 @@ public class loginView extends Composite {
 	VerticalPanel loginPanel;
 	FlexTable ft;
 	Label usr;
-	TextBox usrTxt;
+	final TextBox usrTxt;
 	Label pwd;
-	TextBox pwdTxt;
+	final TextBox pwdTxt;
 
 	Button login = new Button("Login");
 	//BrowseView bv = new BrowseView(clientImpl);
 	
 	
-	public loginView(KartotekServiceClientImpl clientImpl)
+	public loginView(final KartotekServiceClientImpl clientImpl)
 	{
 		this.clientImpl = clientImpl;
 
@@ -52,11 +55,24 @@ public class loginView extends Composite {
 		pwdPanel.add(pwdTxt);
 		
 		login.addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
-				check();
-			}
+				int userid = Integer.parseInt(usrTxt.getText());
+				String userpsw = (pwdTxt.getText());
+				clientImpl.service.logUser(userid, userpsw, new AsyncCallback<Integer>() {
+					
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Server fejl! " + caught.getMessage());
+					}
+
+			@Override
+			public void onSuccess(Integer result) {
+				check(result);
+					}
+			});
+			
+			}		
 		});
 		
 		loginPanel.add(userPanel);
@@ -64,19 +80,20 @@ public class loginView extends Composite {
 		loginPanel.add(login);
 
 	}
-public void check()
+
+public void check(int result)
 {
 	Widget w = null;
-	String usr = usrTxt.getText();
-	if ("9".equals(usr)){
+	if (result == 1){
 		w = new adminView(clientImpl);
-	} else if("10".equals(usr)){
+	} else if(result == 2){
 		w = new PharmacistView(clientImpl);
-	} else if("11".equals(usr)){
+	} else if(result == 3){
 		w = new VaerkfView(clientImpl);
-	} else if("12".equals(usr)){
+	} else if(result == 4){
 		w = new OperatorView(clientImpl);
-	}
+	}else Window.alert("Bruger i gruppe: " + result + " findes ikke");
+		
 	loginPanel.clear();
 	loginPanel.add(w);
 	
