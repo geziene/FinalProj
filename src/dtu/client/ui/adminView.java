@@ -199,7 +199,7 @@ phPanel.clear();
 
 			@Override
 			public void onSuccess(UserDTO result) {
-				FlexTable foundUser = null;
+		/*		FlexTable foundUser = null;
 				foundUser.setText(0, 0, "User ID");
 				foundUser.setText(0, 1, "Username");
 				foundUser.setText(0, 2, "Initials");
@@ -213,7 +213,7 @@ phPanel.clear();
 				foundUser.setText(1, 4, result.getuserPassword());
 				foundUser.setText(1, 5, String.valueOf(result.getuserGroup()));
 				foundUser.setBorderWidth(1);
-				phPanel.add(foundUser);
+				phPanel.add(foundUser); */
 				UserUpdate(result);
 					}
 			});
@@ -227,7 +227,7 @@ phPanel.clear();
 	}
 		public void UserUpdate(UserDTO result)
 		{
-			//phPanel.clear();
+			phPanel.clear();
 			
 			Label idLbl;
 			Label nameLbl;

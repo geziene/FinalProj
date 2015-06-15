@@ -213,8 +213,11 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		try {
 			findUserStmt.setInt(1, id);
 			ResultSet rs = findUserStmt.executeQuery();
-			
-			UserDTO dto = new UserDTO(
+			while(rs.next())
+			{
+				if(rs.getInt("opr_id") == id)
+				{
+					UserDTO dto = new UserDTO(
 							rs.getInt( "opr_id" ),
 							rs.getString( "opr_navn" ),
 							rs.getString( "ini" ),
@@ -222,6 +225,10 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 							rs.getString( "password" ),
 							rs.getInt( "gruppe" ));
 					return dto;
+				}
+			}
+			return null;	
+
 
 	} catch (SQLException e) {
 			

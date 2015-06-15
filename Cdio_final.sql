@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS raavarebatch;
 DROP TABLE IF EXISTS raavare;
 DROP TABLE IF EXISTS users;
 
-
+SELECT gruppe FROM users WHERE opr_id = 4;
 
 CREATE TABLE users(opr_id INT PRIMARY KEY, opr_navn TEXT, ini TEXT, cpr TEXT, password TEXT, gruppe INT) ENGINE=innoDB;
  
