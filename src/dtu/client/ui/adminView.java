@@ -170,8 +170,8 @@ public class adminView extends Composite {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-			 UserDTO newUser = new UserDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), cprTxt.getText(), passwordTxt.getText(), 
-Integer.parseInt(groupTxt.getText()));	 
+			 UserDTO newUser = new UserDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), 
+					 cprTxt.getText(), passwordTxt.getText(), Integer.parseInt(groupTxt.getText()));	 
 			 clientImpl.service.saveUser(newUser, new AsyncCallback<Void>() {
 
 			@Override
@@ -197,8 +197,6 @@ Integer.parseInt(groupTxt.getText()));
 		phPanel.add(save);
 	}
 	
-
-
 	public void updateUserFields() 
 	{
 		
@@ -213,7 +211,7 @@ Integer.parseInt(groupTxt.getText()));
 		t.getFlexCellFormatter().setWidth(0, 3, "130px");
 		t.getFlexCellFormatter().setWidth(0, 4, "150px");
 		t.getFlexCellFormatter().setWidth(0, 5, "160px");
-		t.getFlexCellFormatter().setWidth(0, 6, "180px");
+		t.getFlexCellFormatter().setWidth(0, 6, "80px");
 
 		// style table
 		t.addStyleName("FlexTable");
@@ -313,6 +311,8 @@ Integer.parseInt(groupTxt.getText()));
 											Integer.parseInt(grpTxt.getText())
 										);
 
+							
+								
 									// V.2
 									clientImpl.service.updateUser(dto, new AsyncCallback<Void>() {
 
@@ -454,7 +454,6 @@ Integer.parseInt(groupTxt.getText()));
 	});
 }
 
-
 		public void listUser()
 		{
 			phPanel.clear();
@@ -477,12 +476,33 @@ Integer.parseInt(groupTxt.getText()));
 			t1.setText(0, 3, "CPR");
 			t1.setText(0, 4, "Password");
 			t1.setText(0, 5, "Gruppe");
+
+			// V.2 
+			clientImpl.service.getUsers(new AsyncCallback<ArrayList<UserDTO>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Server fejl!" + caught.getMessage());
+				}
+
+				@Override
+				public void onSuccess(ArrayList<UserDTO> result) {
+					for (int i=0; i < result.size(); i++) {
+						t1.setText(i+1, 0, "" + result.get(i).getuserId());
+						t1.setText(i+1, 1, "" + result.get(i).getuserNavn());
+						t1.setText(i+1, 2, "" + result.get(i).getuserIni());
+						t1.setText(i+1, 3, "" + result.get(i).getuserCpr());
+						t1.setText(i+1, 4, "" + result.get(i).getuserPassword());
+						t1.setText(i+1, 5, "" + result.get(i).getuserGroup());
+						
+					}
+
+				}
+
+			});
+
+			phPanel.add(t1);
 			
 		}
 
-		
 }
-	
-
-
-

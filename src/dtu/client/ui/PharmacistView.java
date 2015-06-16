@@ -40,9 +40,9 @@ public class PharmacistView extends Composite {
 	
 	Button addRecept = new Button("Create Recept");
 	Button showRecept = new Button("Show Recept");
-	Button updateRecept = new Button("Update Recept");
-	
+
 	Button addReceptkomponent = new Button("Create receptkomponet");
+	Button showReceptkomponent = new Button("Show receptkomponent");
 	Button updateReceptkomponent = new Button("Update receptkomponet");
 	
 	public PharmacistView(KartotekServiceClientImpl clientImpl)
@@ -66,7 +66,36 @@ public class PharmacistView extends Composite {
 			public void onClick(ClickEvent event) {
 				updateRaavareFields();
 			}
+			
 		});
+
+		addRecept.addClickHandler(new ClickHandler() {
+		
+			@Override
+			public void onClick(ClickEvent event) {
+				ReceptFields();
+					}
+		});
+		
+		addReceptkomponent.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				ReceptkomponentFields();
+			}
+					});
+		
+		
+		
+		phPanel.add(addRaavare);
+		phPanel.add(showRaavare);
+		phPanel.add(updateRaavare);
+		phPanel.add(addRecept);
+		phPanel.add(showRecept);
+		phPanel.add(addReceptkomponent);
+		phPanel.add(showReceptkomponent);
+		phPanel.add(updateReceptkomponent);
+		
 	}
 	
 		public void addRaavareFields() 
@@ -380,13 +409,7 @@ public class PharmacistView extends Composite {
 			leverTxt = new TextBox();
 			leverTxt.setWidth("50px");
 
-		addRecept.addClickHandler(new ClickHandler() {
-		
-			@Override
-			public void onClick(ClickEvent event) {
-				ReceptFields();
-					}
-		});
+	
 	}
 
 			private void ReceptFields() {
@@ -442,12 +465,7 @@ public class PharmacistView extends Composite {
 				phPanel.add(receptnamePanel);
 				phPanel.add(save);
 		
-			addReceptkomponent.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				ReceptkomponentFields();
-					}
+			}
 
 			private void ReceptkomponentFields() {
 				phPanel.clear();
@@ -461,6 +479,8 @@ public class PharmacistView extends Composite {
 				final TextBox madebyTxt;
 				Label raavareidLbl;
 				final TextBox raavareidTxt;
+				Label pbidLbl;
+				final TextBox pbidTxt;
 		
 				Button savereceptkomponent = new Button("Create");
 				
@@ -472,8 +492,9 @@ public class PharmacistView extends Composite {
 				HorizontalPanel nettoPanel = new HorizontalPanel();
 				HorizontalPanel tolerancePanel = new HorizontalPanel();
 				HorizontalPanel madebyPanel = new HorizontalPanel();
+				HorizontalPanel pbidPanel = new HorizontalPanel();
 				
-				receptidLbl = new Label("Reccept ID:");
+				receptidLbl = new Label("Recept ID:");
 				receptidLbl.setWidth("100px");
 				receptidTxt = new TextBox();
 				receptidTxt.setHeight("1em");
@@ -487,12 +508,27 @@ public class PharmacistView extends Composite {
 				raavareidPanel.add(raavareidLbl);
 				raavareidPanel.add(raavareidTxt);
 				
+				madebyLbl = new Label("Made by:");
+				madebyLbl.setWidth("100px");
+				madebyTxt = new TextBox();
+				madebyTxt.setHeight("1em");
+				madebyPanel.add(madebyLbl);
+				madebyPanel.add(madebyTxt);
+				
+				pbidLbl = new Label("Productbatch ID:");
+				pbidLbl.setWidth("100px");
+				pbidTxt = new TextBox();
+				pbidTxt.setHeight("1em");
+				pbidPanel.add(pbidLbl);
+				pbidPanel.add(pbidTxt);
+				
 				nettoLbl = new Label("Kvantum(netto):");
 				nettoLbl.setWidth("100px");
 				nettoTxt = new TextBox();
 				nettoTxt.setHeight("1em");
 				nettoPanel.add(nettoLbl);
 				nettoPanel.add(nettoTxt);
+		
 				
 				toleranceLbl = new Label("Tolerance");
 				toleranceLbl.setWidth("100px");
@@ -501,22 +537,23 @@ public class PharmacistView extends Composite {
 				tolerancePanel.add(toleranceLbl);
 				tolerancePanel.add(toleranceTxt);
 				
-				madebyLbl = new Label("Made by:");
-				madebyLbl.setWidth("100px");
-				madebyTxt = new TextBox();
-				madebyTxt.setHeight("1em");
-				madebyPanel.add(madebyLbl);
-				madebyPanel.add(madebyTxt);
+				
+			
 				
 				savereceptkomponent.addClickHandler(new ClickHandler()  {
 
 					@Override
 					public void onClick(ClickEvent event) {
-					
-					ReceptkomponentDTO newReceptkomponent = new ReceptkomponentDTO(Integer.parseInt(receptidTxt.getText()),
-							 Integer.parseInt(raavareidTxt.getText()), Double.parseDouble(nettoTxt.getText()), 
-							 Double.parseDouble(toleranceTxt.getText()),Integer.parseInt(madebyTxt.getText()));
-					clientImpl.service.saveReceptkomponent(newReceptkomponent, new AsyncCallback<Void>() {
+					Window.alert("Tester clickhandleren for savereceptkomponent");
+					ReceptkomponentDTO newReceptkomponent = new ReceptkomponentDTO(
+							 Integer.parseInt(receptidTxt.getText()),
+							 Integer.parseInt(raavareidTxt.getText()), 
+							 Integer.parseInt(madebyTxt.getText()),
+							 Integer.parseInt(pbidTxt.getText()),
+							 Double.parseDouble(nettoTxt.getText()), 
+							 Double.parseDouble(toleranceTxt.getText()));
+					clientImpl.service.saveReceptkomponent(newReceptkomponent, new AsyncCallback<Void>() 
+							{
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -538,23 +575,10 @@ public class PharmacistView extends Composite {
 				phPanel.add(nettoPanel);
 				phPanel.add(tolerancePanel);
 				phPanel.add(madebyPanel);
+				phPanel.add(pbidPanel);
 				phPanel.add(savereceptkomponent);
 
 			}
-
-		});
-
-		phPanel.add(addRaavare);
-		phPanel.add(showRaavare);
-		phPanel.add(updateRaavare);
-		
-		phPanel.add(addRecept);
-		phPanel.add(showRecept);
-		phPanel.add(updateRecept);
-		phPanel.add(addReceptkomponent);
-		phPanel.add(updateReceptkomponent);
-
-	}
 
 	public void RaavareFields() 
 	{
@@ -624,4 +648,5 @@ public class PharmacistView extends Composite {
 		phPanel.add(save);
 
 	}
-}
+	}
+	

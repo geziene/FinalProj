@@ -3,24 +3,30 @@ import java.io.Serializable;
 
 public class ReceptkomponentDTO extends RaavareDTO implements Serializable  {
 		
+		/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 		int receptkomponentId;
 		int raavarekomponentId;
 		double nettokomponent;
 		double tolerancekomponent;
 		int madebykomponent;
+		int pbidkomponentId;
 		
 		public ReceptkomponentDTO()
 		{
 			
 		}
 
-		public ReceptkomponentDTO(int receptkomponentId, int raavarekomponentId,double nettokomponent,double tolerancekomponent,int madebykomponent){
+		public ReceptkomponentDTO(int receptkomponentId, int raavarekomponentId, int madebykomponent, int pbidkomponentId, double nettokomponent,double tolerancekomponent){
 			
 			this.receptkomponentId = receptkomponentId;
 			this.raavarekomponentId = raavarekomponentId;
 			this.nettokomponent = nettokomponent;
 			this.tolerancekomponent = tolerancekomponent;
 			this.madebykomponent = madebykomponent;
+			this.pbidkomponentId = pbidkomponentId;
 		}
 		  
 		  public int getreceptkomponentId(){
@@ -58,6 +64,13 @@ public class ReceptkomponentDTO extends RaavareDTO implements Serializable  {
 		  
 		  public void setmadebykomponent(int madebykomponent){
 			  this.madebykomponent = madebykomponent;
+		  }
+
+		public int getpbidkomponentId() {
+			return pbidkomponentId;
+		}
+		 public void setpbidkomponentId(int getpbidkomponentId){
+			  this.pbidkomponentId = getpbidkomponentId;
 		  }
 	}
 

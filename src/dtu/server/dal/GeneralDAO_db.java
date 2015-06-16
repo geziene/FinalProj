@@ -50,6 +50,8 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	
 	private PreparedStatement saveRaavarebatchStmt = null;
 	
+	private PreparedStatement getUsersStmt = null;
+	
 	public GeneralDAO_db() throws Exception {
 		try 
 		{
@@ -86,8 +88,8 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 					"VALUES(?, ?)");
 			
 			saveReceptkomponentStmt = connection.prepareStatement(
-					"INSERT INTO receptkomponent(recept_id, raavare_id, nom_netto, tolerance, made_by) " +
-					"VALUES(?, ?, ?, ?, ?)");
+					"INSERT INTO receptkomponent(recept_id, raavare_id, made_by, pb_id, nom_netto, tolerance, ) " +
+					"VALUES(?, ?, ?, ?, ?, ?)");
 			
 			showProduktbatcheStmt = connection.prepareStatement("SELECT * FROM produktbatch");
 			
@@ -111,6 +113,8 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			
 			updateUserStmt = connection.prepareStatement("UPDATE users SET opr_navn = ?, ini = ?, cpr = ?, "
 					+ "password = ?, gruppe = ?  WHERE opr_id = ?" );
+			
+			getUsersStmt = connection.prepareStatement("SELECT * FROM users"); 
 		} 
 		catch ( SQLException sqlException )
 		{
@@ -254,10 +258,10 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		try {
 			saveReceptkomponentStmt.setInt(1, newReceptkomponent.getreceptkomponentId());
 			saveReceptkomponentStmt.setInt(2, newReceptkomponent.getraavarekomponentId());
-			saveReceptkomponentStmt.setDouble(3, newReceptkomponent.getnettokomponent());
-			saveReceptkomponentStmt.setDouble(4, newReceptkomponent.gettolerancekomponent());
-			saveReceptkomponentStmt.setInt(5, newReceptkomponent.getmadebykomponent());
-			
+			saveReceptkomponentStmt.setInt(3, newReceptkomponent.getmadebykomponent());
+			saveReceptkomponentStmt.setInt(4, newReceptkomponent.getpbidkomponentId());
+			saveReceptkomponentStmt.setDouble(5, newReceptkomponent.getnettokomponent());
+			saveReceptkomponentStmt.setDouble(6, newReceptkomponent.gettolerancekomponent());			
 			saveReceptkomponentStmt.executeUpdate();
 		} catch (SQLException e) {
 		throw new DALException("\"save Receptkomponent\" fejlede");
@@ -356,16 +360,28 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	
 	public void updateUser(UserDTO r) throws Exception {
 		try {
-				updateUserStmt.setString(1, r.getuserNavn());
-				updateUserStmt.setString(2, r.getuserIni());
-				updateUserStmt.setString(3, r.getuserCpr());
-				updateUserStmt.setString(4, r.getuserPassword());
-				updateUserStmt.setInt(5, r.getuserGroup());
-				updateUserStmt.setInt(6, r.getuserId());
+					
+					updateUserStmt.setString(1, r.getuserNavn());
+					updateUserStmt.setString(2, r.getuserIni());
+					updateUserStmt.setString(3, r.getuserCpr());
+					if(r.getuserGroup() == 5)
+					{
+					updateUserStmt.setString(4, "");
+					}
+					else 
+						updateUserStmt.setString(4, r.getuserPassword());
+					if (r.getuserPassword() == "")
+					{
+						updateUserStmt.setInt(5, 5);
+					}else
+					updateUserStmt.setInt(5, r.getuserGroup());
+					updateUserStmt.setInt(6, r.getuserId());
 			
-				updateUserStmt.executeUpdate();
+					updateUserStmt.executeUpdate();
+
+
 		} catch (SQLException e) {
-			throw new DALException(" \"updateUser\" fejlede");
+			throw new DALException(" \"updateUser\" fejlede" + e.getMessage());
 		} 
 	}
 
@@ -397,6 +413,46 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		statusProduktbatchStmt.executeUpdate();
 	}
 	
+	@Override
+	public ArrayList<UserDTO> getUsers() throws Exception {
+		ArrayList< UserDTO > results = null;
+		ResultSet resultSet = null;
+
+		try 
+		{
+			resultSet = getUsersStmt.executeQuery(); 
+			results = new ArrayList< UserDTO >();
+
+			while ( resultSet.next() )
+			{
+				results.add( new UserDTO(
+						resultSet.getInt( "opr_id" ),
+						resultSet.getString( "opr_navn" ),
+						resultSet.getString( "ini" ),
+						resultSet.getString( "cpr" ),
+						resultSet.getString( "password" ),
+						resultSet.getInt( "gruppe" )));
+			} 
+		} 
+		catch ( SQLException sqlException )
+		{
+			throw new DALException(" \"getUsers\" fejlede");
+		} 
+		finally
+		{
+			try 
+			{
+				resultSet.close();
+			} 
+			catch ( SQLException sqlException )
+			{
+				sqlException.printStackTrace();         
+				close();
+			} 
+		} 
+		return results;
+	} 
+
 	// close the database connection
 	public void close() {
 		try {
@@ -405,12 +461,6 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		} 
-	}
-
-	@Override
-	public ArrayList<UserDTO> getUsers() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
