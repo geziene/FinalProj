@@ -26,9 +26,7 @@ public class loginView extends Composite {
 	Label pwd;
 	final TextBox pwdTxt;
 
-	Button login = new Button("Login");
-	//BrowseView bv = new BrowseView(clientImpl);
-	
+	Button login = new Button("Login");	
 	
 	public loginView(final KartotekServiceClientImpl clientImpl)
 	{
@@ -68,6 +66,7 @@ public class loginView extends Composite {
 
 			@Override
 			public void onSuccess(Integer result) {
+	
 				check(result);
 					}
 			});
@@ -93,8 +92,9 @@ public void check(int result)
 	} else if(result == 4){
 		w = new OperatorView(clientImpl);
 	}else Window.alert("Bruger i gruppe: " + result + " findes ikke");
-		
-	loginPanel.clear();
+	
+	if(result != 5) 
+		loginPanel.clear();
 	loginPanel.add(w);
 	
 }

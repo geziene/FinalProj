@@ -30,6 +30,7 @@ public interface KartotekService extends RemoteService {
 	
 	public void saveUser(UserDTO u) throws Exception;
 	public UserDTO findUser(int u) throws Exception;
+	public void updateUser(UserDTO r) throws Exception;
 	
 	public void saveRecept(ReceptDTO newRecept) throws Exception;
 	
@@ -38,12 +39,15 @@ public interface KartotekService extends RemoteService {
 	
 	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception;
 	public ArrayList<String> showProduktbatch() throws Exception;
+	public void statusProduktbatch(int id, int status) throws Exception;
 	
 	public void saveRaavarebatch(RaavarebatchDTO rb) throws Exception;
 	
 	public String userName(int id) throws Exception;
 	
 	public int logUser(int id, String psw) throws Exception;
+	
+	public ArrayList<UserDTO> getUsers() throws Exception;
 	
 
 }

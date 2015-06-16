@@ -65,7 +65,6 @@ import dtu.shared.RaavarebatchDTO;
             phPanel.add(addRaavarebatches);
              
             phPanel.add(showRaavarebatches);
-            //phPanel.add(updateRaavare);
 			
 			phPanel.add(addProduktbatches);
 			
@@ -143,7 +142,6 @@ import dtu.shared.RaavarebatchDTO;
 	            phPanel.add(raavarebatch_idPanel);
 	            phPanel.add(raavare_idPanel);
 	            phPanel.add(maengdePanel);
-	             
 	            phPanel.add(save);
 	            
 	     
@@ -174,8 +172,7 @@ import dtu.shared.RaavarebatchDTO;
 				
 				@Override
 				public void onFailure(Throwable caught) {
-					// TODO Auto-generated method stub
-					
+					Window.alert("Server error " + caught);
 				}
 			});
 			 pbTable.setBorderWidth(1);

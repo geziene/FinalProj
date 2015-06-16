@@ -81,7 +81,6 @@ public class PharmacistView extends Composite {
 			final TextBox levTxt;
 			Button save = new Button("Create");
 
-			// total height of widget. Components are distributed evenly
 			phPanel.setHeight("120px");	
 
 			HorizontalPanel namePanel = new HorizontalPanel();
@@ -105,7 +104,6 @@ public class PharmacistView extends Composite {
 			levLbl = new Label("Leverandoer:");
 			levLbl.setWidth("100px");
 			levTxt = new TextBox();
-			//levTxt.setWidth("5em");
 			levTxt.setHeight("1em");
 			levPanel.add(levLbl);
 			levPanel.add(levTxt);
@@ -118,7 +116,7 @@ public class PharmacistView extends Composite {
 				   nameTxt.getText();
 				   levTxt.getText();
 					 
-				 RaavareDTO raavare1 = new RaavareDTO( Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());	 
+				 RaavareDTO raavare1 = new RaavareDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());	 
 				 clientImpl.service.saveRaavare(raavare1, new AsyncCallback<Void>() {
 
 				@Override
@@ -186,8 +184,7 @@ public class PharmacistView extends Composite {
 		}
 		
 		public void updateRaavareFields() 
-		{
-			
+		{			
 			phPanel.clear();
 			
 			final FlexTable t = new FlexTable();
@@ -251,9 +248,8 @@ public class PharmacistView extends Composite {
 								// get textbox contents for cancel operation
 								final String name = navnTxt.getText();
 								final String lev = leverTxt.getText();
-
-
 								final Anchor ok = new Anchor("ok");
+								
 								ok.addClickHandler(new ClickHandler() {
 
 									@Override
@@ -263,7 +259,6 @@ public class PharmacistView extends Composite {
 										t.setText(eventRowIndex, 1, navnTxt.getText());
 										t.setText(eventRowIndex, 2, leverTxt.getText());
 
-
 										// here you will normally fetch the primary key of the row 
 										// and use it for location the object to be edited
 
@@ -271,8 +266,6 @@ public class PharmacistView extends Composite {
 										RaavareDTO RaavareDTO = new RaavareDTO(
 												Integer.parseInt(t.getText(eventRowIndex, 0)), navnTxt.getText(), leverTxt.getText()
 											);
-
-								
 									
 										// V.2
 										clientImpl.service.updateRaavare(RaavareDTO, new AsyncCallback<Void>() {
@@ -313,7 +306,6 @@ public class PharmacistView extends Composite {
 										navnTxt.setText(lev);
 										leverTxt.fireEvent(new KeyUpEvent() {});  // validation
 
-
 										t.setText(eventRowIndex, 1, name);
 										t.setText(eventRowIndex, 2, lev);
 
@@ -325,8 +317,7 @@ public class PharmacistView extends Composite {
 									}
 
 								});
-
-
+								
 								navnTxt.addKeyUpHandler(new KeyUpHandler(){
 
 									@Override
@@ -388,13 +379,6 @@ public class PharmacistView extends Composite {
 			navnTxt = new TextBox();
 			leverTxt = new TextBox();
 			leverTxt.setWidth("50px");
-				
-		
-
-
-		
-
-
 
 		addRecept.addClickHandler(new ClickHandler() {
 		
@@ -414,7 +398,6 @@ public class PharmacistView extends Composite {
 				
 				Button save = new Button("Create");
 
-				// total height of widget. Components are distributed evenly
 				phPanel.setHeight("120px");	
 
 				HorizontalPanel receptnamePanel = new HorizontalPanel();
@@ -459,7 +442,6 @@ public class PharmacistView extends Composite {
 				phPanel.add(receptnamePanel);
 				phPanel.add(save);
 		
-		
 			addReceptkomponent.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -482,7 +464,6 @@ public class PharmacistView extends Composite {
 		
 				Button savereceptkomponent = new Button("Create");
 				
-				// total height of widget. Components are distributed evenly
 				phPanel.setHeight("120px");	
 
 				HorizontalPanel receptnamePanel = new HorizontalPanel();
@@ -548,7 +529,7 @@ public class PharmacistView extends Composite {
 							}
 						});
 			
-					        }		
+					}		
 				} );
 				
 				phPanel.add(receptidPanel);
@@ -562,9 +543,7 @@ public class PharmacistView extends Composite {
 			}
 
 		});
-			
-			
-			
+
 		phPanel.add(addRaavare);
 		phPanel.add(showRaavare);
 		phPanel.add(updateRaavare);
@@ -642,7 +621,6 @@ public class PharmacistView extends Composite {
 		phPanel.add(idPanel);
 		phPanel.add(namePanel);
 		phPanel.add(levPanel);
-		
 		phPanel.add(save);
 
 	}

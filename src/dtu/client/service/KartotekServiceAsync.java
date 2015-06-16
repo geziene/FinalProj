@@ -25,8 +25,8 @@ public interface KartotekServiceAsync {
 	void getSize(AsyncCallback<Integer> callback);
 	
 	void saveUser(UserDTO u, AsyncCallback<Void> callback);
-	
 	void findUser(int u, AsyncCallback<UserDTO> callback);
+	void updateUser(UserDTO r,AsyncCallback<Void> callback);
 
 	void saveRecept(ReceptDTO newRecept, AsyncCallback<Void> asyncCallback);
 
@@ -34,14 +34,16 @@ public interface KartotekServiceAsync {
 	void findReceptkomponet(int id, AsyncCallback<ArrayList<String>> asyncCallback);
 
 	void saveProduktbatch(ProduktbatchDTO pb, AsyncCallback<Void> asyncCallback);
-	
 	void showProduktbatch(AsyncCallback<ArrayList<String>> callback);
+	void statusProduktbatch(int id, int status,AsyncCallback<Void> asyncCallback);
 
 	void saveRaavarebatch(RaavarebatchDTO rb, AsyncCallback<Void> asyncCallback);
 	
 	void userName(int id, AsyncCallback<String> asyncCallback);
 
 	void logUser(int id, String psw, AsyncCallback<Integer> asyncCallback);
+
+	void getUsers(AsyncCallback<ArrayList<UserDTO>> asyncCallback);
 	
 	
 }
