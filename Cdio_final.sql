@@ -8,8 +8,6 @@ DROP TABLE IF EXISTS raavarebatch;
 DROP TABLE IF EXISTS raavare;
 DROP TABLE IF EXISTS users;
 
-SELECT gruppe FROM users WHERE opr_id = 4;
-
 CREATE TABLE users(opr_id INT PRIMARY KEY, opr_navn TEXT, ini TEXT, cpr TEXT, password TEXT, gruppe INT) ENGINE=innoDB;
  
 CREATE TABLE raavare(raavare_id INT PRIMARY KEY, raavare_navn TEXT, leverandoer TEXT) ENGINE=innoDB;
@@ -60,7 +58,7 @@ INSERT INTO raavarebatch(rb_id, raavare_id, maengde) VALUES
 (1, 1, 1000),
 (2, 2, 300),
 (3, 3, 300),
-(4, 5, 100),
+(4, 4, 100),
 (5, 5, 100), 
 (6, 6, 100),
 (7, 7, 100);
@@ -68,8 +66,7 @@ INSERT INTO raavarebatch(rb_id, raavare_id, maengde) VALUES
 INSERT INTO recept(recept_id, recept_navn, made_by) VALUES
 (1, 'margherita', 0),
 (2, 'prosciutto', 0),
-(3, 'capricciosa', 0),
-(4, 'emda', 0);
+(3, 'capricciosa', 0);
 
 INSERT INTO produktbatch(pb_id, recept_id, status, made_by) VALUES
 (1, 1, 2, 0), 
@@ -93,11 +90,7 @@ INSERT INTO receptkomponent(recept_id, raavare_id, made_by, pb_id, nom_netto, to
 (3, 4, 0, 1, 1.5, 0.1),
 (3, 5, 0, 1, 1.5, 0.1),
 (3, 6, 0, 1, 1.0, 0.1),
-(3, 7, 0, 1, 1.0, 0.1),
-
-(4, 1, 0, 1, 10.0, 0.1),
-(4, 3, 0, 1, 3.0, 0.1),
-(4, 5, 0, 1, 2.0, 0.1);
+(3, 7, 0, 1, 1.0, 0.1);
 
 INSERT INTO produktbatchkomponent(pb_id, rb_id, made_by, tara, netto) VALUES
 (1, 1, 1, 0.5, 10.05),
