@@ -1,5 +1,6 @@
 package dtu.client.ui;
 
+import java.text.*;
 import java.util.ArrayList;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,6 +16,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import dtu.client.service.KartotekServiceClientImpl;
+import dtu.shared.DoubleExceptions;
+import dtu.shared.HeltalExceptions;
 import dtu.shared.ProduktbatchDTO;
 import dtu.shared.RaavarebatchDTO;
 	
@@ -28,6 +31,9 @@ import dtu.shared.RaavarebatchDTO;
 		Button addProduktbatches = new Button("Create Produktbatches");
 		Button showProduktbatches = new Button("Show Produktbatches");
 		Button updateProduktbatches = new Button("Update Produktbatches");
+		
+		HeltalExceptions HTest = new HeltalExceptions();
+		DoubleExceptions DTest = new DoubleExceptions();
 		
 		//BrowseView bv = new BrowseView(clientImpl);
 		
@@ -120,8 +126,12 @@ import dtu.shared.RaavarebatchDTO;
 	                public void onClick(ClickEvent event)   {
 	                     try
 	                        {
-	                    	 RaavarebatchDTO rb = new RaavarebatchDTO(Integer.parseInt(raavarebatch_idTxt.getText()), Integer.parseInt(raavare_idTxt.getText()), Double.parseDouble(maengdeTxt.getText()));
-	                    	 clientImpl.service.saveRaavarebatch(rb, new AsyncCallback<Void>() {
+	                    	 if (HTest.HeltalStringTest(raavarebatch_idTxt.getText()) && HTest.HeltalStringTest(raavare_idTxt.getText())){
+	                    	 if (HTest.HeltalTest(Integer.parseInt(raavarebatch_idTxt.getText())) && HTest.HeltalTest(Integer.parseInt(raavare_idTxt.getText())) ){
+	                    	 if (DTest.DoubleStringTest(maengdeTxt.getText())){
+	                    	 	 double maengde = DTest.DoubleDecimalTest(maengdeTxt.getText());
+	                    		 RaavarebatchDTO rb = new RaavarebatchDTO(Integer.parseInt(raavarebatch_idTxt.getText()), Integer.parseInt(raavare_idTxt.getText()), maengde);
+	                    		 clientImpl.service.saveRaavarebatch(rb, new AsyncCallback<Void>() {
 	                    		 @Override
 	             				public void onFailure(Throwable caught) {
 	             					Window.alert("Server fejl!" + caught.getMessage());
@@ -133,6 +143,10 @@ import dtu.shared.RaavarebatchDTO;
 	             						}
 	                    	 });
 	                        }
+	                     }
+	                        }
+	                       }
+	                        
 	                        catch (Exception e) {
 	                            e.printStackTrace();
 	                        }
