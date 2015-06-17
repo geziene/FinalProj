@@ -11,11 +11,11 @@ public class DoubleExceptions {
 	        Double.parseDouble(TestDoubleString);
 	        return true;
 	    } catch (NumberFormatException e) {
-	    	Window.alert("Double maa kun indholde tal og punktum");
+	    	Window.alert("Double maa kun indholde positive tal og punktum");
 	        return false;
 	    }
 		else{
-			Window.alert("Vaerdien maa ikke vaere negativ");
+			Window.alert("Double maa kun indholde positive tal og punktum");
 	        return false;
 		}
 	}
