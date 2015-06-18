@@ -42,12 +42,12 @@ import dtu.shared.RaavarebatchDTO;
 		boolean made_byValid = true;
 
 		
-		Button addRaavarebatches = new Button("Create Raavarebatches");
+		Button addRaavarebatches = new Button("Opret Raavarebatches");
 //        Button showRaavarebatches = new Button("Show Raavarebatches");
         
-		Button addProduktbatches = new Button("Create Produktbatches");
+		Button addProduktbatches = new Button("Opret Produktbatches");
 //		Button showProduktbatches = new Button("Show Produktbatches");
-		Button updateProduktbatches = new Button("Update Produktbatches");
+		Button updateProduktbatches = new Button("Redigere Produktbatches");
 		
 		HeltalExceptions HTest = new HeltalExceptions();
 		DoubleExceptions DTest = new DoubleExceptions();
@@ -115,7 +115,7 @@ import dtu.shared.RaavarebatchDTO;
 	            Label maengdeLbl;
 	            final TextBox maengdeTxt;
 	             
-	            Button save = new Button("Create");
+	            Button save = new Button("Opret");
 
 	            // total height of widget. Components are distributed evenly
 	            phPanel.setHeight("120px"); 
@@ -245,7 +245,7 @@ import dtu.shared.RaavarebatchDTO;
 	                     try
 	                        {
 	                    	 if (HTest.HeltalStringTest(produktbatch_idTxt.getText()) && HTest.HeltalStringTest(statusTxt.getText())){
-	                    	 if (HTest.HeltalTest(Integer.parseInt(produktbatch_idTxt.getText())) && HTest.HeltalTest(Integer.parseInt(statusTxt.getText())) ){
+	                    	 if (HTest.HeltalTest(Integer.parseInt(produktbatch_idTxt.getText())) && HTest.StatusTest(Integer.parseInt(statusTxt.getText()))){
 	                    	 if (DTest.DoubleStringTest(recept_idTxt.getText())){
 	                    	 	 double recept_id = DTest.DoubleDecimalTest(recept_idTxt.getText());
 	                    	 	 
@@ -328,7 +328,7 @@ import dtu.shared.RaavarebatchDTO;
 							t.setText(rowIndex+1, 2, "" + result.get(rowIndex).getreceptId());
 							t.setText(rowIndex+1, 3, "" + result.get(rowIndex).getmade_by());
 							
-							Anchor edit = new Anchor("edit");
+							Anchor edit = new Anchor("Redigere");
 							t.setWidget(rowIndex+1, 4, edit);
 
 							edit.addClickHandler(new ClickHandler() {
@@ -418,7 +418,7 @@ import dtu.shared.RaavarebatchDTO;
 
 									});
 
-									Anchor cancel = new Anchor("cancel");
+									Anchor cancel = new Anchor("Anullere");
 									previousCancel = cancel;
 									cancel.addClickHandler(new ClickHandler() {
 

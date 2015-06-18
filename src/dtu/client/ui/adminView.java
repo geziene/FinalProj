@@ -40,8 +40,8 @@ public class adminView extends Composite {
 	boolean grpValid = true;
 	
 	
-	Button addUser = new Button("Create User");
-	Button updateUser = new Button("Update User");
+	Button addUser = new Button("Opret Bruger");
+	Button updateUser = new Button("Redigere Bruger");
 	
 
 	
@@ -89,7 +89,7 @@ public class adminView extends Composite {
 		final TextBox passwordTxt;
 		final TextBox groupTxt;
 		
-		Button save = new Button("Create");
+		Button save = new Button("Opret");
 		
 		
 		// total height of widget. Components are distributed evenly
@@ -102,14 +102,14 @@ public class adminView extends Composite {
 		HorizontalPanel passwordPanel = new HorizontalPanel();
 		HorizontalPanel groupPanel = new HorizontalPanel();
 
-		idLbl = new Label("User ID:");
+		idLbl = new Label("Bruger ID:");
 		idLbl.setWidth("100px");
 		idTxt = new TextBox();
 		idTxt.setHeight("1em");
 		idPanel.add(idLbl);
 		idPanel.add(idTxt);
 		
-		nameLbl = new Label("User Name:");
+		nameLbl = new Label("Brugernavn:");
 		nameLbl.setWidth("100px");
 		nameTxt = new TextBox();
 		nameTxt.setHeight("1em");
@@ -117,7 +117,7 @@ public class adminView extends Composite {
 		namePanel.add(nameTxt);
 
 
-		iniLbl = new Label("Initials:");
+		iniLbl = new Label("initialer:");
 		iniLbl.setWidth("100px");
 		iniTxt = new TextBox();
 		//levTxt.setWidth("5em");
@@ -134,7 +134,7 @@ public class adminView extends Composite {
 		cprPanel.add(cprLbl);
 		cprPanel.add(cprTxt);
 
-		passwordLbl = new Label("Password:");
+		passwordLbl = new Label("Adgangskode:");
 		passwordLbl.setWidth("100px");
 		passwordTxt = new TextBox();
 		//levTxt.setWidth("5em");
@@ -143,7 +143,7 @@ public class adminView extends Composite {
 		passwordPanel.add(passwordTxt);
 		
 			
-		groupLbl = new Label("Group:");
+		groupLbl = new Label("Gruppe:");
 		groupLbl.setWidth("100px");
 		groupTxt = new TextBox();
 		//levTxt.setWidth("5em");
@@ -165,7 +165,7 @@ public class adminView extends Composite {
 
 			@Override
 			public void onSuccess(Void result) {
-				Window.alert("User saved in database");
+				Window.alert("Bruger er gemt i databasen");
 					}
 				});
 	
@@ -231,7 +231,7 @@ public class adminView extends Composite {
 					t.setText(rowIndex+1, 4, "" + result.get(rowIndex).getuserPassword());
 					t.setText(rowIndex+1, 5, "" + result.get(rowIndex).getuserGroup());
 					
-					Anchor edit = new Anchor("edit");
+					Anchor edit = new Anchor("Redigere");
 					t.setWidget(rowIndex+1, 6, edit);
 
 					edit.addClickHandler(new ClickHandler() {
@@ -324,7 +324,7 @@ public class adminView extends Composite {
 
 							});
 
-							Anchor cancel = new Anchor("cancel");
+							Anchor cancel = new Anchor("Anullere");
 							previousCancel = cancel;
 							cancel.addClickHandler(new ClickHandler() {
 
