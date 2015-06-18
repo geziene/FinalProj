@@ -8,13 +8,13 @@ import java.util.*;
 public class VaegtConsol {
 	private static double brutto = 0;
 	private static double tara = 0;
-	private static String inline = "";
 	private static String IndstruktionsDisplay = "";
 	private static boolean running = true, loop = true, case6 = true;
 	private static ServerSocket serversocket;
 	private static Socket socket;
 	static String temp = "1", pbId;
 	static int port = 8000;
+	static String raavareCount;
 		
 	public static void printmenu() {
 		System.out.println("");
@@ -72,6 +72,7 @@ public class VaegtConsol {
 					while(ind.ready()){
 					System.out.println(ind.readLine());
 					}
+					raavareCount = ind.readLine();
 					
 				case "3":
 					ud.println("3");
@@ -102,6 +103,8 @@ public class VaegtConsol {
 					if(temp.equals("B")){
 						System.out.print("Indtast brutto vaegt(kg): ");
 						brutto = sc.nextDouble();
+						ud.println(String.valueOf(brutto));
+						ud.flush();
 						printmenu();
 					}
 					else {
@@ -154,21 +157,18 @@ public class VaegtConsol {
 					ud.println("2");
 					ud.println(pbId);
 					ud.flush();
-					ud.println(raavareId.get(0));
-					System.out.println("v " + raavareId.get(0));
-					ud.println(raavareNetto.get(0));
-					System.out.println("v " + raavareNetto.get(0));
-					ud.println(raavareId.get(1));
-					System.out.println("v " + raavareId.get(1));
-					ud.println(raavareNetto.get(1));
-					System.out.println("v " + raavareNetto.get(1));
-					ud.println(raavareId.get(2));
-					System.out.println("v " + raavareId.get(2));
-					ud.println(raavareNetto.get(2));
-					System.out.println("v " + raavareNetto.get(2));
+					for(int i = 0; i < Integer.parseInt(raavareCount); i++){
+					ud.println(raavareId.get(i));
+					ud.println(raavareNetto.get(i));
 					ud.flush();
-					sc.next();
-					
+					}
+					for(int i = 0; i < Integer.parseInt(raavareCount); i++){
+						ud.println(raavareId.get(i));
+						ud.println(raavareNetto.get(i));
+						ud.flush();
+					}
+					System.out.println("Databasen er blevet opdateret og afvejningen er slut.");
+						System.exit(0);
 				}
 			}
 						

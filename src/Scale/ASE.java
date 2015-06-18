@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dtu.shared.DALException;
+import dtu.shared.ProduktbatchDTO;
 
 public class ASE implements Runnable {
 
@@ -25,7 +26,8 @@ public class ASE implements Runnable {
 	PrintWriter ud;
 	BufferedReader ind;
 	static int port = 8000, raavareCount;
-	static String hostname = "localhost", temp, name;
+	static String hostname = "localhost", temp, name, opr;
+	String tolerance;
 		
 	public void run() {
 		try {
@@ -46,9 +48,10 @@ public class ASE implements Runnable {
 				e1.printStackTrace();
 			}
 			}		
-		//while(true) {
+		while(true) {
 		try {
 			temp = ind.readLine();
+			opr = temp.substring(1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,8 +109,8 @@ public class ASE implements Runnable {
 					"SELECT raavare_navn, raavare_id, nom_netto, tolerance "
 					+ "FROM receptkomponent natural join raavare WHERE recept_id = ?");
 			
-//			raavareCountStmt = connection.prepareStatement("SELECT COUNT(recept_id) "
-//					+ "FROM receptkomponent WHERE recept_id = ?");
+			raavareCountStmt = connection.prepareStatement("SELECT COUNT(recept_id) "
+					+ "FROM receptkomponent WHERE recept_id = ?");
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -134,18 +137,20 @@ public class ASE implements Runnable {
 			
 			findReceptkomponentStmt.setInt(1, receptId);
 			rs = findReceptkomponentStmt.executeQuery();
+			
 			while(rs.next()){
 				ud.println(rs.getString("raavare_navn")+"\t"+ rs.getString("raavare_id")+"\t\t"
 			+String.valueOf(rs.getDouble("nom_netto"))+"\t"+String.valueOf(rs.getDouble("tolerance")));
 			}
 			ud.flush();
 			
-//			raavareCountStmt.setInt(1, receptId);
-//			rs = raavareCountStmt.executeQuery();
-//			rs.next();
-//			raavareCount = rs.getInt("COUNT(recept_id)");
-//			ud.println(raavareCount);
-//			ud.flush();
+			
+			raavareCountStmt.setInt(1, receptId);
+			rs = raavareCountStmt.executeQuery();
+			rs.next();
+			raavareCount = rs.getInt("COUNT(recept_id)");
+			ud.println(raavareCount);
+			ud.flush();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -190,6 +195,7 @@ public class ASE implements Runnable {
 		}
 	
 	try {
+		tolerance = ind.readLine();
 		temp = ind.readLine();
 	} catch (IOException e2) {
 		// TODO Auto-generated catch block
@@ -233,14 +239,13 @@ public class ASE implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for(int i = 0; i < 3; i++ ){
+		
 		String raavareId = "";
-		int netto = 0;
+		String netto = "";
+		for(int i = 0; i < raavareCount; i++ ){
 		try {
 			raavareId = ind.readLine();
-			netto = ind.read();
-			System.out.println("a " + raavareId);
-			System.out.println("a " + netto);
+			netto = ind.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -249,19 +254,58 @@ public class ASE implements Runnable {
 			getLagerStmt.setInt(1, Integer.parseInt(raavareId));
 			ResultSet rs = getLagerStmt.executeQuery();
 			rs.next();
-			int lager = rs.getInt("maengde");
-			System.out.println(lager);
-			System.out.println(netto);
-			lagerUpdateStmt.setInt(1, lager - netto);
-			lagerUpdateStmt.setString(2, raavareId);
+			double lager = rs.getDouble("maengde");
+			lagerUpdateStmt.setDouble(1, lager - Double.parseDouble((netto)));
+			lagerUpdateStmt.setInt(2, Integer.parseInt(raavareId));
 			lagerUpdateStmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			}
+		}
+		PreparedStatement saveProduktbatchKomkonentStmt = null;
+		PreparedStatement newPbIdStmt = null;
+		try {
+			saveProduktbatchKomkonentStmt = connection.prepareStatement(
+					"INSERT INTO produktbatchkomponent(pb_id, rb_id, made_by, tara, netto) VALUES (?, ?, ?, ?, ?)");
+			newPbIdStmt = connection.prepareStatement("SELECT COUNT(DISTINCT pb_id) FROM produktbatchkomponent");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ResultSet rs;
+		int pb_id = 0;
+		try {
+			rs = newPbIdStmt.executeQuery();
+			rs.next();
+			pb_id = rs.getInt("COUNT(DISTINCT pb_id)");
+		} catch (SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		for(int i = 0; i < raavareCount; i++ ){
+		try {
+			raavareId = ind.readLine();
+			netto = ind.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			saveProduktbatchKomkonentStmt.setInt(1, (pb_id + 1));
+			saveProduktbatchKomkonentStmt.setInt(2, Integer.parseInt(raavareId));
+			saveProduktbatchKomkonentStmt.setInt(3, Integer.parseInt(opr));
+			saveProduktbatchKomkonentStmt.setDouble(4, Double.parseDouble(tolerance));
+			saveProduktbatchKomkonentStmt.setDouble(5, Double.parseDouble((netto)));
+			saveProduktbatchKomkonentStmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		}
 	}
-		//}
+		}
 	}
 
 }
