@@ -65,7 +65,7 @@ import dtu.shared.RaavarebatchDTO;
 
 				@Override
 				public void onClick(ClickEvent event) {
-					ProduktbatchesFields();
+					ProduktbatchField();
 				}
 			});
 			
@@ -187,38 +187,105 @@ import dtu.shared.RaavarebatchDTO;
 	 
 	        }
 		 
-		 
-/*		 public void showProduktbatchesFields(){
-			 phPanel.clear();
-			 final FlexTable pbTable = new FlexTable();
-			 clientImpl.service.showProduktbatch(new AsyncCallback<ArrayList<String>>() {
-				 
-				@Override
-				public void onSuccess(ArrayList<String> result) {
-					int j = 0;
-					pbTable.setText(0, 0, "Produktbatch id");
-					pbTable.setText(0, 1, "Status");
-					pbTable.setText(0, 2, "Recept id");
-					pbTable.setText(0, 3, "Made by");
-					for(int i = 0; i < result.size()/4; i++) {
-						pbTable.setText(i + 1, 0, result.get(j));
-						pbTable.setText(i + 1, 1, result.get(j + 1));
-						pbTable.setText(i + 1, 2, result.get(j + 2));
-						pbTable.setText(i + 1, 3, result.get(j + 3));
-						j = j + 4;
-					}
-				}
-				
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Server error " + caught);
-				}
-			});
-			 pbTable.setBorderWidth(1);
-			 phPanel.add(pbTable);
-		 } */
+		 public void ProduktbatchField() 
+	        {
+	            phPanel.clear();
+	             
+	            Label produktbatch_idLbl;
+	            final TextBox produktbatch_idTxt;
+	            Label statusLbl;
+	            final TextBox statusTxt;
+	            Label recept_idLbl;
+	            final TextBox recept_idTxt;
+	            Label made_byLbl;
+	            final TextBox made_byTxt;
+	             
+	            Button save = new Button("Opret");
 
-			public void ProduktbatchesFields()
+	            // total height of widget. Components are distributed evenly
+	            phPanel.setHeight("120px"); 
+	 
+	            HorizontalPanel produktbatch_idPanel = new HorizontalPanel();
+	            HorizontalPanel statusPanel = new HorizontalPanel();
+	            HorizontalPanel recept_idPanel = new HorizontalPanel();
+	            HorizontalPanel made_byPanel = new HorizontalPanel();
+	 
+	            produktbatch_idLbl = new Label("produktbatch ID:");
+	            produktbatch_idLbl.setWidth("100px");
+	            produktbatch_idTxt = new TextBox();
+	            produktbatch_idTxt.setHeight("1em");
+	            produktbatch_idPanel.add(produktbatch_idLbl);
+	            produktbatch_idPanel.add(produktbatch_idTxt);
+	             
+	            statusLbl = new Label("status:");
+	            statusLbl.setWidth("100px");
+	            statusTxt = new TextBox();
+	            statusTxt.setHeight("1em");
+	            statusPanel.add(statusLbl);
+	            statusPanel.add(statusTxt);
+	             
+	            recept_idLbl = new Label("Recept ID:");
+	            recept_idLbl.setWidth("100px");
+	            recept_idTxt = new TextBox();
+	            recept_idTxt.setHeight("1em");
+	            recept_idPanel.add(recept_idLbl);
+	            recept_idPanel.add(recept_idTxt);
+	            
+	            made_byLbl = new Label("Udført af:");
+	            made_byLbl.setWidth("100px");
+	            made_byTxt = new TextBox();
+	            made_byTxt.setHeight("1em");
+	            made_byPanel.add(made_byLbl);
+	            made_byPanel.add(made_byTxt);
+	            
+	            save.addClickHandler(new ClickHandler()  {
+	 
+	                @Override
+	                public void onClick(ClickEvent event)   {
+	                     try
+	                        {
+	                    	 if (HTest.HeltalStringTest(produktbatch_idTxt.getText()) && HTest.HeltalStringTest(statusTxt.getText())){
+	                    	 if (HTest.HeltalTest(Integer.parseInt(produktbatch_idTxt.getText())) && HTest.HeltalTest(Integer.parseInt(statusTxt.getText())) ){
+	                    	 if (DTest.DoubleStringTest(recept_idTxt.getText())){
+	                    	 	 double recept_id = DTest.DoubleDecimalTest(recept_idTxt.getText());
+	                    	 	 
+	                    		 ProduktbatchDTO rb = new ProduktbatchDTO(Integer.parseInt(produktbatch_idTxt.getText()), Integer.parseInt(statusTxt.getText()), Integer.parseInt(recept_idTxt.getText()),Integer.parseInt(made_byTxt.getText()) );
+	                    		 clientImpl.service.saveProduktbatch(rb, new AsyncCallback<Void>() {
+	                    		 @Override
+	             				public void onFailure(Throwable caught) {
+	             					Window.alert("Server fejl!" + caught.getMessage());
+	             						}
+
+	             				@Override
+	             				public void onSuccess(Void result) {
+	             					Window.alert("Produktbatch gemt i kartotek");
+	             						}
+	                    	 });
+	                        }
+	                     }
+	                        }
+	                       }
+	                        
+	                        catch (Exception e) {
+	                            e.printStackTrace();
+	                        }
+	                        }       
+	            } );
+	             
+	            phPanel.add(produktbatch_idPanel);
+	            phPanel.add(statusPanel);
+	            phPanel.add(recept_idPanel);
+	            phPanel.add(made_byPanel);
+	            
+	            phPanel.add(save);
+	            
+	     
+	 
+	        }
+		 
+
+		 
+		 public void ProduktbatchesFields()
 			{
 				phPanel.clear();
 				

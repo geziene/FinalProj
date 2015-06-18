@@ -340,7 +340,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			saveProduktbatchStmt.setInt(4, pb.getmade_by());
 			saveProduktbatchStmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new DALException(" \"save Produktbatch\" fejlede");
+			throw new DALException(" \"save Produktbatch\" fejlede" + e.getMessage());
 		}
 	}
 	
