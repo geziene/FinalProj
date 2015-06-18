@@ -475,12 +475,12 @@ public class PharmacistView extends Composite {
 					for (int rowIndex=0; rowIndex < result.size(); rowIndex++) {
 						t.setText(rowIndex+1, 0, "" + result.get(rowIndex).getreceptkomponentId());
 						t.setText(rowIndex+1, 1, "" + result.get(rowIndex).getraavarekomponentId());
-						t.setText(rowIndex+1, 1, "" + result.get(rowIndex).getmadebykomponent());
-						t.setText(rowIndex+1, 1, "" + result.get(rowIndex).getpbidkomponentId());
-						t.setText(rowIndex+1, 1, "" + result.get(rowIndex).getnettokomponent());
-						t.setText(rowIndex+1, 2, "" + result.get(rowIndex).gettolerancekomponent());
+						t.setText(rowIndex+1, 2, "" + result.get(rowIndex).getmadebykomponent());
+						t.setText(rowIndex+1, 3, "" + result.get(rowIndex).getpbidkomponentId());
+						t.setText(rowIndex+1, 4, "" + result.get(rowIndex).getnettokomponent());
+						t.setText(rowIndex+1, 5, "" + result.get(rowIndex).gettolerancekomponent());
 						Anchor edit = new Anchor("edit");
-						t.setWidget(rowIndex+1, 5, edit);
+						t.setWidget(rowIndex+1, 6, edit);
 
 						edit.addClickHandler(new ClickHandler() {
 
@@ -498,8 +498,8 @@ public class PharmacistView extends Composite {
 								toleranceTxt.setText(t.getText(eventRowIndex, 6));
 
 								// show text boxes for editing
-								t.setWidget(eventRowIndex, 5, navnTxt);
-								t.setWidget(eventRowIndex, 6, leverTxt);
+								t.setWidget(eventRowIndex, 5, nettoTxt);
+								t.setWidget(eventRowIndex, 6, toleranceTxt);
 
 								// start editing here
 								nettoTxt.setFocus(true);
@@ -532,7 +532,7 @@ public class PharmacistView extends Composite {
 												Integer.parseInt(raavareidTxt.getText()),
 												Integer.parseInt(madebyTxt.getText()),
 												Integer.parseInt(pdidTxt.getText()),
-												Integer.parseInt(nettoTxt.getText())
+												Integer.parseInt(toleranceTxt.getText())
 											
 											);
 									
@@ -587,7 +587,7 @@ public class PharmacistView extends Composite {
 
 								});
 								
-								navnTxt.addKeyUpHandler(new KeyUpHandler(){
+								nettoTxt.addKeyUpHandler(new KeyUpHandler(){
 
 									@Override
 									public void onKeyUp(KeyUpEvent event) {
@@ -609,7 +609,7 @@ public class PharmacistView extends Composite {
 
 								});
 
-								leverTxt.addKeyUpHandler(new KeyUpHandler(){
+								toleranceTxt.addKeyUpHandler(new KeyUpHandler(){
 
 									@Override
 									public void onKeyUp(KeyUpEvent event) {
@@ -623,7 +623,7 @@ public class PharmacistView extends Composite {
 										}
 
 										// enable/disable ok depending on form status 
-										if (nettoValid&&levValid)
+										if (nettoValid&&toleranceValid)
 											t.setWidget(eventRowIndex, 4, ok);
 										else
 											t.setText(eventRowIndex, 4, "ok");
@@ -632,8 +632,8 @@ public class PharmacistView extends Composite {
 								});
 
 								// showing ok and cancel widgets
-								t.setWidget(eventRowIndex, 5 , ok);
-								t.setWidget(eventRowIndex, 6 , cancel);	
+								t.setWidget(eventRowIndex, 7 , ok);
+								t.setWidget(eventRowIndex, 8 , cancel);	
 							}
 						});
 					}
@@ -649,7 +649,7 @@ public class PharmacistView extends Composite {
 			// text boxes
 			nettoTxt = new TextBox();
 			toleranceTxt = new TextBox();
-			toleranceTxt.setWidth("50px");
+			toleranceTxt.setWidth("40px");
 
 	
 			
