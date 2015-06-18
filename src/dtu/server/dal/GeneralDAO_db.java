@@ -56,6 +56,8 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	
 	private PreparedStatement updateProduktbatchesStmt = null;
 	
+	private PreparedStatement showReceptStmt = null;
+	
 
 	
 	public GeneralDAO_db() throws Exception {
@@ -71,7 +73,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 
 			// create query that updates a raavare
 			updateRaavareStmt = connection.prepareStatement( 
-					"UPDATE raavre SET raavare_navn = ?, leverandoer = ?  WHERE raavare_id = ?" );
+					"UPDATE raavare SET raavare_navn = ?, leverandoer = ?  WHERE raavare_id = ?" );
 
 			// create query that get all raavare in kartotek
 			getRaavareStmt = connection.prepareStatement( 
@@ -90,11 +92,11 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 					"VALUES(?, ?, ?, ?, ?, ?)");
 
 			saveReceptStmt = connection.prepareStatement(
-					"INSERT INTO recept(recept_id, recept_navn) " +
-					"VALUES(?, ?)");
+					"INSERT INTO recept(recept_id, recept_navn, made_by) " +
+					"VALUES(?, ?, ?)");
 			
 			saveReceptkomponentStmt = connection.prepareStatement(
-					"INSERT INTO receptkomponent(recept_id, raavare_id, made_by, pb_id, nom_netto, tolerance, ) " +
+					"INSERT INTO receptkomponent(recept_id, raavare_id, made_by, pb_id, nom_netto, tolerance) " +
 					"VALUES(?, ?, ?, ?, ?, ?)");
 			
 			showProduktbatcheStmt = connection.prepareStatement("SELECT * FROM produktbatch");
@@ -126,6 +128,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			
 			updateProduktbatchesStmt = connection.prepareStatement("UPDATE produktbatch SET status = ?, recept_id = ?, made_by = ?  WHERE pb_id = ?" );
 
+			showReceptStmt = connection.prepareStatement("SELECT * FROM recept");
 		} 
 		catch ( SQLException sqlException )
 		{
@@ -155,7 +158,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 
 			updateRaavareStmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new DALException(" \"updateRaavare\" fejlede");
+			throw new DALException(" \"updateRaavare \" fejlede" + e.getMessage());
 		} 
 	}
 
@@ -257,6 +260,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		try {
 			saveReceptStmt.setInt(1, newRecept.getreceptId());
 			saveReceptStmt.setString(2, newRecept.getreceptNavn());
+			saveReceptStmt.setInt(3, newRecept.getmade_by());
 			
 			saveReceptStmt.executeUpdate();
 		} catch (SQLException e) {
@@ -275,7 +279,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			saveReceptkomponentStmt.setDouble(6, newReceptkomponent.gettolerancekomponent());			
 			saveReceptkomponentStmt.executeUpdate();
 		} catch (SQLException e) {
-		throw new DALException("\"save Receptkomponent\" fejlede");
+		throw new DALException("\"save Receptkomponent\" fejlede" + e.getMessage());
 		
 	}
 }
@@ -298,6 +302,34 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			throw new DALException("Kunne ikke hente Produktbatch");
 		}
 	}
+	@Override
+	public ArrayList<ReceptDTO> showRecept() throws Exception{
+		ArrayList< ReceptDTO > results = null;
+		ResultSet resultSet = null;
+
+		try 
+		{
+			resultSet = showReceptStmt.executeQuery(); 
+			results = new ArrayList< ReceptDTO >();
+			
+
+
+			while ( resultSet.next() )
+			{
+
+				results.add( new ReceptDTO(
+						resultSet.getInt( "recept_id" ),
+						resultSet.getString("recept_navn"),
+						resultSet.getInt("made_by")));
+			}
+			return results;
+			
+		} catch (SQLException e) {
+		
+			throw new DALException("Kunne ikke hente recept" + e.getMessage());
+		}
+	}
+
 	
 	@Override
 	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception {

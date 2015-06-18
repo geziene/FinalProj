@@ -6,16 +6,18 @@ public class ReceptDTO implements Serializable {
 	
 	int receptId;
 	String receptNavn;
+	int made_by;
 		
 	public ReceptDTO()
 	{
 		
 	}
 
-	public ReceptDTO(int receptId, String receptNavn)
+	public ReceptDTO(int receptId, String receptNavn, int made_by)
 	{
 		this.receptId = receptId;
 		this.receptNavn = receptNavn;
+		this.made_by = made_by;
 	}
 	
 	  public int getreceptId() {
@@ -30,6 +32,12 @@ public class ReceptDTO implements Serializable {
 	  public void setreceptNavn(String receptNavn) {
 	    	this.receptNavn = receptNavn;
 	  }	
+	  public int getmade_by() {
+	    	return made_by;
+	    	}
+	  public void setmade_by(int receptId) {
+	    	this.made_by = made_by;
+	    	}
 	  
 	  
 }

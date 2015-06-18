@@ -3,6 +3,7 @@ package dtu.client.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -51,6 +52,8 @@ public interface KartotekService extends RemoteService {
 	
 	public ArrayList<ProduktbatchDTO> getProduktbatches() throws Exception;
 	public void updateProduktbatches(ProduktbatchDTO p) throws Exception;
+	
+	public ArrayList<ReceptDTO> showRecept() throws Exception;
 
 	
 

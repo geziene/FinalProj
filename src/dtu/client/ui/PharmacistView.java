@@ -34,16 +34,16 @@ public class PharmacistView extends Composite {
 	boolean nameValid = true;
 	boolean levValid = true;
 	
-	Button addRaavare = new Button("Create Raavare");
-	Button showRaavare = new Button("Show Raavare");
-	Button updateRaavare = new Button("Update Raavare");
+	Button addRaavare = new Button("Opret Raavare");
+//	Button showRaavare = new Button("Show Raavare");
+	Button updateRaavare = new Button("Rediger Raavare");
 	
-	Button addRecept = new Button("Create Recept");
+	Button addRecept = new Button("Opret Recept");
 	Button showRecept = new Button("Show Recept");
 
-	Button addReceptkomponent = new Button("Create receptkomponet");
-	Button showReceptkomponent = new Button("Show receptkomponent");
-	Button updateReceptkomponent = new Button("Update receptkomponet");
+	Button addReceptkomponent = new Button("Opret receptkomponet");
+//	Button showReceptkomponent = new Button("Show receptkomponent");
+	Button updateReceptkomponent = new Button("rediger receptkomponet");
 	
 	public PharmacistView(KartotekServiceClientImpl clientImpl)
 	{
@@ -77,6 +77,14 @@ public class PharmacistView extends Composite {
 					}
 		});
 		
+		showRecept.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				showReceptFields();
+					}
+		});
+		
 		addReceptkomponent.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -84,16 +92,24 @@ public class PharmacistView extends Composite {
 				ReceptkomponentFields();
 			}
 					});
+	
+		updateReceptkomponent.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				UpdateReceptkomponentFields();
+			}
+					});
 		
 		
 		
 		phPanel.add(addRaavare);
-		phPanel.add(showRaavare);
+	//	phPanel.add(showRaavare);
 		phPanel.add(updateRaavare);
 		phPanel.add(addRecept);
 		phPanel.add(showRecept);
 		phPanel.add(addReceptkomponent);
-		phPanel.add(showReceptkomponent);
+//		phPanel.add(showReceptkomponent);
 		phPanel.add(updateReceptkomponent);
 		
 	}
@@ -220,8 +236,9 @@ public class PharmacistView extends Composite {
 
 			// adjust column widths
 			t.getFlexCellFormatter().setWidth(0, 0, "50px");
-			t.getFlexCellFormatter().setWidth(0, 1, "100px");
-			t.getFlexCellFormatter().setWidth(0, 2, "150px");
+			t.getFlexCellFormatter().setWidth(0, 1, "50px");
+			t.getFlexCellFormatter().setWidth(0, 2, "100px");
+			t.getFlexCellFormatter().setWidth(0, 3, "50px");
 
 			// style table
 			t.addStyleName("FlexTable");
@@ -253,7 +270,7 @@ public class PharmacistView extends Composite {
 
 							@Override
 							public void onClick(ClickEvent event) {
-								// if previous edit open - force cancel operation¨
+								// if previous edit open - force cancel operationï¿½
 								if (previousCancel != null)
 									previousCancel.fireEvent(new ClickEvent(){});
 
@@ -411,20 +428,27 @@ public class PharmacistView extends Composite {
 
 	
 	}
-
+		private void UpdateReceptkomponentFields() {
+			// TODO Auto-generated method stub
+			
+		}
 			private void ReceptFields() {
 				phPanel.clear();
 				Label receptidLbl;
 				final TextBox receptidTxt;
 				Label receptnameLbl;
 				final TextBox receptnameTxt;
+				Label madebyLbl;
+				final TextBox madebyTxt;
 				
-				Button save = new Button("Create");
+				Button save = new Button("Opret");
 
 				phPanel.setHeight("120px");	
 
 				HorizontalPanel receptnamePanel = new HorizontalPanel();
 				HorizontalPanel receptidPanel = new HorizontalPanel();
+				HorizontalPanel madebyPanel = new HorizontalPanel();
+				
 				
 				receptidLbl = new Label("Recept ID:");
 				receptidLbl.setWidth("100px");
@@ -439,12 +463,20 @@ public class PharmacistView extends Composite {
 				receptnameTxt.setHeight("1em");
 				receptnamePanel.add(receptnameLbl);
 				receptnamePanel.add(receptnameTxt);
+				
+				madebyLbl = new Label("Recept made by: ");
+				madebyLbl.setWidth("100px");
+				madebyTxt = new TextBox();
+				madebyTxt.setHeight("1em");
+				madebyPanel.add(madebyLbl);
+				madebyPanel.add(madebyTxt);
 
 				save.addClickHandler(new ClickHandler()  {
 
 					@Override
 					public void onClick(ClickEvent event) {
-					 ReceptDTO newRecept = new ReceptDTO( Integer.parseInt(receptidTxt.getText()), receptnameTxt.getText());	 
+					 ReceptDTO newRecept = new ReceptDTO( Integer.parseInt(receptidTxt.getText()), 
+							 receptnameTxt.getText(),Integer.parseInt(madebyTxt.getText()));	 
 					 clientImpl.service.saveRecept(newRecept, new AsyncCallback<Void>() {
 
 					@Override
@@ -463,6 +495,7 @@ public class PharmacistView extends Composite {
 				
 				phPanel.add(receptidPanel);
 				phPanel.add(receptnamePanel);
+				phPanel.add(madebyPanel);
 				phPanel.add(save);
 		
 			}
@@ -471,22 +504,24 @@ public class PharmacistView extends Composite {
 				phPanel.clear();
 				Label receptidLbl;
 				final TextBox receptidTxt;
+				Label raavareidLbl;
+				final TextBox raavareidTxt;
+				Label madebyLbl;
+				final TextBox madebyTxt;
+				Label pbidLbl;
+				final TextBox pbidTxt;
 				Label nettoLbl;
 				final TextBox nettoTxt;
 				Label toleranceLbl;
 				final TextBox toleranceTxt;
-				Label madebyLbl;
-				final TextBox madebyTxt;
-				Label raavareidLbl;
-				final TextBox raavareidTxt;
-				Label pbidLbl;
-				final TextBox pbidTxt;
+				
 		
-				Button savereceptkomponent = new Button("Create");
+		
+				Button savereceptkomponent = new Button("Opret");
 				
 				phPanel.setHeight("120px");	
 
-				HorizontalPanel receptnamePanel = new HorizontalPanel();
+		//		HorizontalPanel receptnamePanel = new HorizontalPanel();
 				HorizontalPanel receptidPanel = new HorizontalPanel();
 				HorizontalPanel raavareidPanel = new HorizontalPanel();
 				HorizontalPanel nettoPanel = new HorizontalPanel();
@@ -544,7 +579,7 @@ public class PharmacistView extends Composite {
 
 					@Override
 					public void onClick(ClickEvent event) {
-					Window.alert("Tester clickhandleren for savereceptkomponent");
+				//	Window.alert("Tester clickhandleren for savereceptkomponent");
 					ReceptkomponentDTO newReceptkomponent = new ReceptkomponentDTO(
 							 Integer.parseInt(receptidTxt.getText()),
 							 Integer.parseInt(raavareidTxt.getText()), 
@@ -570,12 +605,12 @@ public class PharmacistView extends Composite {
 				} );
 				
 				phPanel.add(receptidPanel);
-				phPanel.add(receptnamePanel);
 				phPanel.add(raavareidPanel);
-				phPanel.add(nettoPanel);
-				phPanel.add(tolerancePanel);
 				phPanel.add(madebyPanel);
 				phPanel.add(pbidPanel);
+				phPanel.add(nettoPanel);
+				phPanel.add(tolerancePanel);
+			
 				phPanel.add(savereceptkomponent);
 
 			}
@@ -648,5 +683,211 @@ public class PharmacistView extends Composite {
 		phPanel.add(save);
 
 	}
+	public void showReceptFields()
+	{
+		
+		phPanel.clear();
+		
+		final FlexTable t = new FlexTable();
+
+		// adjust column widths
+		t.getFlexCellFormatter().setWidth(0, 0, "50px");
+		t.getFlexCellFormatter().setWidth(0, 1, "50px");
+		t.getFlexCellFormatter().setWidth(0, 2, "100px");
+
+
+		// style table
+		t.addStyleName("FlexTable");
+		t.getRowFormatter().addStyleName(0,"FlexTable-Header");
+
+		// set headers in flextable
+		t.setText(0, 0, "ReceptId");
+		t.setText(0, 1, "ReceptNavn");
+		t.setText(0, 2, "UdfÃ¸rt af");
+		
+		clientImpl.service.showRecept(new AsyncCallback<ArrayList<ReceptDTO>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Server fejl!" + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(ArrayList<ReceptDTO> result) {
+				// populate table and add delete anchor to each row
+				for (int rowIndex=0; rowIndex < result.size(); rowIndex++) {
+					t.setText(rowIndex+1, 0, "" + result.get(rowIndex).getreceptId());
+					t.setText(rowIndex+1, 1, result.get(rowIndex).getreceptNavn());
+					t.setText(rowIndex+1, 2, "" + result.get(rowIndex).getmade_by());
+		/*			Anchor edit = new Anchor("edit");
+					t.setWidget(rowIndex+1, 3, edit);
+
+					edit.addClickHandler(new ClickHandler() {
+
+						@Override
+						public void onClick(ClickEvent event) {
+							// if previous edit open - force cancel operationï¿½
+							if (previousCancel != null)
+								previousCancel.fireEvent(new ClickEvent(){});
+
+							// get rowindex where event happened
+							eventRowIndex = t.getCellForEvent(event).getRowIndex();
+
+							// populate textboxes
+							navnTxt.setText(t.getText(eventRowIndex, 1));
+							leverTxt.setText(t.getText(eventRowIndex, 2));
+
+							// show text boxes for editing
+							t.setWidget(eventRowIndex, 1, navnTxt);
+							t.setWidget(eventRowIndex, 2, leverTxt);
+
+							// start editing here
+							navnTxt.setFocus(true);
+
+							// get edit anchor ref for cancel operation
+							final Anchor edit =  (Anchor) event.getSource();
+
+							// get textbox contents for cancel operation
+							final String name = navnTxt.getText();
+							final String lev = leverTxt.getText();
+							final Anchor ok = new Anchor("ok");
+							
+							ok.addClickHandler(new ClickHandler() {
+
+								@Override
+								public void onClick(ClickEvent event) {
+
+									// remove inputboxes
+									t.setText(eventRowIndex, 1, navnTxt.getText());
+									t.setText(eventRowIndex, 2, leverTxt.getText());
+
+									// here you will normally fetch the primary key of the row 
+									// and use it for location the object to be edited
+
+									// fill DTO with id and new values 
+									RaavareDTO RaavareDTO = new RaavareDTO(
+											Integer.parseInt(t.getText(eventRowIndex, 0)), navnTxt.getText(), leverTxt.getText()
+										);
+								
+									// V.2
+									clientImpl.service.updateRaavare(RaavareDTO, new AsyncCallback<Void>() {
+
+										@Override
+										public void onSuccess(Void result) {
+
+										}
+
+										@Override
+										public void onFailure(Throwable caught) {
+											Window.alert("Server fejl!" + caught.getMessage());
+										}
+
+									});
+
+									// restore edit link
+									t.setWidget(eventRowIndex, 3, edit);
+									t.clearCell(eventRowIndex, 4);
+
+									previousCancel = null;
+
+								}
+
+							});
+
+							Anchor cancel = new Anchor("cancel");
+							previousCancel = cancel;
+							cancel.addClickHandler(new ClickHandler() {
+
+								@Override
+								public void onClick(ClickEvent event) {
+
+									// restore original content of textboxes and rerun input validation
+									navnTxt.setText(name);
+									leverTxt.fireEvent(new KeyUpEvent() {}); // validation
+
+									navnTxt.setText(lev);
+									leverTxt.fireEvent(new KeyUpEvent() {});  // validation
+
+									t.setText(eventRowIndex, 1, name);
+									t.setText(eventRowIndex, 2, lev);
+
+									// restore edit link
+									t.setWidget(eventRowIndex, 3, edit);
+									t.clearCell(eventRowIndex, 4);
+
+									previousCancel = null;
+								}
+
+							});
+							
+							navnTxt.addKeyUpHandler(new KeyUpHandler(){
+
+								@Override
+								public void onKeyUp(KeyUpEvent event) {
+									if (!FieldVerifier.isValidName(navnTxt.getText())) {
+										navnTxt.setStyleName("gwt-TextBox-invalidEntry");
+										nameValid = false;
+									}
+									else {
+										navnTxt.removeStyleName("gwt-TextBox-invalidEntry");
+										nameValid = true;
+									}
+
+									// enable/disable ok depending on form status 
+									if (nameValid&&levValid)
+										t.setWidget(eventRowIndex, 3, ok);
+									else
+										t.setText(eventRowIndex, 3, "ok");				
+								}
+
+							});
+
+							leverTxt.addKeyUpHandler(new KeyUpHandler(){
+
+								@Override
+								public void onKeyUp(KeyUpEvent event) {
+									if (!FieldVerifier.isValidName(leverTxt.getText())) {
+										leverTxt.setStyleName("gwt-TextBox-invalidEntry");
+										levValid = false;
+									}
+									else {
+										leverTxt.removeStyleName("gwt-TextBox-invalidEntry");
+										levValid = true;
+									}
+
+									// enable/disable ok depending on form status 
+									if (nameValid&&levValid)
+										t.setWidget(eventRowIndex, 3, ok);
+									else
+										t.setText(eventRowIndex, 3, "ok");
+								}
+
+							});
+
+							// showing ok and cancel widgets
+							t.setWidget(eventRowIndex, 3 , ok);
+							t.setWidget(eventRowIndex, 4 , cancel);	
+						}
+					});
+			*/	}
+
+			}
+
+		});
+		
+
+		phPanel.add(t);
+
+		// text boxes
+		navnTxt = new TextBox();
+		leverTxt = new TextBox();
+		leverTxt.setWidth("50px");
+
+
+}
+
+		
+		
 	}
+	
 	

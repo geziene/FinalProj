@@ -48,6 +48,8 @@ public interface KartotekServiceAsync {
 	void getProduktbatches(AsyncCallback<ArrayList<ProduktbatchDTO>> asyncCallback);
 	
 	void updateProduktbatches(ProduktbatchDTO p, AsyncCallback<Void> callback);
+	
+	void showRecept(AsyncCallback<ArrayList<ReceptDTO>> asyncCallback);
 
 
 	
