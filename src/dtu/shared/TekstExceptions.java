@@ -9,7 +9,7 @@ public class TekstExceptions {
 		if (Tekstlengthmin <= TestTekst.length() && TestTekst.length() <= Tekstlengthmax){
 			return true;
 		};
-		Window.alert("Tekst felternerne skal vaere mellem " + Tekstlengthmin + " - " + Tekstlengthmax);
+		Window.alert(TestTekst + " ikke accepteret " + "Tekst felternerne skal vaere mellem " + Tekstlengthmin + " - " + Tekstlengthmax);
 		return false;
 		
 	}
