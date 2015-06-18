@@ -35,28 +35,29 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	private PreparedStatement deleteRaavareStmt = null;
 	
 	private PreparedStatement saveReceptStmt = null;
+	private PreparedStatement showReceptStmt = null;
+	private PreparedStatement saveReceptkomponentStmt = null;
+	private PreparedStatement findReceptkomponentStmt = null;
+	private PreparedStatement getReceptkomponentStmt = null;
+	private PreparedStatement updateReceptkomponentStmt = null;
 	
 	private PreparedStatement saveUserStmt = null;
 	private PreparedStatement findUserStmt = null;
 	private PreparedStatement updateUserStmt = null;
-	
-	private PreparedStatement saveReceptkomponentStmt = null;
-	private PreparedStatement findReceptkomponentStmt = null;
+	private PreparedStatement getUsersStmt = null;
 	
 	private PreparedStatement saveProduktbatchStmt = null;
 	private PreparedStatement findProduktbatchStmt = null;
 	private PreparedStatement showProduktbatcheStmt = null;
 	private PreparedStatement statusProduktbatchStmt = null;
+	private PreparedStatement getProduktbatchesStmt = null;
+	private PreparedStatement updateProduktbatchesStmt = null;
 	
 	private PreparedStatement saveRaavarebatchStmt = null;
 	
-	private PreparedStatement getUsersStmt = null;
 	
-	private PreparedStatement getProduktbatchesStmt = null;
 	
-	private PreparedStatement updateProduktbatchesStmt = null;
-	
-	private PreparedStatement showReceptStmt = null;
+
 	
 
 	
@@ -94,10 +95,19 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			saveReceptStmt = connection.prepareStatement(
 					"INSERT INTO recept(recept_id, recept_navn, made_by) " +
 					"VALUES(?, ?, ?)");
+		
+			// create query that get all receptkomponent in kartotek
+			getReceptkomponentStmt = connection.prepareStatement( "SELECT * FROM receptkomponent ");
+			
 			
 			saveReceptkomponentStmt = connection.prepareStatement(
 					"INSERT INTO receptkomponent(recept_id, raavare_id, made_by, pb_id, nom_netto, tolerance) " +
 					"VALUES(?, ?, ?, ?, ?, ?)");
+		
+			// create query that updates a receptkomponent
+			updateReceptkomponentStmt = connection.prepareStatement( 
+			"UPDATE raavare SET nom_netto = ?, tolerance = ?  WHERE recept_id = ?, raavare_id = ?, made_by = ?, pb_id = ?" );
+
 			
 			showProduktbatcheStmt = connection.prepareStatement("SELECT * FROM produktbatch");
 			
@@ -553,7 +563,49 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			throw new DALException(" \"updateProduktbatces\" fejlede" + e.getMessage());
 		} 
 	}
+	public ArrayList<ReceptkomponentDTO> getReceptkomponent() throws Exception {
+		ArrayList< ReceptkomponentDTO > results;
+		ResultSet resultSet;
 
+		try 
+		{
+			resultSet = getReceptkomponentStmt.executeQuery(); 
+			results = new ArrayList< ReceptkomponentDTO >();
+
+			while ( resultSet.next() )
+			{
+				results.add( new ReceptkomponentDTO(
+						resultSet.getInt( "recept_id" ),
+						resultSet.getInt( "raavare_id" ),
+						resultSet.getInt( "made_by" ),
+						resultSet.getInt( "pb_id" ),
+						resultSet.getDouble( "nom_netto" ),
+						resultSet.getDouble( "tolerance" )));
+			} 
+		} 
+		catch ( SQLException sqlException )
+		{
+			throw new DALException(" \"getReceptkomponent\" fejlede" + sqlException.getMessage());
+		} 
+		return results;
+	}
+	@Override
+	public void updateReceptkomponent(ReceptkomponentDTO newReceptkomponent)
+			throws Exception {
+		try {
+			updateReceptkomponentStmt.setInt(1, newReceptkomponent.getreceptkomponentId());
+			updateReceptkomponentStmt.setInt(2, newReceptkomponent.getraavarekomponentId());
+			updateReceptkomponentStmt.setInt(3, newReceptkomponent.getmadebykomponent());
+			updateReceptkomponentStmt.setInt(4, newReceptkomponent.getpbidkomponentId());
+			updateReceptkomponentStmt.setDouble(5, newReceptkomponent.getnettokomponent());
+			updateReceptkomponentStmt.setDouble(6, newReceptkomponent.gettolerancekomponent());
+
+			updateRaavareStmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DALException(" \"updateReceptkomponent \" fejlede" + e.getMessage());
+		}
+		
+	}
 
 	// close the database connection
 	public void close() {
@@ -564,5 +616,7 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 			sqlException.printStackTrace();
 		} 
 	}
+
+	
 
 }

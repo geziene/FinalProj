@@ -28,6 +28,14 @@ public class PharmacistView extends Composite {
 	VerticalPanel phPanel;
 	TextBox navnTxt = null;
 	TextBox leverTxt = null;
+	TextBox receptidTxt = null;
+	TextBox raavareidTxt = null;
+	TextBox madebyTxt = null;
+	TextBox pdidTxt = null;
+	TextBox nettoTxt = null;
+	TextBox toleranceTxt = null;
+	boolean nettoValid = true;
+	boolean toleranceValid = true;
 	Anchor previousCancel = null;
 	FlexTable t;
 	int eventRowIndex;
@@ -429,7 +437,221 @@ public class PharmacistView extends Composite {
 	
 	}
 		private void UpdateReceptkomponentFields() {
-			// TODO Auto-generated method stub
+			phPanel.clear();
+			
+			final FlexTable t = new FlexTable();
+
+			// adjust column widths
+			t.getFlexCellFormatter().setWidth(0, 0, "50px");
+			t.getFlexCellFormatter().setWidth(0, 1, "50px");
+			t.getFlexCellFormatter().setWidth(0, 2, "100px");
+			t.getFlexCellFormatter().setWidth(0, 3, "50px");
+			t.getFlexCellFormatter().setWidth(0, 4, "50px");
+			t.getFlexCellFormatter().setWidth(0, 5, "100px");
+			t.getFlexCellFormatter().setWidth(0, 6, "50px");
+			// style table
+			t.addStyleName("FlexTable");
+			t.getRowFormatter().addStyleName(0,"FlexTable-Header");
+
+			// set headers in flextable
+			t.setText(0, 0, "Recept Id");
+			t.setText(0, 1, "Raavare ID");
+			t.setText(0, 2, "Made by");
+			t.setText(0, 3, "Pb Id");
+			t.setText(0, 4, "Netto vaegt");
+			t.setText(0, 5, "Tolerance");
+			
+			
+			clientImpl.service.getReceptkomponent(new AsyncCallback<ArrayList<ReceptkomponentDTO>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Server fejl!" + caught.getMessage());
+				}
+
+				@Override
+				public void onSuccess(ArrayList<ReceptkomponentDTO> result) {
+					// populate table and add delete anchor to each row
+					for (int rowIndex=0; rowIndex < result.size(); rowIndex++) {
+						t.setText(rowIndex+1, 0, "" + result.get(rowIndex).getreceptkomponentId());
+						t.setText(rowIndex+1, 1, "" + result.get(rowIndex).getraavarekomponentId());
+						t.setText(rowIndex+1, 1, "" + result.get(rowIndex).getmadebykomponent());
+						t.setText(rowIndex+1, 1, "" + result.get(rowIndex).getpbidkomponentId());
+						t.setText(rowIndex+1, 1, "" + result.get(rowIndex).getnettokomponent());
+						t.setText(rowIndex+1, 2, "" + result.get(rowIndex).gettolerancekomponent());
+						Anchor edit = new Anchor("edit");
+						t.setWidget(rowIndex+1, 5, edit);
+
+						edit.addClickHandler(new ClickHandler() {
+
+							@Override
+							public void onClick(ClickEvent event) {
+								// if previous edit open - force cancel operation�
+								if (previousCancel != null)
+									previousCancel.fireEvent(new ClickEvent(){});
+
+								// get rowindex where event happened
+								eventRowIndex = t.getCellForEvent(event).getRowIndex();
+
+								// populate textboxes
+								nettoTxt.setText(t.getText(eventRowIndex, 5));
+								toleranceTxt.setText(t.getText(eventRowIndex, 6));
+
+								// show text boxes for editing
+								t.setWidget(eventRowIndex, 5, navnTxt);
+								t.setWidget(eventRowIndex, 6, leverTxt);
+
+								// start editing here
+								nettoTxt.setFocus(true);
+
+								// get edit anchor ref for cancel operation
+								final Anchor edit =  (Anchor) event.getSource();
+
+								// get textbox contents for cancel operation
+								final String netto = nettoTxt.getText();
+								final String tolerance = toleranceTxt.getText();
+								final Anchor ok = new Anchor("ok");
+								
+								ok.addClickHandler(new ClickHandler() {
+
+									@Override
+									public void onClick(ClickEvent event) {
+
+										// remove inputboxes
+										t.setText(eventRowIndex, 5, nettoTxt.getText());
+										t.setText(eventRowIndex, 6, toleranceTxt.getText());
+
+										// here you will normally fetch the primary key of the row 
+										// and use it for location the object to be edited
+
+										// fill DTO with id and new values 
+										
+										ReceptkomponentDTO ReceptkomponentDTO = new ReceptkomponentDTO(
+												Integer.parseInt(t.getText(eventRowIndex, 0)),
+												Integer.parseInt(receptidTxt.getText()),
+												Integer.parseInt(raavareidTxt.getText()),
+												Integer.parseInt(madebyTxt.getText()),
+												Integer.parseInt(pdidTxt.getText()),
+												Integer.parseInt(nettoTxt.getText())
+											
+											);
+									
+										// V.2
+										clientImpl.service.updateReceptkomponent(ReceptkomponentDTO, new AsyncCallback<Void>() {
+
+											@Override
+											public void onSuccess(Void result) {
+
+											}
+
+											@Override
+											public void onFailure(Throwable caught) {
+												Window.alert("Server fejl!" + caught.getMessage());
+											}
+
+										});
+
+										// restore edit link
+										t.setWidget(eventRowIndex, 3, edit);
+										t.clearCell(eventRowIndex, 4);
+
+										previousCancel = null;
+
+									}
+
+								});
+
+								Anchor cancel = new Anchor("cancel");
+								previousCancel = cancel;
+								cancel.addClickHandler(new ClickHandler() {
+
+									@Override
+									public void onClick(ClickEvent event) {
+
+										// restore original content of textboxes and rerun input validation
+										nettoTxt.setText(netto);
+										toleranceTxt.fireEvent(new KeyUpEvent() {}); // validation
+
+										nettoTxt.setText(tolerance);
+										toleranceTxt.fireEvent(new KeyUpEvent() {});  // validation
+
+										t.setText(eventRowIndex, 4, netto);
+										t.setText(eventRowIndex, 5, tolerance);
+
+										// restore edit link
+										t.setWidget(eventRowIndex, 4, edit);
+										t.clearCell(eventRowIndex, 5);
+
+										previousCancel = null;
+									}
+
+								});
+								
+								navnTxt.addKeyUpHandler(new KeyUpHandler(){
+
+									@Override
+									public void onKeyUp(KeyUpEvent event) {
+										if (!FieldVerifier.isValidName(nettoTxt.getText())) {
+											nettoTxt.setStyleName("gwt-TextBox-invalidEntry");
+											nettoValid = false;
+										}
+										else {
+											nettoTxt.removeStyleName("gwt-TextBox-invalidEntry");
+											nettoValid = true;
+										}
+
+										// enable/disable ok depending on form status 
+										if (nettoValid&&toleranceValid)
+											t.setWidget(eventRowIndex, 4, ok);
+										else
+											t.setText(eventRowIndex, 4, "ok");				
+									}
+
+								});
+
+								leverTxt.addKeyUpHandler(new KeyUpHandler(){
+
+									@Override
+									public void onKeyUp(KeyUpEvent event) {
+										if (!FieldVerifier.isValidName(toleranceTxt.getText())) {
+											toleranceTxt.setStyleName("gwt-TextBox-invalidEntry");
+											toleranceValid = false;
+										}
+										else {
+											toleranceTxt.removeStyleName("gwt-TextBox-invalidEntry");
+											toleranceValid = true;
+										}
+
+										// enable/disable ok depending on form status 
+										if (nettoValid&&levValid)
+											t.setWidget(eventRowIndex, 4, ok);
+										else
+											t.setText(eventRowIndex, 4, "ok");
+									}
+
+								});
+
+								// showing ok and cancel widgets
+								t.setWidget(eventRowIndex, 5 , ok);
+								t.setWidget(eventRowIndex, 6 , cancel);	
+							}
+						});
+					}
+
+				}
+
+				
+
+			});
+
+			phPanel.add(t);
+
+			// text boxes
+			nettoTxt = new TextBox();
+			toleranceTxt = new TextBox();
+			toleranceTxt.setWidth("50px");
+
+	
 			
 		}
 			private void ReceptFields() {

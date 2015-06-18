@@ -32,28 +32,25 @@ public interface KartotekService extends RemoteService {
 	public void saveUser(UserDTO u) throws Exception;
 	public UserDTO findUser(int u) throws Exception;
 	public void updateUser(UserDTO r) throws Exception;
+	public String userName(int id) throws Exception;
+	public int logUser(int id, String psw) throws Exception;
+	public ArrayList<UserDTO> getUsers() throws Exception;
 	
 	public void saveRecept(ReceptDTO newRecept) throws Exception;
-	
+	public ArrayList<ReceptDTO> showRecept() throws Exception;
 	public void saveReceptkomponent(ReceptkomponentDTO newReceptkomponent) throws Exception;
 	public ArrayList<String> findReceptkomponet(int id) throws Exception;
+	public ArrayList<ReceptkomponentDTO> getReceptkomponent() throws Exception;
+	public void updateReceptkomponent(ReceptkomponentDTO newReceptkomponent) throws Exception;
 	
 	public void saveProduktbatch(ProduktbatchDTO pb) throws Exception;
 	public ArrayList<String> showProduktbatch() throws Exception;
 	public void statusProduktbatch(int id, int status) throws Exception;
-	
-	public void saveRaavarebatch(RaavarebatchDTO rb) throws Exception;
-	
-	public String userName(int id) throws Exception;
-	
-	public int logUser(int id, String psw) throws Exception;
-	
-	public ArrayList<UserDTO> getUsers() throws Exception;
-	
 	public ArrayList<ProduktbatchDTO> getProduktbatches() throws Exception;
 	public void updateProduktbatches(ProduktbatchDTO p) throws Exception;
 	
-	public ArrayList<ReceptDTO> showRecept() throws Exception;
+	public void saveRaavarebatch(RaavarebatchDTO rb) throws Exception;
+	
 
 	
 
