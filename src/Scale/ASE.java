@@ -24,8 +24,8 @@ public class ASE implements Runnable {
 	static Connection connection = null;
 	PrintWriter ud;
 	BufferedReader ind;
-	static int port = 8000;
-	static String hostname = "Localhost", temp, name;
+	static int port = 8000, raavareCount;
+	static String hostname = "localhost", temp, name;
 		
 	public void run() {
 		try {
@@ -46,7 +46,7 @@ public class ASE implements Runnable {
 				e1.printStackTrace();
 			}
 			}		
-		while(true) {
+		//while(true) {
 		try {
 			temp = ind.readLine();
 		} catch (IOException e) {
@@ -81,11 +81,19 @@ public class ASE implements Runnable {
 		ud.flush();
 	    }
 	
-	else if(temp.startsWith("2")) {
+	try {
+		temp = ind.readLine();
+	} catch (IOException e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
+	}
+	
+	if(temp.startsWith("2")) {
 		int receptId = 0;
 		PreparedStatement findProduktbatchStmt = null;
 		PreparedStatement findReceptStmt = null;
 		PreparedStatement findReceptkomponentStmt = null;
+		PreparedStatement raavareCountStmt = null;
 		
 		try {
 			findProduktbatchStmt = connection.prepareStatement("SELECT recept_id "
@@ -97,6 +105,9 @@ public class ASE implements Runnable {
 			findReceptkomponentStmt = connection.prepareStatement(
 					"SELECT raavare_navn, raavare_id, nom_netto, tolerance "
 					+ "FROM receptkomponent natural join raavare WHERE recept_id = ?");
+			
+//			raavareCountStmt = connection.prepareStatement("SELECT COUNT(recept_id) "
+//					+ "FROM receptkomponent WHERE recept_id = ?");
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -128,13 +139,27 @@ public class ASE implements Runnable {
 			+String.valueOf(rs.getDouble("nom_netto"))+"\t"+String.valueOf(rs.getDouble("tolerance")));
 			}
 			ud.flush();
+			
+//			raavareCountStmt.setInt(1, receptId);
+//			rs = raavareCountStmt.executeQuery();
+//			rs.next();
+//			raavareCount = rs.getInt("COUNT(recept_id)");
+//			ud.println(raavareCount);
+//			ud.flush();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 	}
 	
-	else if(temp.startsWith("3")) {
+	try {
+		temp = ind.readLine();
+	} catch (IOException e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
+	}
+	
+	if(temp.startsWith("3")) {
 		PreparedStatement statusProduktbatchStmt = null;
 		try {
 			statusProduktbatchStmt = connection.prepareStatement(
@@ -163,10 +188,80 @@ public class ASE implements Runnable {
 		}
 
 		}
-	else if(temp.startsWith("4")) {
-		
+	
+	try {
+		temp = ind.readLine();
+	} catch (IOException e2) {
+		// TODO Auto-generated catch block
+		e2.printStackTrace();
 	}
+	
+	if(temp.startsWith("7")) {
+		PreparedStatement statusProduktbatchStmt = null;
+		try {
+			statusProduktbatchStmt = connection.prepareStatement(
+					"UPDATE produktbatch SET status = ? WHERE pb_id = ?");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		int status = 0;
+		int id = 0;
+		try {
+			status = Integer.parseInt(ind.readLine());
+			id = Integer.parseInt(ind.readLine());
+		} catch (NumberFormatException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			statusProduktbatchStmt.setInt(1, status);
+			statusProduktbatchStmt.setInt(2, id);
+			statusProduktbatchStmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		PreparedStatement getLagerStmt = null;
+		PreparedStatement lagerUpdateStmt = null;
+		try {
+			getLagerStmt = connection.prepareStatement("SELECT maengde FROM raavarebatch WHERE raavare_id = ?");
+			lagerUpdateStmt = connection.prepareStatement("UPDATE raavarebatch SET maengde = ? WHERE raavare_id = ?");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(int i = 0; i < 3; i++ ){
+		String raavareId = "";
+		int netto = 0;
+		try {
+			raavareId = ind.readLine();
+			netto = ind.read();
+			System.out.println("a " + raavareId);
+			System.out.println("a " + netto);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			getLagerStmt.setInt(1, Integer.parseInt(raavareId));
+			ResultSet rs = getLagerStmt.executeQuery();
+			rs.next();
+			int lager = rs.getInt("maengde");
+			System.out.println(lager);
+			System.out.println(netto);
+			lagerUpdateStmt.setInt(1, lager - netto);
+			lagerUpdateStmt.setString(2, raavareId);
+			lagerUpdateStmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+	}
+		//}
 	}
 
 }

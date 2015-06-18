@@ -49,5 +49,9 @@ public interface KartotekService extends RemoteService {
 	
 	public ArrayList<UserDTO> getUsers() throws Exception;
 	
+	public ArrayList<ProduktbatchDTO> getProduktbatches() throws Exception;
+	public void updateProduktbatches(ProduktbatchDTO p) throws Exception;
+
+	
 
 }

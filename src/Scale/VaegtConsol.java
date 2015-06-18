@@ -40,13 +40,13 @@ public class VaegtConsol {
 	        BufferedReader ind = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			Scanner sc = new Scanner(System.in);
 			ArrayList<String> raavareId = new ArrayList<String>();
-			ArrayList<Double> raavareNetto = new ArrayList<Double>();
+			ArrayList<String> raavareNetto = new ArrayList<String>();
 
 			while(running) {
 				switch(temp) {
 				
 				case "1":
-					System.out.println("Indtast dit operatoer ID: ");
+					System.out.print("Indtast dit operatoer ID: ");
 					temp = sc.next();
 					ud.println("1" + temp);
 					ud.flush();
@@ -138,7 +138,7 @@ public class VaegtConsol {
 					if(temp.equals("B")){
 						System.out.print("Indtast brutto vaegt(kg): ");
 						brutto = sc.nextDouble();
-						raavareNetto.add(brutto-tara);
+						raavareNetto.add(String.valueOf(brutto-tara));
 						printmenu();
 					}
 					else {
@@ -147,8 +147,27 @@ public class VaegtConsol {
 						break;
 						}
 					}
-					
+					break;
 				case "7":
+					ud.println("7");
+					ud.flush();
+					ud.println("2");
+					ud.println(pbId);
+					ud.flush();
+					ud.println(raavareId.get(0));
+					System.out.println("v " + raavareId.get(0));
+					ud.println(raavareNetto.get(0));
+					System.out.println("v " + raavareNetto.get(0));
+					ud.println(raavareId.get(1));
+					System.out.println("v " + raavareId.get(1));
+					ud.println(raavareNetto.get(1));
+					System.out.println("v " + raavareNetto.get(1));
+					ud.println(raavareId.get(2));
+					System.out.println("v " + raavareId.get(2));
+					ud.println(raavareNetto.get(2));
+					System.out.println("v " + raavareNetto.get(2));
+					ud.flush();
+					sc.next();
 					
 				}
 			}

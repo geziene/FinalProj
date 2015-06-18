@@ -41,11 +41,9 @@ public class adminView extends Composite {
 	
 	
 	Button addUser = new Button("Create User");
-	Button showUser = new Button("Show User");
 	Button updateUser = new Button("Update User");
 	
-//	EditView bv = new EditView(clientImpl);
-	
+
 	
 	public adminView(KartotekServiceClientImpl clientImpl)
 	{
@@ -61,16 +59,7 @@ public class adminView extends Composite {
 				UserFields();
 			}
 		});
-		
 
-		
-		showUser.addClickHandler(new ClickHandler(){
-
-			@Override
-			public void onClick(ClickEvent event) {
-				listUser();
-			}
-		});
 		updateUser.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -80,11 +69,7 @@ public class adminView extends Composite {
 		});
 		
 		phPanel.add(addUser);
-		phPanel.add(showUser);
 		phPanel.add(updateUser);
-		
-		
-
 	}
 
 	public void UserFields() 
@@ -170,8 +155,7 @@ public class adminView extends Composite {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-			 UserDTO newUser = new UserDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), 
-					 cprTxt.getText(), passwordTxt.getText(), Integer.parseInt(groupTxt.getText()));	 
+			 UserDTO newUser = new UserDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), cprTxt.getText(), passwordTxt.getText(), Integer.parseInt(groupTxt.getText()));	 
 			 clientImpl.service.saveUser(newUser, new AsyncCallback<Void>() {
 
 			@Override
@@ -197,6 +181,8 @@ public class adminView extends Composite {
 		phPanel.add(save);
 	}
 	
+
+
 	public void updateUserFields() 
 	{
 		
@@ -207,11 +193,12 @@ public class adminView extends Composite {
 		// adjust column widths
 		t.getFlexCellFormatter().setWidth(0, 0, "50px");
 		t.getFlexCellFormatter().setWidth(0, 1, "80px");
-		t.getFlexCellFormatter().setWidth(0, 2, "110px");
-		t.getFlexCellFormatter().setWidth(0, 3, "130px");
-		t.getFlexCellFormatter().setWidth(0, 4, "150px");
-		t.getFlexCellFormatter().setWidth(0, 5, "160px");
-		t.getFlexCellFormatter().setWidth(0, 6, "80px");
+		t.getFlexCellFormatter().setWidth(0, 2, "50px");
+		t.getFlexCellFormatter().setWidth(0, 3, "100px");
+		t.getFlexCellFormatter().setWidth(0, 4, "60px");
+		t.getFlexCellFormatter().setWidth(0, 5, "50px");
+		t.getFlexCellFormatter().setWidth(0, 6, "50px");
+		t.getFlexCellFormatter().setWidth(0, 7, "50px");
 
 		// style table
 		t.addStyleName("FlexTable");
@@ -305,10 +292,8 @@ public class adminView extends Composite {
 									// and use it for location the object to be edited
 
 									// fill DTO with id and new values 
-									UserDTO dto= new UserDTO(
-											Integer.parseInt(t.getText(eventRowIndex, 0)), navnTxt.getText(), 
-											iniTxt.getText(), cprTxt.getText(), pwdTxt.getText(), 
-											Integer.parseInt(grpTxt.getText())
+									final UserDTO dto= new UserDTO(
+											Integer.parseInt(t.getText(eventRowIndex, 0)), navnTxt.getText(), iniTxt.getText(), cprTxt.getText(), pwdTxt.getText(), Integer.parseInt(grpTxt.getText())
 										);
 
 							
@@ -318,7 +303,8 @@ public class adminView extends Composite {
 
 										@Override
 										public void onSuccess(Void result) {
-											Window.alert("succes " + result);
+										
+											
 										}
 
 										@Override
@@ -361,6 +347,7 @@ public class adminView extends Composite {
 									navnTxt.setText(grp);
 									grpTxt.fireEvent(new KeyUpEvent() {});  // validation
 
+
 									t.setText(eventRowIndex, 1, name);
 									t.setText(eventRowIndex, 2, ini);
 									t.setText(eventRowIndex, 3, cpr);
@@ -375,6 +362,7 @@ public class adminView extends Composite {
 								}
 
 							});
+
 
 							navnTxt.addKeyUpHandler(new KeyUpHandler(){
 
@@ -453,56 +441,5 @@ public class adminView extends Composite {
 				}
 	});
 }
-
-		public void listUser()
-		{
-			phPanel.clear();
-			
-			final FlexTable t1 = new FlexTable();
-			t1.getFlexCellFormatter().setWidth(0, 0, "50px");
-			t1.getFlexCellFormatter().setWidth(0, 1, "80px");
-			t1.getFlexCellFormatter().setWidth(0, 2, "110px");
-			t1.getFlexCellFormatter().setWidth(0, 3, "130px");
-			t1.getFlexCellFormatter().setWidth(0, 4, "150px");
-			t1.getFlexCellFormatter().setWidth(0, 5, "160px");
-
-			t1.addStyleName("FlexTable"); 
-			t1.getRowFormatter().addStyleName(0,"FlexTable-Header"); //  it show one big table
-			
-			// set headers in flextable
-			t1.setText(0, 0, "Id");
-			t1.setText(0, 1, "Navn");
-			t1.setText(0, 2, "Initialer");
-			t1.setText(0, 3, "CPR");
-			t1.setText(0, 4, "Password");
-			t1.setText(0, 5, "Gruppe");
-
-			// V.2 
-			clientImpl.service.getUsers(new AsyncCallback<ArrayList<UserDTO>>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert("Server fejl!" + caught.getMessage());
-				}
-
-				@Override
-				public void onSuccess(ArrayList<UserDTO> result) {
-					for (int i=0; i < result.size(); i++) {
-						t1.setText(i+1, 0, "" + result.get(i).getuserId());
-						t1.setText(i+1, 1, "" + result.get(i).getuserNavn());
-						t1.setText(i+1, 2, "" + result.get(i).getuserIni());
-						t1.setText(i+1, 3, "" + result.get(i).getuserCpr());
-						t1.setText(i+1, 4, "" + result.get(i).getuserPassword());
-						t1.setText(i+1, 5, "" + result.get(i).getuserGroup());
-						
-					}
-
-				}
-
-			});
-
-			phPanel.add(t1);
-			
-		}
-
+		
 }

@@ -44,6 +44,12 @@ public interface KartotekServiceAsync {
 	void logUser(int id, String psw, AsyncCallback<Integer> asyncCallback);
 
 	void getUsers(AsyncCallback<ArrayList<UserDTO>> asyncCallback);
+
+	void getProduktbatches(AsyncCallback<ArrayList<ProduktbatchDTO>> asyncCallback);
+	
+	void updateProduktbatches(ProduktbatchDTO p, AsyncCallback<Void> callback);
+
+
 	
 	
 }

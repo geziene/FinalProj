@@ -5,8 +5,11 @@ import java.util.ArrayList;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -17,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import dtu.client.service.KartotekServiceClientImpl;
 import dtu.shared.DoubleExceptions;
+import dtu.shared.FieldVerifier;
 import dtu.shared.HeltalExceptions;
 import dtu.shared.ProduktbatchDTO;
 import dtu.shared.RaavarebatchDTO;
@@ -24,12 +28,25 @@ import dtu.shared.RaavarebatchDTO;
 	public class VaerkfView extends Composite{
 		KartotekServiceClientImpl clientImpl;
 		VerticalPanel phPanel;
+		TextBox Pb_IdTxt = null;
+		TextBox statusTxt = null;
+		TextBox receptTxt = null;
+		TextBox made_byTxt = null;
+
+		Anchor previousCancel = null;
+		FlexTable t;
+		int eventRowIndex;
+		boolean Pb_IdValid = true;
+		boolean statusValid = true;
+		boolean receptValid = true;
+		boolean made_byValid = true;
+
 		
 		Button addRaavarebatches = new Button("Create Raavarebatches");
-        Button showRaavarebatches = new Button("Show Raavarebatches");
+//        Button showRaavarebatches = new Button("Show Raavarebatches");
         
 		Button addProduktbatches = new Button("Create Produktbatches");
-		Button showProduktbatches = new Button("Show Produktbatches");
+//		Button showProduktbatches = new Button("Show Produktbatches");
 		Button updateProduktbatches = new Button("Update Produktbatches");
 		
 		HeltalExceptions HTest = new HeltalExceptions();
@@ -52,13 +69,13 @@ import dtu.shared.RaavarebatchDTO;
 				}
 			});
 			
-			showProduktbatches.addClickHandler(new ClickHandler(){
+/*			showProduktbatches.addClickHandler(new ClickHandler(){
 				
 				@Override
 				public void onClick(ClickEvent event){
 				showProduktbatchesFields();
 				}
-			});
+			});*/
 			
 			addRaavarebatches.addClickHandler(new ClickHandler() {
 				 
@@ -67,14 +84,22 @@ import dtu.shared.RaavarebatchDTO;
                     RaavarebatchesFields();
                 }
             });
+			updateProduktbatches.addClickHandler(new ClickHandler() {
+				 
+                @Override
+                public void onClick(ClickEvent event) {
+                	ProduktbatchesFields();
+                }
+            });
+
              
             phPanel.add(addRaavarebatches);
              
-            phPanel.add(showRaavarebatches);
+     //       phPanel.add(showRaavarebatches);
 			
 			phPanel.add(addProduktbatches);
 			
-			phPanel.add(showProduktbatches);
+		//	phPanel.add(showProduktbatches);
 			phPanel.add(updateProduktbatches);
 			
 		}
@@ -163,7 +188,7 @@ import dtu.shared.RaavarebatchDTO;
 	        }
 		 
 		 
-		 public void showProduktbatchesFields(){
+/*		 public void showProduktbatchesFields(){
 			 phPanel.clear();
 			 final FlexTable pbTable = new FlexTable();
 			 clientImpl.service.showProduktbatch(new AsyncCallback<ArrayList<String>>() {
@@ -191,9 +216,296 @@ import dtu.shared.RaavarebatchDTO;
 			});
 			 pbTable.setBorderWidth(1);
 			 phPanel.add(pbTable);
-		 }
+		 } */
 
-		public void ProduktbatchesFields()
+			public void ProduktbatchesFields()
+			{
+				phPanel.clear();
+				
+				final FlexTable t = new FlexTable();
+
+				// adjust column widths
+				t.getFlexCellFormatter().setWidth(0, 0, "50px");
+				t.getFlexCellFormatter().setWidth(0, 1, "50px");
+				t.getFlexCellFormatter().setWidth(0, 2, "50px");
+				t.getFlexCellFormatter().setWidth(0, 3, "80px");
+				t.getFlexCellFormatter().setWidth(0, 4, "50px");
+				t.getFlexCellFormatter().setWidth(0, 5, "50px");
+
+
+				// style table
+				t.addStyleName("FlexTable");
+				t.getRowFormatter().addStyleName(0,"FlexTable-Header");
+
+				// set headers in flextable
+				t.setText(0, 0, "Pb_Id");
+				t.setText(0, 1, "Status");
+				t.setText(0, 2, "Recept");
+				t.setText(0, 3, "made_by");
+				t.setText(0, 4, "Edit");
+				t.setText(0, 5, " ");
+				
+				clientImpl.service.getProduktbatches(new AsyncCallback<ArrayList<ProduktbatchDTO>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Server fejl!" + caught.getMessage());
+					}
+
+					@Override
+					public void onSuccess(ArrayList<ProduktbatchDTO> result) {
+						// populate table and add delete anchor to each row
+						for (int rowIndex=0; rowIndex < result.size(); rowIndex++) {
+							t.setText(rowIndex+1, 0, "" + result.get(rowIndex).getproduktbatchId());
+							t.setText(rowIndex+1, 1, "" + result.get(rowIndex).getstatus());
+							t.setText(rowIndex+1, 2, "" + result.get(rowIndex).getreceptId());
+							t.setText(rowIndex+1, 3, "" + result.get(rowIndex).getmade_by());
+							
+							Anchor edit = new Anchor("edit");
+							t.setWidget(rowIndex+1, 4, edit);
+
+							edit.addClickHandler(new ClickHandler() {
+
+								@Override
+								public void onClick(ClickEvent event) {
+									// if previous edit open - force cancel operation�
+									if (previousCancel != null)
+										previousCancel.fireEvent(new ClickEvent(){});
+
+									// get rowindex where event happened
+									eventRowIndex = t.getCellForEvent(event).getRowIndex();
+
+									// populate textboxes
+								
+									statusTxt.setText(t.getText(eventRowIndex, 1));
+									receptTxt.setText(t.getText(eventRowIndex, 2));
+									made_byTxt.setText(t.getText(eventRowIndex, 3));
+									
+
+									// show text boxes for editing
+						
+									t.setWidget(eventRowIndex, 1, statusTxt);
+									t.setWidget(eventRowIndex, 2, receptTxt);
+									t.setWidget(eventRowIndex, 3, made_byTxt);
+
+									// start editing here
+									Pb_IdTxt.setFocus(true);
+
+									// get edit anchor ref for cancel operation
+									final Anchor edit =  (Anchor) event.getSource();
+
+									// get textbox contents for cancel operation
+									final String Pb_Id = Pb_IdTxt.getText();
+									final String status = statusTxt.getText();
+									final String recept = receptTxt.getText();
+									final String made_by = made_byTxt.getText();
+
+
+									final Anchor ok = new Anchor("ok");
+									ok.addClickHandler(new ClickHandler() {
+
+										@Override
+										public void onClick(ClickEvent event) {
+
+											// remove inputboxes
+							
+											t.setText(eventRowIndex, 1, statusTxt.getText());
+											t.setText(eventRowIndex, 2, receptTxt.getText());
+											t.setText(eventRowIndex, 3, made_byTxt.getText());
+
+
+											// here you will normally fetch the primary key of the row 
+											// and use it for location the object to be edited
+
+											// fill DTO with id and new values 
+											ProduktbatchDTO pb= new ProduktbatchDTO(
+													Integer.parseInt(t.getText(eventRowIndex, 0)), Integer.parseInt(statusTxt.getText()), Integer.parseInt(receptTxt.getText()), 
+													Integer.parseInt(made_byTxt.getText())
+												);
+
+									
+										
+											// V.2
+											clientImpl.service.updateProduktbatches(pb, new AsyncCallback<Void>() {
+
+												@Override
+												public void onSuccess(Void result) {
+												
+													
+												}
+
+												@Override
+												public void onFailure(Throwable caught) {
+													Window.alert("Server fejl!" + caught.getMessage());
+												}
+
+											});
+
+											// restore edit link
+											t.setWidget(eventRowIndex, 4, edit);
+											t.clearCell(eventRowIndex, 5);
+
+											previousCancel = null;
+
+										}
+
+									});
+
+									Anchor cancel = new Anchor("cancel");
+									previousCancel = cancel;
+									cancel.addClickHandler(new ClickHandler() {
+
+										@Override
+										public void onClick(ClickEvent event) {
+
+											// restore original content of textboxes and rerun input validation
+											Pb_IdTxt.setText(Pb_Id);
+											statusTxt.fireEvent(new KeyUpEvent() {}); // validation
+
+											Pb_IdTxt.setText(status);
+											statusTxt.fireEvent(new KeyUpEvent() {});  // validation
+											
+											Pb_IdTxt.setText(recept);
+											receptTxt.fireEvent(new KeyUpEvent() {});  // validation
+											
+											Pb_IdTxt.setText(made_by);
+											made_byTxt.fireEvent(new KeyUpEvent() {});  // validation
+											
+											t.setText(eventRowIndex, 1, status);
+											t.setText(eventRowIndex, 2, recept);
+											t.setText(eventRowIndex, 3, made_by);
+
+											// restore edit link
+											t.setWidget(eventRowIndex, 4, edit);
+											t.clearCell(eventRowIndex, 5);
+
+											previousCancel = null;
+										}
+
+									});
+
+
+									Pb_IdTxt.addKeyUpHandler(new KeyUpHandler(){
+
+										@Override
+										public void onKeyUp(KeyUpEvent event) {
+											if (!FieldVerifier.isValidName(Pb_IdTxt.getText())) {
+												Pb_IdTxt.setStyleName("gwt-TextBox-invalidEntry");
+												Pb_IdValid = false;
+											}
+											else {
+												Pb_IdTxt.removeStyleName("gwt-TextBox-invalidEntry");
+												Pb_IdValid = true;
+											}
+
+											// enable/disable ok depending on form status 
+											if (Pb_IdValid&&statusValid)
+												t.setWidget(eventRowIndex, 4, ok);
+											else
+												t.setText(eventRowIndex, 4, "ok");				
+										}
+
+									});
+
+									statusTxt.addKeyUpHandler(new KeyUpHandler(){
+
+										@Override
+										public void onKeyUp(KeyUpEvent event) {
+											if (!FieldVerifier.isValidName(statusTxt.getText())) {
+												statusTxt.setStyleName("gwt-TextBox-invalidEntry");
+												statusValid = false;
+											}
+											else {
+												statusTxt.removeStyleName("gwt-TextBox-invalidEntry");
+												statusValid = true;
+											}
+
+											// enable/disable ok depending on form status 
+											if (Pb_IdValid&&statusValid)
+												t.setWidget(eventRowIndex, 5, ok);
+											else
+												t.setText(eventRowIndex, 5, "ok");
+										}
+
+										
+									});
+								
+									receptTxt.addKeyUpHandler(new KeyUpHandler(){
+
+										@Override
+										public void onKeyUp(KeyUpEvent event) {
+											if (!FieldVerifier.isValidName(receptTxt.getText())) {
+												receptTxt.setStyleName("gwt-TextBox-invalidEntry");
+												receptValid = false;
+											}
+											else {
+												receptTxt.removeStyleName("gwt-TextBox-invalidEntry");
+												receptValid = true;
+											}
+
+											// enable/disable ok depending on form status 
+											if (Pb_IdValid&&receptValid)
+												t.setWidget(eventRowIndex, 4, ok);
+											else
+												t.setText(eventRowIndex, 4, "ok");
+										}
+
+									});
+									
+									made_byTxt.addKeyUpHandler(new KeyUpHandler(){
+
+										@Override
+										public void onKeyUp(KeyUpEvent event) {
+											if (!FieldVerifier.isValidName(made_byTxt.getText())) {
+												made_byTxt.setStyleName("gwt-TextBox-invalidEntry");
+												made_byValid = false;
+											}
+											else {
+												made_byTxt.removeStyleName("gwt-TextBox-invalidEntry");
+												made_byValid = true;
+											}
+
+											// enable/disable ok depending on form status 
+											if (Pb_IdValid&&made_byValid)
+												t.setWidget(eventRowIndex, 4, ok);
+											else
+												t.setText(eventRowIndex, 4, "ok");
+										}
+									});
+
+									// showing ok and cancel widgets
+									t.setWidget(eventRowIndex, 4 , ok);
+									t.setWidget(eventRowIndex, 5 , cancel);	
+								}
+							});
+						}
+
+					}
+
+				});
+
+				phPanel.add(t);
+
+				// text boxes
+				Pb_IdTxt = new TextBox();
+				Pb_IdTxt.setWidth("50px");
+				statusTxt = new TextBox();
+				statusTxt.setWidth("50px");
+				receptTxt = new TextBox();
+				receptTxt.setWidth("50px");
+				made_byTxt = new TextBox();
+				made_byTxt.setWidth("50px");
+
+			addProduktbatches.addClickHandler(new ClickHandler() {
+			
+				@Override
+				public void onClick(ClickEvent event) {
+					ProduktbatchesFields();
+						}
+			});
+		}
+
+/*		public void ProduktbatchesFields()
 		{
 			phPanel.clear();
 			
@@ -275,6 +587,6 @@ import dtu.shared.RaavarebatchDTO;
 			phPanel.add(made_byPanel);
 			phPanel.add(save);
 
-		}
+		} */
 		
 	}

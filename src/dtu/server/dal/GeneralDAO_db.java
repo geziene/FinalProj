@@ -52,6 +52,12 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 	
 	private PreparedStatement getUsersStmt = null;
 	
+	private PreparedStatement getProduktbatchesStmt = null;
+	
+	private PreparedStatement updateProduktbatchesStmt = null;
+	
+
+	
 	public GeneralDAO_db() throws Exception {
 		try 
 		{
@@ -115,6 +121,11 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 					+ "password = ?, gruppe = ?  WHERE opr_id = ?" );
 			
 			getUsersStmt = connection.prepareStatement("SELECT * FROM users"); 
+
+			getProduktbatchesStmt = connection.prepareStatement("SELECT * FROM produktbatch "); 
+			
+			updateProduktbatchesStmt = connection.prepareStatement("UPDATE produktbatch SET status = ?, recept_id = ?, made_by = ?  WHERE pb_id = ?" );
+
 		} 
 		catch ( SQLException sqlException )
 		{
@@ -452,6 +463,65 @@ public class GeneralDAO_db extends RemoteServiceServlet implements KartotekServi
 		} 
 		return results;
 	} 
+
+	
+	@Override
+	public ArrayList<ProduktbatchDTO> getProduktbatches() throws Exception {
+		
+		ArrayList< ProduktbatchDTO > results = null;
+		ResultSet resultSet = null;
+
+		try 
+		{
+			resultSet = getProduktbatchesStmt.executeQuery(); 
+			results = new ArrayList< ProduktbatchDTO >();
+
+			while ( resultSet.next() )
+			{
+				results.add( new ProduktbatchDTO(
+						resultSet.getInt( "pb_id" ),
+						resultSet.getInt("status"),
+						resultSet.getInt( "recept_id"),
+						resultSet.getInt("made_by")));
+			} 
+		} 
+		catch ( SQLException sqlException )
+		{
+			sqlException.printStackTrace();
+			throw new DALException(" \"getProduktbatches\" fejlede" + sqlException.getMessage());
+		} 
+		finally
+		{
+			try 
+			{
+				resultSet.close();
+			} 
+			catch ( SQLException sqlException )
+			{
+				sqlException.printStackTrace();         
+				close();
+			} 
+		} 
+		return results;
+	} 
+	
+	@Override
+	public void updateProduktbatches(ProduktbatchDTO p) throws Exception {
+		try {
+					
+					updateProduktbatchesStmt.setInt(1, p.getstatus());
+					updateProduktbatchesStmt.setInt(3, p.getreceptId());
+					updateProduktbatchesStmt.setInt(2, p.getmade_by());
+					updateProduktbatchesStmt.setInt(4, p.getproduktbatchId());
+			
+					updateProduktbatchesStmt.executeUpdate();
+
+
+		} catch (SQLException e) {
+			throw new DALException(" \"updateProduktbatces\" fejlede" + e.getMessage());
+		} 
+	}
+
 
 	// close the database connection
 	public void close() {
