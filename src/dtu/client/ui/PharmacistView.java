@@ -22,6 +22,9 @@ import dtu.shared.FieldVerifier;
 import dtu.shared.RaavareDTO;
 import dtu.shared.ReceptDTO;
 import dtu.shared.ReceptkomponentDTO;
+import dtu.shared.HeltalExceptions;
+import dtu.shared.DoubleExceptions;
+import dtu.shared.TekstExceptions;
 
 public class PharmacistView extends Composite {
 	KartotekServiceClientImpl clientImpl;
@@ -52,6 +55,10 @@ public class PharmacistView extends Composite {
 	Button addReceptkomponent = new Button("Opret receptkomponet");
 //	Button showReceptkomponent = new Button("Show receptkomponent");
 	Button updateReceptkomponent = new Button("rediger receptkomponet");
+	
+	HeltalExceptions HTest = new HeltalExceptions();
+	DoubleExceptions DTest = new DoubleExceptions();
+	TekstExceptions TTest = new TekstExceptions();
 	
 	public PharmacistView(KartotekServiceClientImpl clientImpl)
 	{
@@ -697,6 +704,9 @@ public class PharmacistView extends Composite {
 
 					@Override
 					public void onClick(ClickEvent event) {
+					if (HTest.HeltalStringTest(receptidTxt.getText()) && HTest.HeltalStringTest(madebyTxt.getText()) ){
+				    if (HTest.HeltalTest(Integer.parseInt(receptidTxt.getText())) && HTest.MadebyTest(Integer.parseInt(madebyTxt.getText()))){
+				    if (TTest.TekstTest(receptnameTxt.getText(),2 ,20)){
 					 ReceptDTO newRecept = new ReceptDTO( Integer.parseInt(receptidTxt.getText()), 
 							 receptnameTxt.getText(),Integer.parseInt(madebyTxt.getText()));	 
 					 clientImpl.service.saveRecept(newRecept, new AsyncCallback<Void>() {
@@ -711,7 +721,9 @@ public class PharmacistView extends Composite {
 						Window.alert("Recept saved in system");
 							}
 						});
-			
+				    }
+				    }
+					}
 					        }		
 				} );
 				
@@ -801,6 +813,10 @@ public class PharmacistView extends Composite {
 
 					@Override
 					public void onClick(ClickEvent event) {
+					if (HTest.HeltalStringTest(receptidTxt.getText()) && HTest.HeltalStringTest(raavareidTxt.getText()) && HTest.HeltalStringTest(madebyTxt.getText()) && HTest.HeltalStringTest(pbidTxt.getText())){
+	                if (HTest.HeltalTest(Integer.parseInt(receptidTxt.getText())) && HTest.HeltalTest(Integer.parseInt(raavareidTxt.getText())) && HTest.MadebyTest(Integer.parseInt(madebyTxt.getText())) && HTest.HeltalTest(Integer.parseInt(pbidTxt.getText())) ){
+	                if (DTest.DoubleStringTest(nettoTxt.getText()) && DTest.DoubleStringTest(toleranceTxt.getText())){
+	                if (DTest.DoublenonNettoTest(Double.parseDouble(nettoTxt.getText())) && DTest.DoubletoleranceTest(Double.parseDouble(toleranceTxt.getText()))){
 				//	Window.alert("Tester clickhandleren for savereceptkomponent");
 					ReceptkomponentDTO newReceptkomponent = new ReceptkomponentDTO(
 							 Integer.parseInt(receptidTxt.getText()),
@@ -822,8 +838,11 @@ public class PharmacistView extends Composite {
 						Window.alert("Receptkomponet saved in system");
 							}
 						});
-			
-					}		
+	                }
+	                }
+					}
+					}	
+					}
 				} );
 				
 				phPanel.add(receptidPanel);
@@ -882,6 +901,9 @@ public class PharmacistView extends Composite {
 
 			@Override
 			public void onClick(ClickEvent event)   {
+			if (HTest.HeltalStringTest(idTxt.getText())){
+            if (HTest.HeltalTest(Integer.parseInt(idTxt.getText()))){
+            if (TTest.TekstTest(nameTxt.getText(),2 ,20) && TTest.TekstTest(levTxt.getText(),2 ,20) ){
 			 RaavareDTO newRaavare = new RaavareDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), levTxt.getText());	 
 			 clientImpl.service.saveRaavare(newRaavare, new AsyncCallback<Void>() {
 
@@ -895,7 +917,9 @@ public class PharmacistView extends Composite {
 				Window.alert("Raavare saved in system");
 					}
 				});
-	
+            }
+			}
+			}
 			        }		
 		} );
 		

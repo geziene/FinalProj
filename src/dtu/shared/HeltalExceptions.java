@@ -10,7 +10,7 @@ public class HeltalExceptions {
 			return true;
 			
 		};
-		Window.alert("ID maa kun indholde tal");
+		Window.alert("ID/Status/made_by maa kun indholde tal");
 		return false;
 		
 	}
@@ -22,6 +22,28 @@ public class HeltalExceptions {
 			
 		};
 		Window.alert("ID skal vaere mellem 1-99999999");
+		return false;
+		
+	}
+	
+	public boolean MadebyTest(int MadebyHeltal) {
+		
+		if (0 < MadebyHeltal && MadebyHeltal < 100000000 ){
+			return true;
+			
+		};
+		Window.alert("made_by skal vaere mellem 1-99999999");
+		return false;
+		
+	}
+	
+	public boolean GroupTest(int MadebyHeltal) {
+		
+		if (0 < MadebyHeltal && MadebyHeltal < 6 ){
+			return true;
+			
+		};
+		Window.alert("Gruppe skal vaere mellem 1-5");
 		return false;
 		
 	}

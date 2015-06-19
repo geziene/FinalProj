@@ -21,6 +21,8 @@ import dtu.client.service.KartotekServiceClientImpl;
 import dtu.shared.FieldVerifier;
 import dtu.shared.RaavareDTO;
 import dtu.shared.UserDTO;
+import dtu.shared.HeltalExceptions;
+import dtu.shared.TekstExceptions;
 
 public class adminView extends Composite {
 	KartotekServiceClientImpl clientImpl;
@@ -43,7 +45,8 @@ public class adminView extends Composite {
 	Button addUser = new Button("Opret Bruger");
 	Button updateUser = new Button("Redigere Bruger");
 	
-
+	HeltalExceptions HTest = new HeltalExceptions();
+	TekstExceptions TTest = new TekstExceptions();
 	
 	public adminView(KartotekServiceClientImpl clientImpl)
 	{
@@ -155,6 +158,9 @@ public class adminView extends Composite {
 			
 			@Override
 			public void onClick(ClickEvent event) {
+			if (HTest.HeltalStringTest(idTxt.getText()) && HTest.HeltalStringTest(groupTxt.getText())){
+		    if (HTest.HeltalTest(Integer.parseInt(idTxt.getText())) && HTest.GroupTest(Integer.parseInt(groupTxt.getText()))){
+		    if (TTest.TekstTest(nameTxt.getText(),2 ,20) && TTest.TekstTest(iniTxt.getText(),2 ,4) && TTest.TekstTest(cprTxt.getText(),10 ,10) && TTest.TekstTest(passwordTxt.getText(),5 ,8) ){
 			 UserDTO newUser = new UserDTO(Integer.parseInt(idTxt.getText()), nameTxt.getText(), iniTxt.getText(), cprTxt.getText(), passwordTxt.getText(), Integer.parseInt(groupTxt.getText()));	 
 			 clientImpl.service.saveUser(newUser, new AsyncCallback<Void>() {
 
@@ -168,7 +174,9 @@ public class adminView extends Composite {
 				Window.alert("Bruger er gemt i databasen");
 					}
 				});
-	
+		    }
+		    }
+			}
 			        }		
 		} );
 		

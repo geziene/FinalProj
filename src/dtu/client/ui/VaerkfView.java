@@ -244,11 +244,8 @@ import dtu.shared.RaavarebatchDTO;
 	                public void onClick(ClickEvent event)   {
 	                     try
 	                        {
-	                    	 if (HTest.HeltalStringTest(produktbatch_idTxt.getText()) && HTest.HeltalStringTest(statusTxt.getText())){
-	                    	 if (HTest.HeltalTest(Integer.parseInt(produktbatch_idTxt.getText())) && HTest.StatusTest(Integer.parseInt(statusTxt.getText()))){
-	                    	 if (DTest.DoubleStringTest(recept_idTxt.getText())){
-	                    	 	 double recept_id = DTest.DoubleDecimalTest(recept_idTxt.getText());
-	                    	 	 
+	                    	 if (HTest.HeltalStringTest(produktbatch_idTxt.getText()) && HTest.HeltalStringTest(statusTxt.getText()) && HTest.HeltalStringTest(recept_idTxt.getText()) && HTest.HeltalStringTest(made_byTxt.getText())){
+	                    	 if (HTest.HeltalTest(Integer.parseInt(produktbatch_idTxt.getText())) && HTest.StatusTest(Integer.parseInt(statusTxt.getText())) && HTest.HeltalTest(Integer.parseInt(recept_idTxt.getText())) && HTest.MadebyTest(Integer.parseInt(made_byTxt.getText()))){        	 	 
 	                    		 ProduktbatchDTO rb = new ProduktbatchDTO(Integer.parseInt(produktbatch_idTxt.getText()), Integer.parseInt(statusTxt.getText()), Integer.parseInt(recept_idTxt.getText()),Integer.parseInt(made_byTxt.getText()) );
 	                    		 clientImpl.service.saveProduktbatch(rb, new AsyncCallback<Void>() {
 	                    		 @Override
@@ -264,7 +261,7 @@ import dtu.shared.RaavarebatchDTO;
 	                        }
 	                     }
 	                        }
-	                       }
+	                       
 	                        
 	                        catch (Exception e) {
 	                            e.printStackTrace();
